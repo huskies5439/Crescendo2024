@@ -19,6 +19,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -54,7 +56,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(manette.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(manette.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(manette.getRightX(), OIConstants.kDriveDeadband),
-                false, true),
+                true, true),
             basePilotable));
   }
 
@@ -69,7 +71,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
    
-    manette.x().whileTrue(new RunCommand(basePilotable::setX, basePilotable));
+    manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
+    manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
   }
 
   /**
@@ -90,9 +93,9 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         new Pose2d(0, 0, new Rotation2d(0)),
         // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+        List.of(new Translation2d(1, 0.5), new Translation2d(2, 0)),
         // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
+        new Pose2d(3, 0.5, new Rotation2d(Math.PI/2)),
         config);
 
     var thetaController = new ProfiledPIDController(
