@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -30,7 +32,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final MAXSwerveModule arriereDroite = new MAXSwerveModule(7,8,90);
 
   // The gyro sensor
-  private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+  private final PigeonIMU gyro = new PigeonIMU(3);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -44,7 +46,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(gyro.getAngle()),
+      Rotation2d.fromDegrees(getAngle()),
       new SwerveModulePosition[] {
           avantGauche.getPosition(),
           avantDroite.getPosition(),
@@ -54,13 +56,14 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    resetGyro();
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
     odometry.update(
-        Rotation2d.fromDegrees(gyro.getAngle()),
+        Rotation2d.fromDegrees(getAngle()),
         new SwerveModulePosition[] {
             avantGauche.getPosition(),
             avantDroite.getPosition(),
@@ -86,7 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     odometry.resetPosition(
-        Rotation2d.fromDegrees(gyro.getAngle()),
+        Rotation2d.fromDegrees(getAngle()),
         new SwerveModulePosition[] {
             avantGauche.getPosition(),
             avantDroite.getPosition(),
@@ -166,7 +169,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -209,8 +212,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    gyro.reset();
+  public void resetGyro() {
+    gyro.setYaw(0);
   }
 
   /**
@@ -219,15 +222,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getAngle() {
-    return Rotation2d.fromDegrees(-gyro.getAngle()).getDegrees();
-  }
-
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  public double getTurnRate() {
-    return -gyro.getRate();
+    return gyro.getYaw();
   }
 }
