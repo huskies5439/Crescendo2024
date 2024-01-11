@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commmands.Gober;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Gobeur;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -36,6 +38,9 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem basePilotable = new DriveSubsystem();
+  private final Gobeur gobeur = new Gobeur();
+
+
 
   // The driver's controller
   CommandXboxController manette = new CommandXboxController(0);
@@ -73,6 +78,8 @@ public class RobotContainer {
    
     manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
+    manette.leftBumper().whileTrue(new Gober(gobeur));
+
   }
 
   /**
