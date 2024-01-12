@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,14 +15,11 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.commmands.Gober;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -37,7 +33,7 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem basePilotable = new DriveSubsystem();
+  private final BasePilotable basePilotable = new BasePilotable();
   private final Gobeur gobeur = new Gobeur();
 
 
@@ -56,13 +52,11 @@ public class RobotContainer {
     basePilotable.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> basePilotable.drive(
-                -MathUtil.applyDeadband(manette.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(manette.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(manette.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
-            basePilotable));
+        Commands.run(
+            () -> basePilotable.conduire(
+                  manette.getLeftY(),manette.getLeftX(),manette.getRightX(),
+                  true, true),
+                  basePilotable));
   }
 
   /**
@@ -125,6 +119,6 @@ public class RobotContainer {
     basePilotable.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> basePilotable.drive(0, 0, 0, false, false));
+    return swerveControllerCommand.andThen(basePilotable::stop);
   }
 }

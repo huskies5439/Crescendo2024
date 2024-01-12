@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,14 +16,14 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveSubsystem extends SubsystemBase {
-  // Create MAXSwerveModules
+public class BasePilotable extends SubsystemBase {
+  // Créer les moteurs swerves
   private final MAXSwerveModule avantGauche = new MAXSwerveModule(1,2,-90);
 
   private final MAXSwerveModule avantDroite = new MAXSwerveModule(3,4,0);
@@ -31,7 +32,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final MAXSwerveModule arriereDroite = new MAXSwerveModule(7,8,90);
 
-  // The gyro sensor
+  // Le gyroscope
   private final PigeonIMU gyro = new PigeonIMU(3);
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -54,8 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
           arriereDroite.getPosition()
       });
 
-  /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public BasePilotable() {
     resetGyro();
   }
 
@@ -109,10 +109,18 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void conduire(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
-    double xSpeedCommanded;
+    double xSpeedCommanded; 
     double ySpeedCommanded;
+
+    double deadband = 0.05;
+    //appliquer une deadband sur les joysticks et corriger la direction
+    xSpeed = -MathUtil.applyDeadband(xSpeed, deadband);
+    ySpeed = -MathUtil.applyDeadband(ySpeed, deadband);
+    rot = -MathUtil.applyDeadband(rot, deadband); 
+
+
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -179,6 +187,12 @@ public class DriveSubsystem extends SubsystemBase {
     arriereDroite.setDesiredState(swerveModuleStates[3]);
   }
 
+
+
+  public void stop() {
+    conduire(0,0,0,false,false);
+
+  }
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
