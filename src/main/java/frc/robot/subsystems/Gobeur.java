@@ -8,16 +8,18 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Gobeur extends SubsystemBase { 
 
-  private final TalonFX moteur = new TalonFX(0);
+  private final TalonFX moteur = new TalonFX(5);
   
   /** Creates a new Gobeur. */
   public Gobeur() {
     moteur.setInverted(false);
+    stop();
 
   }
 
@@ -26,7 +28,7 @@ public class Gobeur extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void gober(){
-    moteur.setVoltage(0.2);
+    moteur.setVoltage(3);
 
   } 
   public void stop(){
