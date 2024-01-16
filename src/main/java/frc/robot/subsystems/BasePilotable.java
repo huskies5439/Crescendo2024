@@ -60,6 +60,8 @@ public class BasePilotable extends SubsystemBase {
 
   public BasePilotable() {
     resetGyro();
+
+    //Copier-coller du getting started de PathPlanner
     AutoBuilder.configureHolonomic(
       this::getPose,
       this::resetOdometry,
@@ -104,6 +106,10 @@ public class BasePilotable extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
+  /**
+   * Returns the chassis speed relative to the field XY and angle from each module angle and speed
+   * @return the ChassisSpeed
+   */
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),arriereDroite.getState(), arriereGauche.getState());
   }
@@ -213,7 +219,12 @@ public class BasePilotable extends SubsystemBase {
     arriereDroite.setDesiredState(swerveModuleStates[3]);
   }
 
+  /**
+   * Method to drive the robot from field relative speeds
+   * @param chassisSpeeds XY and omege speeds the robot should be going
+   */
   public void conduireRobotRelatif(ChassisSpeeds chassisSpeeds) {
+    //Ramene la vitesse en déplacement de 50Hz
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);

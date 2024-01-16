@@ -48,12 +48,12 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-        public static final HolonomicPathFollowerConfig kPathFollowerConfig = new HolonomicPathFollowerConfig(
-                                              new PIDConstants(5.0, 0.0, 0.0),
-                                              new PIDConstants(5.0, 0.0, 0.0),
-                                              kMaxSpeedMetersPerSecond,
-                                              new Translation2d(kWheelBase / 2, kTrackWidth / 2).getNorm(),
-                                              new ReplanningConfig());
+    public static final HolonomicPathFollowerConfig kPathFollowerConfig = new HolonomicPathFollowerConfig(
+                                          new PIDConstants(5.0, 0.0, 0.0),
+                                          new PIDConstants(5.0, 0.0, 0.0),
+                                          kMaxSpeedMetersPerSecond,
+                                          new Translation2d(kWheelBase / 2, kTrackWidth / 2).getNorm(),
+                                          new ReplanningConfig());
   }
 
   public static final class ModuleConstants {
