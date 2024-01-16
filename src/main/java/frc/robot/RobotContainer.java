@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -72,7 +74,7 @@ public class RobotContainer {
    
     manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
-    manette.leftBumper().whileTrue(new Gober(gobeur));
+    manette.leftBumper().toggleOnTrue(new Gober(gobeur));
 
   }
 
@@ -115,10 +117,13 @@ public class RobotContainer {
         basePilotable::setModuleStates,
         basePilotable);
 
+
     // Reset odometry to the starting pose of the trajectory.
     basePilotable.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(basePilotable::stop);
+   // return swerveControllerCommand.andThen(basePilotable::stop);
+   return new PathPlannerAuto("New Auto");
+
   }
 }

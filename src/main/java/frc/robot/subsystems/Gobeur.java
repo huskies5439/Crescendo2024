@@ -28,8 +28,7 @@ public class Gobeur extends SubsystemBase {
     // This method will be called once per scheduler run
   }
   public void gober(){
-    moteur.setVoltage(6);
-
+    moteur.setVoltage(4);
   } 
   public void stop(){
     moteur.setVoltage(0);
