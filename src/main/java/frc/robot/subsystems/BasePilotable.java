@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -16,11 +17,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 public class BasePilotable extends SubsystemBase {
   // Créer les moteurs swerves
@@ -57,6 +60,25 @@ public class BasePilotable extends SubsystemBase {
 
   public BasePilotable() {
     resetGyro();
+    AutoBuilder.configureHolonomic(
+      this::getPose,
+      this::resetOdometry,
+      this::getRobotRelativeSpeeds,
+      this::conduireRobotRelatif,
+      DriveConstants.kPathFollowerConfig,
+       () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this
+    );
   }
 
   @Override
@@ -73,13 +95,17 @@ public class BasePilotable extends SubsystemBase {
         SmartDashboard.putNumber("Gyro", getAngle()); 
   }
 
-  /**
+  /*
    * Returns the currently-estimated pose of the robot.
    *
    * @return The pose.
    */
   public Pose2d getPose() {
     return odometry.getPoseMeters();
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),arriereDroite.getState(), arriereGauche.getState());
   }
 
   /**
@@ -187,6 +213,15 @@ public class BasePilotable extends SubsystemBase {
     arriereDroite.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void conduireRobotRelatif(ChassisSpeeds chassisSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+    avantGauche.setDesiredState(swerveModuleStates[0]);
+    avantDroite.setDesiredState(swerveModuleStates[1]);
+    arriereGauche.setDesiredState(swerveModuleStates[2]);
+    arriereDroite.setDesiredState(swerveModuleStates[3]); 
+   }
 
 
   public void stop() {
@@ -237,5 +272,7 @@ public class BasePilotable extends SubsystemBase {
    */
   public double getAngle() {
     return gyro.getYaw();
-  }
+  } 
+
+  
 }
