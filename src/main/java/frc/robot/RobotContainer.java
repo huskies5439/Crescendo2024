@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.Gober;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
@@ -13,7 +15,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /*
@@ -27,6 +30,8 @@ public class RobotContainer {
   private final BasePilotable basePilotable = new BasePilotable();
   private final Gobeur gobeur = new Gobeur();
 
+  private final SendableChooser<Command> chooser;
+  
 
 
   // The driver's controller
@@ -38,6 +43,10 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    chooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("trajets",chooser);
+
+    NamedCommands.registerCommand("gober", new Gober(gobeur));
 
     // Configure default commands
     basePilotable.setDefaultCommand(
@@ -73,6 +82,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-   return new PathPlannerAuto("New Auto");
+   return chooser.getSelected();
   }
 }
