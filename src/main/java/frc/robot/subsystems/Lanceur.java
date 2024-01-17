@@ -8,8 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Lanceur extends SubsystemBase {
@@ -32,6 +31,8 @@ private final SimpleMotorFeedforward feedforwardD = new SimpleMotorFeedforward(0
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("VitesseG", getVitesseG());
+    SmartDashboard.putNumber("VitesseD", getVitesseD());
     // This method will be called once per scheduler run
   }
 
@@ -58,5 +59,10 @@ private final SimpleMotorFeedforward feedforwardD = new SimpleMotorFeedforward(0
 
   public void setVitessePIDD(double vcible) {
     moteurD.setVoltage(pidD.calculate(getVitesseD(),vcible)+feedforwardD.calculate(vcible));
+  }
+
+  public void setVitessePID(double vcible){
+    moteurD.setVoltage(pidD.calculate(getVitesseD(),vcible)+feedforwardD.calculate(vcible));
+    moteurG.setVoltage(pidG.calculate(getVitesseG(),vcible)+feedforwardG.calculate(vcible));
   }
 }
