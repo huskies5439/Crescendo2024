@@ -44,10 +44,13 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    
+    NamedCommands.registerCommand("gober", new Gober(gobeur));
+    
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajets",chooser);
 
-    NamedCommands.registerCommand("gober", new Gober(gobeur));
 
     // Configure default commands
     basePilotable.setDefaultCommand(

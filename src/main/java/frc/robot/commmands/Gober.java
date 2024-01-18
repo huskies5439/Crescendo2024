@@ -22,6 +22,7 @@ public class Gober extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Gobe");
     gobeur.gober();
     
   }
@@ -33,6 +34,7 @@ public class Gober extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Gobe pus");
     gobeur.stop();
 
   }
