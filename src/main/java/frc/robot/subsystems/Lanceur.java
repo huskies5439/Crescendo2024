@@ -16,12 +16,10 @@ public class Lanceur extends SubsystemBase {
   private final TalonFX moteurG = new TalonFX(1);
   private final TalonFX moteurD = new TalonFX(2);
 
-  private final SimpleMotorFeedforward feedforwardG = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
   private PIDController pidG = new PIDController(0, 0, 0);
-  
-private final SimpleMotorFeedforward feedforwardD = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
   private PIDController pidD = new PIDController(0, 0, 0);
-  
+  double cibleLanceur = 0;
 
   /** Creates a new Lanceur. */
   public Lanceur() {
@@ -33,12 +31,23 @@ private final SimpleMotorFeedforward feedforwardD = new SimpleMotorFeedforward(0
   public void periodic() {
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
-    // This method will be called once per scheduler run
+    cibleLanceur = SmartDashboard.getNumber("cibleLanceur", 0);
+    
+
   }
 
-  public void setVitesseSimple(double volts){
+  public void setVoltage(double volts){
     moteurG.setVoltage(volts);
     moteurD.setVoltage(volts);
+
+
+  }
+  public void setVoltageDashboard(){
+    setVoltage(cibleLanceur);
+
+  }
+  public void stop(){
+    setVoltage(0);
 
   }
 
@@ -47,8 +56,8 @@ private final SimpleMotorFeedforward feedforwardD = new SimpleMotorFeedforward(0
 
   }
 
-  public void setVitessePIDG(double vcible) {
-    moteurG.setVoltage(pidG.calculate(getVitesseG(),vcible)+feedforwardG.calculate(vcible));
+  public void setVitessePIDGauche(double vcible) {
+    moteurG.setVoltage(pidG.calculate(getVitesseG(),vcible)+feedforward.calculate(vcible));
   }
 
 
@@ -57,12 +66,13 @@ private final SimpleMotorFeedforward feedforwardD = new SimpleMotorFeedforward(0
 
   }
 
-  public void setVitessePIDD(double vcible) {
-    moteurD.setVoltage(pidD.calculate(getVitesseD(),vcible)+feedforwardD.calculate(vcible));
+  public void setVitessePIDDroite(double vcible) {
+    moteurD.setVoltage(pidD.calculate(getVitesseD(),vcible)+feedforward.calculate(vcible));
   }
 
   public void setVitessePID(double vcible){
-    moteurD.setVoltage(pidD.calculate(getVitesseD(),vcible)+feedforwardD.calculate(vcible));
-    moteurG.setVoltage(pidG.calculate(getVitesseG(),vcible)+feedforwardG.calculate(vcible));
+      setVitessePIDDroite(vcible);
+      setVitessePIDGauche(vcible);
+
   }
 }

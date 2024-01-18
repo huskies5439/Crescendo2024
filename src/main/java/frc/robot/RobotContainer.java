@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.Gober;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
+import frc.robot.subsystems.Lanceur;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -28,7 +28,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final BasePilotable basePilotable = new BasePilotable();
-  private Gobeur gobeur = new Gobeur();
+  private final Gobeur gobeur = new Gobeur();
+  private final Lanceur lanceur = new Lanceur();
 
   private final SendableChooser<Command> chooser;
   
@@ -76,7 +77,7 @@ public class RobotContainer {
     manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
-
+    manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageDashboard, lanceur::stop, lanceur));
   }
 
   /**
