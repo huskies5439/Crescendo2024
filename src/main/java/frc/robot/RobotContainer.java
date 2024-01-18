@@ -77,7 +77,8 @@ public class RobotContainer {
     manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
-    manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageDashboard, lanceur::stop, lanceur));
+    manette.y().toggleOnTrue(Commands.run(()-> lanceur.setVoltage(lanceur.getValeurShuffleboard()), lanceur)
+                                              .andThen(Commands.runOnce(lanceur::stop)));
   }
 
   /**

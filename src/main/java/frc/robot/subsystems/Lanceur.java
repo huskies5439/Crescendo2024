@@ -8,6 +8,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -19,7 +23,11 @@ public class Lanceur extends SubsystemBase {
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
   private PIDController pidG = new PIDController(0, 0, 0);
   private PIDController pidD = new PIDController(0, 0, 0);
-  double cibleLanceur = 0;
+
+
+  private ShuffleboardTab calibration = Shuffleboard.getTab("calibration");
+  private GenericEntry valeurLanceurCible = calibration.add("valeur lanceur cible",0).getEntry();
+
 
   /** Creates a new Lanceur. */
   public Lanceur() {
@@ -30,9 +38,7 @@ public class Lanceur extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("VitesseG", getVitesseG());
-    SmartDashboard.putNumber("VitesseD", getVitesseD());
-    cibleLanceur = SmartDashboard.getNumber("cibleLanceur", 0);
-    
+    SmartDashboard.putNumber("VitesseD", getVitesseD());    
 
   }
 
@@ -42,10 +48,7 @@ public class Lanceur extends SubsystemBase {
 
 
   }
-  public void setVoltageDashboard(){
-    setVoltage(cibleLanceur);
 
-  }
   public void stop(){
     setVoltage(0);
 
@@ -75,4 +78,9 @@ public class Lanceur extends SubsystemBase {
       setVitessePIDGauche(vcible);
 
   }
+
+  public double getValeurShuffleboard() {
+    return valeurLanceurCible.getDouble(0);
+}
+
 }

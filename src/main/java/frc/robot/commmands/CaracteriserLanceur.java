@@ -7,13 +7,12 @@ package frc.robot.commmands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Lanceur;
 
-public class Lancer extends Command {
+public class CaracteriserLanceur extends Command {
+  /** Creates a new CaracteriserLanceur. */
   Lanceur lanceur;
-  int vitesse;
 
-  public Lancer(int vitesse,Lanceur lanceur) {
+  public CaracteriserLanceur(Lanceur lanceur) {
     this.lanceur = lanceur;
-    this.vitesse = vitesse;
     addRequirements(lanceur);
   }
 
@@ -24,7 +23,8 @@ public class Lancer extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    lanceur.setVitessePID(vitesse);
+        lanceur.setVitessePID(lanceur.getValeurShuffleboard());
+
   }
 
   // Called once the command ends or is interrupted.
