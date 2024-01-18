@@ -28,7 +28,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final BasePilotable basePilotable = new BasePilotable();
-  private final Gobeur gobeur = new Gobeur();
+  private Gobeur gobeur = new Gobeur();
 
   private final SendableChooser<Command> chooser;
   
@@ -43,10 +43,13 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    
+    NamedCommands.registerCommand("gober", new Gober(gobeur));
+    
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajets",chooser);
 
-    NamedCommands.registerCommand("gober", new Gober(gobeur));
 
     // Configure default commands
     basePilotable.setDefaultCommand(

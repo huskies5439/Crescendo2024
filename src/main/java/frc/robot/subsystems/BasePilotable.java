@@ -95,6 +95,7 @@ public class BasePilotable extends SubsystemBase {
             arriereDroite.getPosition()
         });
         SmartDashboard.putNumber("Gyro", getAngle()); 
+        SmartDashboard.putString("pose",getPose().toString());
   }
 
   /*
