@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 1.35,
+      "y": 5.5
     },
     "rotation": 0
   },
@@ -12,13 +12,19 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "named",
+          "data": {
+            "name": "lancer"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "New Path"
+                  "pathName": "allerNoteSpeaker"
                 }
               },
               {
@@ -28,6 +34,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "retourSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancer"
           }
         }
       ]
