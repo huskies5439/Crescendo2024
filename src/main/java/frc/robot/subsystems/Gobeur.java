@@ -20,7 +20,7 @@ public class Gobeur extends SubsystemBase {
 
   private final TalonFX moteur = new TalonFX(5);
   private final DigitalInput infrarouge = new DigitalInput(0);
-  private AddressableLED del = new AddressableLED(0);
+  private AddressableLED del = new AddressableLED(9);
   private AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3
                                                                         // DEL/Section
   /** Creates a new Gobeur. */
@@ -41,8 +41,8 @@ public class Gobeur extends SubsystemBase {
       closeDel();
     } else {
       setCouleur(Color.kOrange);
-    }
   }
+}
 
   public void gober(){
     moteur.setVoltage(4);
