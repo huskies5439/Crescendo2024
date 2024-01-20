@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -17,8 +19,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Lanceur extends SubsystemBase {
 
-  private final TalonFX moteurG = new TalonFX(1);
-  private final TalonFX moteurD = new TalonFX(2);
+  private final CANSparkMax moteurG = new CANSparkMax(9, MotorType.kBrushless);  
+  private final CANSparkMax moteurD = new CANSparkMax(10, MotorType.kBrushless);
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
   private PIDController pidG = new PIDController(0, 0, 0);
@@ -55,8 +57,7 @@ public class Lanceur extends SubsystemBase {
   }
 
   public double getVitesseG(){
-    return moteurG.getVelocity().getValue();
-
+    return moteurG.getEncoder().getVelocity();
   }
 
   public void setVitessePIDGauche(double vcible) {
@@ -65,7 +66,7 @@ public class Lanceur extends SubsystemBase {
 
 
   public double getVitesseD(){
-    return moteurD.getVelocity().getValue();
+    return moteurD.getEncoder().getVelocity();
 
   }
 

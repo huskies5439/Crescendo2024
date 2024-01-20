@@ -37,7 +37,13 @@ public class Gobeur extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("infrarouge", getInfrarouge());
+    if (getInfrarouge()) { 
+      closeDel();
+    } else {
+      setCouleur(Color.kOrange);
+    }
   }
+
   public void gober(){
     moteur.setVoltage(4);
   } 
@@ -49,9 +55,9 @@ public class Gobeur extends SubsystemBase {
     return infrarouge.get();
   }
 
-  public void setCouleur(int rouge, int vert, int bleu) {
+  public void closeDel() {
     for (var i = 0; i < delBuffer.getLength(); i++) {
-      delBuffer.setRGB(i, rouge, bleu, vert);
+      delBuffer.setRGB(i, 0, 0, 0);
     }
     del.setData(delBuffer);
 
