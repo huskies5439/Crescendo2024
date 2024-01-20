@@ -53,7 +53,7 @@ public class RobotContainer {
 
 
     // Configure default commands
-    basePilotable.setDefaultCommand(
+     basePilotable.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         Commands.run(
@@ -77,8 +77,7 @@ public class RobotContainer {
     manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
-    manette.y().toggleOnTrue(Commands.run(()-> lanceur.setVoltage(lanceur.getValeurShuffleboard()), lanceur)
-                                              .andThen(Commands.runOnce(lanceur::stop)));
+    manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
   }
 
   /**

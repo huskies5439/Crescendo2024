@@ -23,7 +23,7 @@ public class CaracteriserLanceur extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        lanceur.setVitessePID(lanceur.getValeurShuffleboard());
+        lanceur.setPIDShuffleboard();
 
   }
 

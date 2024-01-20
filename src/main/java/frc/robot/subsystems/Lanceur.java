@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Lanceur extends SubsystemBase {
 
-  private final CANSparkMax moteurG = new CANSparkMax(9, MotorType.kBrushless);  
-  private final CANSparkMax moteurD = new CANSparkMax(10, MotorType.kBrushless);
+  private final CANSparkMax moteurG = new CANSparkMax(10, MotorType.kBrushless);  
+  private final CANSparkMax moteurD = new CANSparkMax(9, MotorType.kBrushless);
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
   private PIDController pidG = new PIDController(0, 0, 0);
@@ -32,6 +32,7 @@ public class Lanceur extends SubsystemBase {
 
   /** Creates a new Lanceur. */
   public Lanceur() {
+    moteurG.setInverted(true);
   
 
   }
@@ -81,6 +82,14 @@ public class Lanceur extends SubsystemBase {
 
   public double getValeurShuffleboard() {
     return valeurLanceurCible.getDouble(0);
+}
+
+public void setVoltageShuffleboard(){
+  setVoltage(getValeurShuffleboard());
+}
+
+public void setPIDShuffleboard(){
+  setVitessePID(getValeurShuffleboard());
 }
 
 }

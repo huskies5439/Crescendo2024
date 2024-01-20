@@ -9,7 +9,7 @@ import frc.robot.subsystems.Gobeur;
 
 public class Gober extends Command {
 
-  private Gobeur gobeur = new Gobeur();
+  private Gobeur gobeur;
   /** Creates a new Gober. */
   public Gober(Gobeur gobeur) {
     
