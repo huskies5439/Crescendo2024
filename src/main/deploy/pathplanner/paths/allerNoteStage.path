@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.468033988749895,
-        "y": 5.5
+        "x": 1.7590314210585614,
+        "y": 4.122214464115091
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "DépartSpeaker"
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 5.5
+        "x": 2.894982565999367,
+        "y": 4.098792791023527
       },
       "prevControl": {
-        "x": 2.25,
-        "y": 5.5
+        "x": 1.5013930170513679,
+        "y": 4.122214464115091
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "NoteSpeaker"
+      "isLocked": false,
+      "linkedName": "NoteStage"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
