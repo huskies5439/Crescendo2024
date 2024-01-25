@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -78,6 +79,15 @@ public class RobotContainer {
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
     manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
+
+
+
+
+    //////SysID Lanceur
+    manette.povUp().whileTrue(lanceur.sysIdDynamic(Direction.kForward));
+    manette.povDown().whileTrue(lanceur.sysIdDynamic(Direction.kReverse));
+    manette.povRight().whileTrue(lanceur.sysIdQuasistatic(Direction.kForward));
+    manette.povLeft().whileTrue(lanceur.sysIdQuasistatic(Direction.kReverse));
   }
 
   /**
