@@ -9,8 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import static edu.wpi.first.units.MutableMeasure.mutable;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -19,7 +17,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;

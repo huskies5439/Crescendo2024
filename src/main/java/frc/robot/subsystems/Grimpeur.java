@@ -5,13 +5,12 @@
 package frc.robot.subsystems;
 
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Grimpeur extends SubsystemBase {
@@ -23,12 +22,27 @@ public class Grimpeur extends SubsystemBase {
     moteurFollower.setControl(new Follower(80, false));
     moteur.setInverted(false);
     moteur.setNeutralMode(NeutralModeValue.Brake);
-    // moteur.configselectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,0,0);
-  
+    resetEncodeur();
   } 
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Position Grimper",getPosition());
+  }
+
+  public double getPosition() {
+    return moteur.getPosition().getValue();
+  }
+
+  public void resetEncodeur() {
+    moteur.setPosition(0);
+  }
+
+  public void setVoltage(double volt) {
+    moteur.set(volt);
+  }
+
+  public void stop() {
+    setVoltage(0);
   }
 }
