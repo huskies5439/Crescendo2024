@@ -1,0 +1,87 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4024792927634633,
+      "y": 1.65
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "deposeNoteArea1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancer"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "allerNoteMilieuStage"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "gober"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "allerCracherNote1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancer"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "allerNoteMilieuSource"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "gober"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "allerCracherNote2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

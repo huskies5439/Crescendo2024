@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4,
+        "y": 7.3
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.6894709561776844,
+        "y": 7.294927630505668
+      },
+      "isLocked": false,
+      "linkedName": "DépartAmpli"
+    },
+    {
+      "anchor": {
+        "x": 1.849652349711203,
+        "y": 7.628638867033832
+      },
+      "prevControl": {
+        "x": 1.7024717553477797,
+        "y": 7.233521149157386
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Ampli"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -90.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

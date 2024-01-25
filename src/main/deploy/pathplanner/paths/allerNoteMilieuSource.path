@@ -1,0 +1,65 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.510400598036968,
+        "y": 2.703061015878129
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.510400598036968,
+        "y": 2.203061015878129
+      },
+      "isLocked": true,
+      "linkedName": "cracherNote"
+    },
+    {
+      "anchor": {
+        "x": 5.553847075173826,
+        "y": 1.0211563837761821
+      },
+      "prevControl": {
+        "x": 4.610758547736608,
+        "y": 1.335856366326553
+      },
+      "nextControl": {
+        "x": 6.496935602611043,
+        "y": 0.7064564012258105
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.303627664165898,
+        "y": 0.7742100687453413
+      },
+      "prevControl": {
+        "x": 7.1651012917103625,
+        "y": 0.7742100687453413
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "NoteMilieuSource"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}
