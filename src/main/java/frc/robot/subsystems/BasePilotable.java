@@ -204,20 +204,16 @@ public class BasePilotable extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
+    double xSpeedDelivered = xSpeedCommanded * DriveConstants.maxVitesseTeleop;
+    double ySpeedDelivered = ySpeedCommanded * DriveConstants.maxVitesseTeleop;
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    avantGauche.setDesiredState(swerveModuleStates[0]);
-    avantDroite.setDesiredState(swerveModuleStates[1]);
-    arriereGauche.setDesiredState(swerveModuleStates[2]);
-    arriereDroite.setDesiredState(swerveModuleStates[3]);
+
+    setModuleStates(swerveModuleStates);
   }
 
   /**
@@ -229,10 +225,7 @@ public class BasePilotable extends SubsystemBase {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
-    avantGauche.setDesiredState(swerveModuleStates[0]);
-    avantDroite.setDesiredState(swerveModuleStates[1]);
-    arriereGauche.setDesiredState(swerveModuleStates[2]);
-    arriereDroite.setDesiredState(swerveModuleStates[3]); 
+    setModuleStates(swerveModuleStates); 
    }
 
 
@@ -257,7 +250,7 @@ public class BasePilotable extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        desiredStates, DriveConstants.maxVitesseTeleop);
     avantGauche.setDesiredState(desiredStates[0]);
     avantDroite.setDesiredState(desiredStates[1]);
     arriereGauche.setDesiredState(desiredStates[2]);

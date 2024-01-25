@@ -11,7 +11,6 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -30,7 +29,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 1.5;//Valeur original 4.8
+    public static final double maxVitesseTeleop = 1.5;//Valeur original 4.8
     public static final double kMaxAngularSpeed = Math.PI; // radians per second //Originale REV = 2pi
 
     public static final double kDirectionSlewRate = 7; // radians per second //REV = 1.2
@@ -51,7 +50,7 @@ public final class Constants {
     public static final HolonomicPathFollowerConfig kPathFollowerConfig = new HolonomicPathFollowerConfig(
                                           new PIDConstants(5.0, 0.0, 0.0),
                                           new PIDConstants(5.0, 0.0, 0.0),
-                                          kMaxSpeedMetersPerSecond,
+                                          2,//Vitesse maximale en auto
                                           new Translation2d(kWheelBase / 2, kTrackWidth / 2).getNorm(),
                                           new ReplanningConfig());
   }
@@ -89,19 +88,4 @@ public final class Constants {
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
-
-  public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
-
-    // Constraint for the motion profiled robot angle controller
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
-  }
 }

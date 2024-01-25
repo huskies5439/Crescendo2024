@@ -31,7 +31,7 @@ public class Grimpeur extends SubsystemBase {
   }
 
   public double getPosition() {
-    return moteur.getPosition().getValue();
+    return moteur.getPosition().getValueAsDouble();
   }
 
   public void resetEncodeur() {
