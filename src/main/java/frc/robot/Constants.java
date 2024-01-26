@@ -49,8 +49,8 @@ public final class Constants {
 
     public static final HolonomicPathFollowerConfig kPathFollowerConfig = new HolonomicPathFollowerConfig(
                                           new PIDConstants(5.0, 0.0, 0.0),
-                                          new PIDConstants(5.0, 0.0, 0.0),
-                                          2,//Vitesse maximale en auto
+                                          new PIDConstants(10.0, 0.0, 0.0),
+                                          5,//Vitesse maximale en auto
                                           new Translation2d(kWheelBase / 2, kTrackWidth / 2).getNorm(),
                                           new ReplanningConfig());
   }

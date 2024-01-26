@@ -18,9 +18,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "allerNoteSpeaker"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "allerNoteSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "gober"
+                }
+              }
+            ]
           }
         }
       ]
