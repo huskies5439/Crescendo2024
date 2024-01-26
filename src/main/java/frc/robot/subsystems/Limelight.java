@@ -68,7 +68,7 @@ public class Limelight extends SubsystemBase {
 
   //Change l'alliance 
   public void setAlliance() {
-    if (DriverStation.getAlliance() == Alliance.Red) {
+    if (DriverStation.getAlliance().get() == Alliance.Red) {
       alliance = "red";
     } 
 
