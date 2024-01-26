@@ -59,7 +59,7 @@ public class BasePilotable extends SubsystemBase {
       });
 
   public BasePilotable() {
-    resetGyro();
+    resetOdometry(new Pose2d());
 
     //Copier-coller du getting started de PathPlanner
     AutoBuilder.configureHolonomic(
@@ -96,6 +96,10 @@ public class BasePilotable extends SubsystemBase {
         });
         SmartDashboard.putNumber("Gyro", getAngle()); 
         SmartDashboard.putString("pose",getPose().toString());
+        SmartDashboard.putString("Avant gauche", avantGauche.getState().toString());
+        SmartDashboard.putString("Avant droite", avantDroite.getState().toString());
+        SmartDashboard.putString("Arriere droite", arriereDroite.getState().toString());
+        SmartDashboard.putString("Arriere gauche", arriereGauche.getState().toString());
   }
 
   /*
