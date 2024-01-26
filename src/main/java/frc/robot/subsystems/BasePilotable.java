@@ -100,6 +100,7 @@ public class BasePilotable extends SubsystemBase {
         SmartDashboard.putString("Avant droite", avantDroite.getState().toString());
         SmartDashboard.putString("Arriere droite", arriereDroite.getState().toString());
         SmartDashboard.putString("Arriere gauche", arriereGauche.getState().toString());
+        SmartDashboard.putString("Chassis Speed", getRobotRelativeSpeeds().toString());
   }
 
   /*
@@ -208,9 +209,9 @@ public class BasePilotable extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.maxVitesseTeleop;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.maxVitesseTeleop;
-    double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+    double xSpeedDelivered = xSpeedCommanded * DriveConstants.maxVitesseLineaire;
+    double ySpeedDelivered = ySpeedCommanded * DriveConstants.maxVitesseLineaire;
+    double rotDelivered = m_currentRotation * DriveConstants.maxVitesseRotation;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
@@ -254,7 +255,7 @@ public class BasePilotable extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.maxVitesseTeleop);
+        desiredStates, DriveConstants.maxVitesseModule);//Tentative de régler le bug que la distance parcourue dépent de la rotation
     avantGauche.setDesiredState(desiredStates[0]);
     avantDroite.setDesiredState(desiredStates[1]);
     arriereGauche.setDesiredState(desiredStates[2]);

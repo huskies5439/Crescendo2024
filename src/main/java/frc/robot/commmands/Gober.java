@@ -27,12 +27,12 @@ public class Gober extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    /*if (gobeur.getInfrarouge()) { 
+    if (gobeur.getInfrarouge()) { 
       gobeur.gober();
     } else {
       gobeur.stop();
-    }*/
-    gobeur.gober();
+    }
+    // gobeur.gober();
   }
 
   // Called once the command ends or is interrupted.
