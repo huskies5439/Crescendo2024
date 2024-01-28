@@ -17,17 +17,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-/*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
+
 public class RobotContainer {
   // The robot's subsystems
   private final BasePilotable basePilotable = new BasePilotable();
@@ -84,14 +78,6 @@ public class RobotContainer {
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
     manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
 
-
-
-
-    //////SysID Lanceur
-    manette.povUp().whileTrue(lanceur.sysIdDynamic(Direction.kForward));
-    manette.povDown().whileTrue(lanceur.sysIdDynamic(Direction.kReverse));
-    manette.povRight().whileTrue(lanceur.sysIdQuasistatic(Direction.kForward));
-    manette.povLeft().whileTrue(lanceur.sysIdQuasistatic(Direction.kReverse));
   }
 
   /**
