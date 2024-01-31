@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
@@ -99,9 +98,13 @@ public class BasePilotable extends SubsystemBase {
             arriereGauche.getPosition(),
             arriereDroite.getPosition()
         });
-        SmartDashboard.putNumber("Gyro", getAngle()); 
-        SmartDashboard.putString("pose",getPose().toString());
-        SmartDashboard.putString("Chassis Speed", getRobotRelativeSpeeds().toString());
+
+        
+        SmartDashboard.putNumber("Gyro", getAngle());
+        SmartDashboard.putNumber("Pose Estimator X",getPose().getX());
+        SmartDashboard.putNumber("Pose Estimator Y",getPose().getY());
+        SmartDashboard.putNumber("Pose Estimator Rotation",getPose().getRotation().getDegrees());
+        
   }
 
   /*

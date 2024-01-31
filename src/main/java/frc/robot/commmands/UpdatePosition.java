@@ -4,7 +4,6 @@
 
 package frc.robot.commmands;
 
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.BasePilotable;
@@ -35,7 +34,7 @@ public class UpdatePosition extends Command {
   @Override
   public void execute() {
     if(limelight.getTv() && limelight.getTa() > 0.12){
-      basePilotable.addVisionMeasurement(limelight.getVisionPosition().toPose2d(), limelight.getTotalLatency() / 1000.0);
+      basePilotable.addVisionMeasurement(limelight.getVisionPosition(), limelight.getTotalLatency() / 1000.0);
     }
   }
 

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -12,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
@@ -25,7 +27,7 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry botpose;
 
   double[] result;
-  double[] temp = {0,0,0,0,0,0};
+ 
 
   String alliance;
   
@@ -36,18 +38,23 @@ public class Limelight extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Vision X", getVisionPosition().getX());
+    SmartDashboard.putNumber("Vision Y", getVisionPosition().getY());
+    SmartDashboard.putNumber("Vision Rotation ", getVisionPosition().getRotation().getDegrees());
+    SmartDashboard.putNumber("Vision Total Latency", getTotalLatency());
+
+  }
 
   //Donne la position du robot selon la limelight
-  public Pose3d getVisionPosition() {
-    result = botpose.getDoubleArray(temp);
+  public Pose2d getVisionPosition() {
+    result = botpose.getDoubleArray(new double[6]);
 
     Translation3d tran3d = new Translation3d(result[0], result[1], result[2]);
-
     Rotation3d r3d = new Rotation3d(Math.toRadians(result[3]), Math.toRadians(result[4]), Math.toRadians(result[5]));
     Pose3d p3d = new Pose3d(tran3d, r3d);
 
-    return p3d;
+    return p3d.toPose2d();
 
   }
 
