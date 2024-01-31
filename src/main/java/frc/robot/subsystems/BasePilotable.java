@@ -8,6 +8,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
@@ -48,7 +50,7 @@ public class BasePilotable extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry odometry = new SwerveDriveOdometry(
+  SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(getAngle()),
       new SwerveModulePosition[] {
@@ -56,9 +58,12 @@ public class BasePilotable extends SubsystemBase {
           avantDroite.getPosition(),
           arriereGauche.getPosition(),
           arriereDroite.getPosition()
-      });
+      },
+      new Pose2d());
 
   public BasePilotable() {
+    resetGyro(); 
+    resetEncoders();
     resetOdometry(new Pose2d());
 
     //Copier-coller du getting started de PathPlanner
@@ -86,7 +91,7 @@ public class BasePilotable extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    odometry.update(
+    poseEstimator.update(
         Rotation2d.fromDegrees(getAngle()),
         new SwerveModulePosition[] {
             avantGauche.getPosition(),
@@ -96,10 +101,6 @@ public class BasePilotable extends SubsystemBase {
         });
         SmartDashboard.putNumber("Gyro", getAngle()); 
         SmartDashboard.putString("pose",getPose().toString());
-        SmartDashboard.putString("Avant gauche", avantGauche.getState().toString());
-        SmartDashboard.putString("Avant droite", avantDroite.getState().toString());
-        SmartDashboard.putString("Arriere droite", arriereDroite.getState().toString());
-        SmartDashboard.putString("Arriere gauche", arriereGauche.getState().toString());
         SmartDashboard.putString("Chassis Speed", getRobotRelativeSpeeds().toString());
   }
 
@@ -109,7 +110,11 @@ public class BasePilotable extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return odometry.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
+  }
+
+  public void addVisionMeasurement(Pose2d position, double delaiLimelight) {
+    poseEstimator.addVisionMeasurement(position, Timer.getFPGATimestamp() - delaiLimelight);
   }
 
   /**
@@ -126,7 +131,7 @@ public class BasePilotable extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    odometry.resetPosition(
+    poseEstimator.resetPosition(
         Rotation2d.fromDegrees(getAngle()),
         new SwerveModulePosition[] {
             avantGauche.getPosition(),

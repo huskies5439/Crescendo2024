@@ -3,47 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.303627664165898,
-        "y": 0.7742100687453413
+        "x": 0.8455861704876034,
+        "y": 4.414985377759629
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.042199190089438,
-        "y": 0.767535844014777
+        "x": 1.8455861704876035,
+        "y": 3.9149853777596286
       },
       "isLocked": false,
-      "linkedName": "NoteMilieuSource"
+      "linkedName": "coteBasSub"
     },
     {
       "anchor": {
-        "x": 2.510400598036968,
-        "y": 2.703061015878129
+        "x": 2.894982565999367,
+        "y": 4.098792791023527
       },
       "prevControl": {
-        "x": 3.424769386124138,
-        "y": 2.008941643899548
+        "x": 1.3742919334248123,
+        "y": 4.098792791023527
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "cracherNote"
+      "linkedName": "NoteStage"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 1.5,
     "maxAcceleration": 1.5,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
-    "rotateFast": false
+    "rotation": 0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

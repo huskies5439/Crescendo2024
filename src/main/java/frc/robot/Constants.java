@@ -32,6 +32,8 @@ public final class Constants {
     public static final double maxVitesseLineaire = 1.5;//Vitesse linéaire max du chassis //Valeur original 4.8
     public static final double maxVitesseRotation = Math.PI; // radians per second //Originale REV = 2pi
 
+    public static final double maxVitesseModule = 3;//Vitesse maximale d'un module en m/s 
+
     public static final double kDirectionSlewRate = 7; // radians per second //REV = 1.2
     public static final double kMagnitudeSlewRate = 2.25; // percent per second (1 = 100%) // REV 1.8
     public static final double kRotationalSlewRate = 2.25; // percent per second (1 = 100%) //REV 2.0
@@ -48,11 +50,10 @@ public final class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
 
-    public static final double maxVitesseModule = 5;//Vitesse maximale d'un module en m/s 
-
+    
     public static final HolonomicPathFollowerConfig kPathFollowerConfig = new HolonomicPathFollowerConfig(
+                                          new PIDConstants(0.5, 0.0, 0.0),
                                           new PIDConstants(5.0, 0.0, 0.0),
-                                          new PIDConstants(10.0, 0.0, 0.0),
                                           maxVitesseModule,
                                           new Translation2d(kWheelBase / 2, kTrackWidth / 2).getNorm(),
                                           new ReplanningConfig());

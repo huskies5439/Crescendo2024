@@ -2,25 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 7.3
+      "x": 0.85,
+      "y": 4.41
     },
-    "rotation": -90.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "allerAmpli"
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "scorerAmpli"
+            "name": "lancer"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "allerNoteAmpli"
+                  "pathName": "coteAllerStage"
                 }
               },
               {
@@ -45,32 +45,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "retourAmpli"
+            "pathName": "retourCoteSub"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "scorerAmpli"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "allerNoteMilieuAmpli"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "gober"
-                }
-              }
-            ]
+            "name": "lancer"
           }
         }
       ]

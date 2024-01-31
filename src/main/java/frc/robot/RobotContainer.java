@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.Gober;
+import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
+import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -27,7 +29,7 @@ public class RobotContainer {
   private final BasePilotable basePilotable = new BasePilotable();
   private final Gobeur gobeur = new Gobeur();
   private final Lanceur lanceur = new Lanceur();
-
+  private final Limelight limelight = new Limelight();
   private final SendableChooser<Command> chooser;
   
 
@@ -45,21 +47,23 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("gober", new Gober(gobeur));
     NamedCommands.registerCommand("lancer", new WaitCommand(2));
-
+    NamedCommands.registerCommand("scorerAmpli", new WaitCommand(2));
     
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajets",chooser);
 
 
     // Configure default commands
-     basePilotable.setDefaultCommand(
+    basePilotable.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         Commands.run(
             () -> basePilotable.conduire(
                   manette.getLeftY(),manette.getLeftX(),manette.getRightX(),
                   true, true),
-                  basePilotable));
+                  basePilotable)); 
+    limelight.setDefaultCommand(new UpdatePosition(basePilotable,limelight));
+
   }
 
   /**

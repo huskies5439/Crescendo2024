@@ -20,11 +20,11 @@
         {
           "type": "named",
           "data": {
-            "name": "lancer"
+            "name": "scorerAmpli"
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
