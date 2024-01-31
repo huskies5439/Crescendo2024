@@ -101,17 +101,18 @@ public class BasePilotable extends SubsystemBase {
 
         
         SmartDashboard.putNumber("Gyro", getAngle());
+
         SmartDashboard.putNumber("Pose Estimator X",getPose().getX());
         SmartDashboard.putNumber("Pose Estimator Y",getPose().getY());
         SmartDashboard.putNumber("Pose Estimator Rotation",getPose().getRotation().getDegrees());
+
+        SmartDashboard.putNumber("Chassis Speed VX", getRobotRelativeSpeeds().vxMetersPerSecond);
+        SmartDashboard.putNumber("Chassis Speed VY", getRobotRelativeSpeeds().vyMetersPerSecond);
+        SmartDashboard.putNumber("Chassis Speed Omega", Math.toDegrees(getRobotRelativeSpeeds().omegaRadiansPerSecond));
         
   }
 
-  /*
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
+
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();
   }
