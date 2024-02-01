@@ -36,8 +36,8 @@ public class Gobeur extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("infrarouge", getInfrarouge());
-    if (getInfrarouge()) { 
+    SmartDashboard.putBoolean("infrarouge", notePresente());
+    if (notePresente()) { 
       closeDel();
     } else {
       setCouleur(Color.kOrange);
@@ -51,7 +51,7 @@ public class Gobeur extends SubsystemBase {
     moteur.setVoltage(0);
   }
    
-  public boolean getInfrarouge(){
+  public boolean notePresente(){
     return infrarouge.get();
   }
 
