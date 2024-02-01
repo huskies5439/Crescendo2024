@@ -8,10 +8,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commmands.Ajuster;
 import frc.robot.commmands.Gober;
+import frc.robot.commmands.Grimper;
 import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
+import frc.robot.subsystems.Grimpeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,7 +34,7 @@ public class RobotContainer {
   private final Lanceur lanceur = new Lanceur();
   private final Limelight limelight = new Limelight();
   private final SendableChooser<Command> chooser;
-  
+  private final Grimpeur grimpeur = new Grimpeur();
 
 
   // The driver's controller
@@ -81,7 +84,9 @@ public class RobotContainer {
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
     manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
-
+    manette.rightTrigger().whileTrue(new Ajuster(grimpeur,2));
+    manette.leftTrigger().whileTrue(new Ajuster(grimpeur,1));
+    manette.b().onTrue(new Grimper(grimpeur));
   }
 
   /**

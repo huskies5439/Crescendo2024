@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-
-
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -13,36 +11,51 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
 public class Grimpeur extends SubsystemBase {
-  private TalonFX moteur = new TalonFX(80);
-  private TalonFX moteurFollower = new TalonFX(81);
+  private TalonFX moteurGauche = new TalonFX(1);
+  private TalonFX moteurDroit = new TalonFX(2);
   
+  private double conversion = 1;
   /** Creates a new Grimper. */
   public Grimpeur() {
-    moteurFollower.setControl(new Follower(80, false));
-    moteur.setInverted(false);
-    moteur.setNeutralMode(NeutralModeValue.Brake);
+    moteurDroit.setControl(new Follower(80, false));
+    moteurGauche.setInverted(false);
+    moteurGauche.setNeutralMode(NeutralModeValue.Brake);
     resetEncodeur();
   } 
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Position Grimper",getPosition());
+    SmartDashboard.putNumber("Position Grimper Droite", getPositionDroit());
+    SmartDashboard.putNumber("Position Grimper Gauche", getPositionGauche());
   }
 
-  public double getPosition() {
-    return moteur.getPosition().getValueAsDouble();
+  public Double getPositionDroit() {
+    return moteurDroit.getPosition().getValue() * conversion;
   }
+
+  public Double getPositionGauche(){
+    return moteurGauche.getPosition().getValue() * conversion;
+  }
+
+
 
   public void resetEncodeur() {
-    moteur.setPosition(0);
+    moteurGauche.setPosition(0);
   }
 
-  public void setVoltage(double volt) {
-    moteur.set(volt);
+  public void setVoltageGauche(double volt) {
+    moteurGauche.set(volt);
+  }
+
+  public void setVoltageDroit(double volt) {
+    moteurDroit.set(volt);
   }
 
   public void stop() {
-    setVoltage(0);
+    setVoltageDroit(0);
+    setVoltageGauche(0);
+
   }
 }
