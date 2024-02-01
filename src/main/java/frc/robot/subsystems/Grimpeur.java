@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -82,11 +81,11 @@ public class Grimpeur extends SubsystemBase {
   }
 
   public Command monterGauche(){
-    return new StartEndCommand(() -> this.setVoltageGauche(3), this::stop, this).until(this::maxHauteurG);
+    return this.startEnd(() -> this.setVoltageGauche(3), this::stop).until(this::maxHauteurG);//requiert implicitement "this"
   }
 
   public Command descendreGauche(){
-    return new StartEndCommand(()->this.setVoltageGauche(-3), this::stop, this).until(this::minHauteurG);
+    return this.startEnd(()->this.setVoltageGauche(-3), this::stop).until(this::minHauteurG);
   }
 
 
