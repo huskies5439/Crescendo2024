@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Gobeur extends SubsystemBase { 
 
   private final TalonFX moteur = new TalonFX(5);
-  private final DigitalInput infrarouge = new DigitalInput(0);
+  private final DigitalInput infrarouge = new DigitalInput(0); // Émeteur branché sur le 1
   private AddressableLED del = new AddressableLED(9);
   private AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3
                                                                         // DEL/Section
