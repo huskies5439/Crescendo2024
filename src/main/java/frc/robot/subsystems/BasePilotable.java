@@ -48,7 +48,7 @@ public class BasePilotable extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
-  // Odometry class for tracking robot pose
+  //Initialisation PoseEstimator
   SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       Rotation2d.fromDegrees(getAngle()),
@@ -61,6 +61,7 @@ public class BasePilotable extends SubsystemBase {
       new Pose2d());
 
   public BasePilotable() {
+    //Reset initial
     resetGyro(); 
     resetEncoders();
     resetOdometry(new Pose2d());
@@ -69,8 +70,8 @@ public class BasePilotable extends SubsystemBase {
     AutoBuilder.configureHolonomic(
       this::getPose,
       this::resetOdometry,
-      this::getRobotRelativeSpeeds,
-      this::conduireRobotRelatif,
+      this::getChassisSpeed,
+      this::conduireChassis,
       DriveConstants.kPathFollowerConfig,
        () -> {
                     // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -106,56 +107,28 @@ public class BasePilotable extends SubsystemBase {
         SmartDashboard.putNumber("Pose Estimator Y",getPose().getY());
         SmartDashboard.putNumber("Pose Estimator Rotation",getPose().getRotation().getDegrees());
 
-        SmartDashboard.putNumber("Chassis Speed VX", getRobotRelativeSpeeds().vxMetersPerSecond);
-        SmartDashboard.putNumber("Chassis Speed VY", getRobotRelativeSpeeds().vyMetersPerSecond);
-        SmartDashboard.putNumber("Chassis Speed Omega", Math.toDegrees(getRobotRelativeSpeeds().omegaRadiansPerSecond));
+        SmartDashboard.putNumber("Chassis Speed VX", getChassisSpeed().vxMetersPerSecond);
+        SmartDashboard.putNumber("Chassis Speed VY", getChassisSpeed().vyMetersPerSecond);
+        SmartDashboard.putNumber("Chassis Speed Omega", Math.toDegrees(getChassisSpeed().omegaRadiansPerSecond));
         
   }
 
 
-  public Pose2d getPose() {
-    return poseEstimator.getEstimatedPosition();
+
+  /////////MÉTHODE DONNANT DES CONSIGNES À CHAQUE MODULE
+  
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        desiredStates, DriveConstants.maxVitesseModule);
+    avantGauche.setDesiredState(desiredStates[0]);
+    avantDroite.setDesiredState(desiredStates[1]);
+    arriereGauche.setDesiredState(desiredStates[2]);
+    arriereDroite.setDesiredState(desiredStates[3]);
   }
 
-  public void addVisionMeasurement(Pose2d position, double delaiLimelight) {
-    poseEstimator.addVisionMeasurement(position, Timer.getFPGATimestamp() - delaiLimelight);
-  }
 
-  /**
-   * Returns the chassis speed relative to the field XY and angle from each module angle and speed
-   * @return the ChassisSpeed
-   */
-  public ChassisSpeeds getRobotRelativeSpeeds() {
-    return DriveConstants.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),arriereDroite.getState(), arriereGauche.getState());
-  }
 
-  /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   */
-  public void resetOdometry(Pose2d pose) {
-    poseEstimator.resetPosition(
-        Rotation2d.fromDegrees(getAngle()),
-        new SwerveModulePosition[] {
-            avantGauche.getPosition(),
-            avantDroite.getPosition(),
-            arriereGauche.getPosition(),
-            arriereDroite.getPosition()
-        },
-        pose);
-  }
-
-  /**
-   * Method to drive the robot using joystick info.
-   *
-   * @param xSpeed        Speed of the robot in the x direction (forward).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
-   * @param rot           Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to the
-   *                      field.
-   * @param rateLimit     Whether to enable rate limiting for smoother control.
-   */
+  ////////TÉLÉOP
   public void conduire(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
     double xSpeedCommanded; 
@@ -230,26 +203,15 @@ public class BasePilotable extends SubsystemBase {
     setModuleStates(swerveModuleStates);
   }
 
-  /**
-   * Method to drive the robot from field relative speeds
-   * @param chassisSpeeds XY and omege speeds the robot should be going
-   */
-  public void conduireRobotRelatif(ChassisSpeeds chassisSpeeds) {
-    //Ramene la vitesse en déplacement de 50Hz
-    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
-
-    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
-    setModuleStates(swerveModuleStates); 
-   }
-
 
   public void stop() {
     conduire(0,0,0,false,false);
 
   }
-  /**
-   * Sets the wheels into an X formation to prevent movement.
-   */
+
+
+
+   //Sets the wheels into an X formation to prevent movement.
   public void setX() {
     avantGauche.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
     avantDroite.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
@@ -257,21 +219,32 @@ public class BasePilotable extends SubsystemBase {
     arriereDroite.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
-  /**
-   * Sets the swerve ModuleStates.
-   *
-   * @param desiredStates The desired SwerveModule states.
-   */
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.maxVitesseModule);//Tentative de régler le bug que la distance parcourue dépent de la rotation
-    avantGauche.setDesiredState(desiredStates[0]);
-    avantDroite.setDesiredState(desiredStates[1]);
-    arriereGauche.setDesiredState(desiredStates[2]);
-    arriereDroite.setDesiredState(desiredStates[3]);
+
+
+  /////////Pose estimator
+  public Pose2d getPose() {
+    return poseEstimator.getEstimatedPosition();
   }
 
-  /** Resets the drive encoders to currently read a position of 0. */
+  public void addVisionMeasurement(Pose2d position, double delaiLimelight) {
+    poseEstimator.addVisionMeasurement(position, Timer.getFPGATimestamp() - delaiLimelight);
+  }
+
+  public void resetOdometry(Pose2d pose) {//pose est à la pose où reset l'odométrie du robot
+    poseEstimator.resetPosition(
+        Rotation2d.fromDegrees(getAngle()),
+        new SwerveModulePosition[] {
+            avantGauche.getPosition(),
+            avantDroite.getPosition(),
+            arriereGauche.getPosition(),
+            arriereDroite.getPosition()
+        },
+        pose);
+  }
+
+
+  //////////////Encodeurs
+  //Pas besoin de méthode pour obtenir la position des encodeurs, tout ça passe directement pas la pose2D du robot
   public void resetEncoders() {
     avantGauche.resetEncoders();
     arriereGauche.resetEncoders();
@@ -279,19 +252,39 @@ public class BasePilotable extends SubsystemBase {
     arriereDroite.resetEncoders();
   }
 
-  /** Zeroes the heading of the robot. */
-  public void resetGyro() {
-    gyro.setYaw(0);
-  }
 
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from -180 to 180
-   */
+
+  ///////////////GYRO
   public double getAngle() {
     return gyro.getYaw();
   } 
 
+    public void resetGyro() {
+    gyro.setYaw(0);
+  }
+
+
+
+  /////////Méthodes pour PathPlanner. Ce sont deux méthodes réfléchies en terme du Chassis et Field Relative
+/**
+   * Returns the chassis speed relative to the field XY and angle from each module angle and speed
+   * @return the ChassisSpeed
+   */
+  public ChassisSpeeds getChassisSpeed() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),arriereDroite.getState(), arriereGauche.getState());
+  }
+
+  /**
+   * Method to drive the robot from field relative speeds
+   * @param chassisSpeeds XY and omege speeds the robot should be going
+   */
+  public void conduireChassis(ChassisSpeeds chassisSpeeds) {
+    //Ramene la vitesse continue en valeur à chaque de 20 ms (fréquence des itérations du roborio = 50 Hz)
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+    setModuleStates(swerveModuleStates); 
+   }
+  
   
 }

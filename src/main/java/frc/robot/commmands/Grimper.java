@@ -19,7 +19,7 @@ public class Grimper extends Command {
   public Grimper(Grimpeur grimpeur) {
       
     this.grimpeur = grimpeur;
-    this.voltage = Constants.ModuleConstants.grimpeurVoltage;
+    this.voltage = Constants.grimpeurVoltage;
     this.maxHauteur = 10.0;
     addRequirements(grimpeur); 
 

@@ -15,6 +15,7 @@ import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Grimpeur;
+import frc.robot.subsystems.GrimpeurV2;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,6 +36,11 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private final SendableChooser<Command> chooser;
   private final Grimpeur grimpeur = new Grimpeur();
+
+
+  //////Suggestion V2 pour team grimpeur
+  private final GrimpeurV2 grimpeurGauche = new GrimpeurV2(1, false, "gauche");
+  //On crée un autre GrimpeurV2 qui est grimpeurDroit
 
 
   // The driver's controller
@@ -87,6 +93,19 @@ public class RobotContainer {
     manette.rightTrigger().whileTrue(new Ajuster(grimpeur,2));
     manette.leftTrigger().whileTrue(new Ajuster(grimpeur,1));
     manette.b().onTrue(new Grimper(grimpeur));
+
+
+
+    //Proposition V1 pour team grimpeur
+    manette.leftTrigger().whileTrue(grimpeur.descendreGauche());//whileTrue fait qu'on va canceller la commande en lâchant
+    manette.b().onTrue(grimpeur.monterGauche());/* .alongWith(équivalent pour la droite); */
+
+
+    //Proposition V2 pour team grimpeur
+    manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
+    //manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
+    manette.b().onTrue(grimpeurGauche.monter());//.alongWith(grimpeurDroit.monter())// et éventuellement.alongWith(new PIDEchelle(0.2)).....
+
   }
 
   /**

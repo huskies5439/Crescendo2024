@@ -33,37 +33,46 @@ public class Echelle extends SubsystemBase {
 
   @Override
   public void periodic() {
-  SmartDashboard.putNumber("Position Échelle", getPosition());
-  SmartDashboard.putBoolean("Échelle à l'ampli", positionAmpli());
+    SmartDashboard.putNumber("Position Échelle", getPosition());
+    SmartDashboard.putBoolean("Échelle à l'ampli", positionAmpli());
     SmartDashboard.putBoolean("Échelle position de départ", positionDepart());
 
+
+    //Reset encodeur quand on redescend on active la limit switch
     if (positionDepart()) {
-      moteur.setPosition(0);
+      resetEncodeur();
     }
   }
-  public void resetEncodeur() {
-    moteur.setPosition(0);   
-  }
 
-  public boolean positionDepart() {
-    return limitSwitch.get();
-  }
-
-  public double getPosition() {
-   return moteur.getPosition().getValueAsDouble()*conversionEncodeur;
-  }
-
+  //Envoyer consigne au moteur
   public void setVoltage(double volt) {
     setVoltage(volt);
+  }
+
+  public void stop() {
+    setVoltage(0);
+  }
+
+
+  //Encodeurs
+  public double getPosition() {
+   return moteur.getPosition().getValueAsDouble()*conversionEncodeur;
   }
 
   public double getVitesse() {
    return moteur.getVelocity().getValueAsDouble()*conversionEncodeur;
   }
 
-  public void stop() {
-    setVoltage(0);
+  public void resetEncodeur() {
+    moteur.setPosition(0);   
   }
+
+
+  //Boolean donnant les positions de départ et de fin de l'échelle
+  public boolean positionDepart() {
+    return limitSwitch.get();
+  }
+
 
   public boolean positionAmpli() {
     return getPosition()>0.2; //valeur à déterminer

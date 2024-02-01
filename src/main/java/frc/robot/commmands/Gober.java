@@ -10,24 +10,22 @@ import frc.robot.subsystems.Gobeur;
 public class Gober extends Command {
 
   private Gobeur gobeur;
-  /** Creates a new Gober. */
+
+  
   public Gober(Gobeur gobeur) {
     
     this.gobeur = gobeur;
    
     addRequirements(gobeur);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {  
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-    if (gobeur.notePresente()) { 
+    if (!gobeur.notePresente() /* && !lanceur.notePresente()*/) { //Il n'y a pas de notes dans le gobeur. Ni le lanceur. Valider la syntaxe pour le lanceur
       gobeur.gober();
     } else {
       gobeur.stop();
@@ -35,16 +33,14 @@ public class Gober extends Command {
     // gobeur.gober();
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     gobeur.stop();
 
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return gobeur.notePresente();
   }
 }

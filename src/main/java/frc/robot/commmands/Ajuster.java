@@ -16,7 +16,7 @@ public class Ajuster extends Command {
 
   /** Creates a new Ajuster. */
   public Ajuster(Grimpeur grimpeur, int moteur) {
-    this.voltage = Constants.ModuleConstants.grimpeurVoltage;
+    this.voltage = Constants.grimpeurVoltage;
     this.grimpeur = grimpeur;
     this.moteur = moteur;
     addRequirements(grimpeur);

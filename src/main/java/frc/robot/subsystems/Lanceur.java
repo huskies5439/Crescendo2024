@@ -24,6 +24,8 @@ public class Lanceur extends SubsystemBase {
   private final CANSparkMax moteurD = new CANSparkMax(9, MotorType.kBrushless);
 
   private final double conversionEncodeur = 1;//à déterminer
+
+  //DIO à créer sur le 2. L'émetteur sera branché sur le 3
  
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
