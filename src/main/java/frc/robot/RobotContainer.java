@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.Gober;
+import frc.robot.commmands.Homing;
 import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
+import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Grimpeur;
 import frc.robot.subsystems.Lanceur;
@@ -32,7 +34,7 @@ public class RobotContainer {
   private final Lanceur lanceur = new Lanceur();
   private final Limelight limelight = new Limelight();
   private final SendableChooser<Command> chooser;
-  
+  private final Echelle echelle = new Echelle();
 
 
  
@@ -84,16 +86,15 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
    
-    manette.x().whileTrue(Commands.run(basePilotable::setX, basePilotable));
-    manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
+    manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
-    manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
+    manette.rightBumper().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
+    manette.start().onTrue(new Homing(echelle));
+    
 
-
-    //Proposition V2 pour team grimpeur
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
-    manette.b().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new PIDEchelle(0.2)).....
+    manette.y().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new PIDEchelle(0.2)).....
 
   }
 
