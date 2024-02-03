@@ -8,14 +8,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commmands.Ajuster;
 import frc.robot.commmands.Gober;
-import frc.robot.commmands.Grimper;
 import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Grimpeur;
-import frc.robot.subsystems.GrimpeurV2;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,13 +32,14 @@ public class RobotContainer {
   private final Lanceur lanceur = new Lanceur();
   private final Limelight limelight = new Limelight();
   private final SendableChooser<Command> chooser;
-  private final Grimpeur grimpeur = new Grimpeur();
+  
 
 
-  //////Suggestion V2 pour team grimpeur
-  private final GrimpeurV2 grimpeurGauche = new GrimpeurV2(1, false, "gauche");
-  //On crée un autre GrimpeurV2 qui est grimpeurDroit
-
+ 
+  private final Grimpeur grimpeurGauche = new Grimpeur(1, false, "gauche");
+  
+ 
+  private final Grimpeur grimpeurDroit = new Grimpeur(2, true, "droit");
 
   // The driver's controller
   CommandXboxController manette = new CommandXboxController(0);
@@ -90,21 +88,12 @@ public class RobotContainer {
     manette.start().onTrue(Commands.runOnce(basePilotable::resetGyro));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur));
     manette.y().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
-    manette.rightTrigger().whileTrue(new Ajuster(grimpeur,2));
-    manette.leftTrigger().whileTrue(new Ajuster(grimpeur,1));
-    manette.b().onTrue(new Grimper(grimpeur));
-
-
-
-    //Proposition V1 pour team grimpeur
-    manette.leftTrigger().whileTrue(grimpeur.descendreGauche());//whileTrue fait qu'on va canceller la commande en lâchant
-    manette.b().onTrue(grimpeur.monterGauche());/* .alongWith(équivalent pour la droite); */
 
 
     //Proposition V2 pour team grimpeur
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
-    //manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
-    manette.b().onTrue(grimpeurGauche.monter());//.alongWith(grimpeurDroit.monter())// et éventuellement.alongWith(new PIDEchelle(0.2)).....
+    manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
+    manette.b().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new PIDEchelle(0.2)).....
 
   }
 

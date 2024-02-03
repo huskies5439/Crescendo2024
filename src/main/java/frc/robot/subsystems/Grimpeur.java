@@ -11,85 +11,65 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
 public class Grimpeur extends SubsystemBase {
-  private TalonFX moteurGauche = new TalonFX(1);
-  private TalonFX moteurDroit = new TalonFX(2);
-  
-  private double conversion = 1;
-  private double maxPositionGrimpeur = 0.5; //mètres
-  /** Creates a new Grimper. */
-  public Grimpeur() {
-    
-    moteurGauche.setInverted(false);
-    moteurGauche.setNeutralMode(NeutralModeValue.Brake);
+  private TalonFX moteur;
 
-    moteurDroit.setInverted(true);
-    moteurDroit.setNeutralMode(NeutralModeValue.Brake);
+  private double conversion = 1; //à déterminer avec la team conception
+  private double maxPositionGrimpeur = 0.5; //valeur à déterminer, en mètres
+  private double voltage = 3; //valeur à déterminer
+
+  String dashName;
+  
+  public Grimpeur(int CANID, boolean inverted, String dashName) {
+    moteur = new TalonFX(CANID);
+
+    moteur.setInverted(inverted);
+    moteur.setNeutralMode(NeutralModeValue.Brake);
+
     resetEncodeur();
-  } 
+    this.dashName = dashName;
+  }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Position Grimper Droite", getPositionDroit());
-    SmartDashboard.putNumber("Position Grimper Gauche", getPositionGauche());
-
+    SmartDashboard.putNumber("Grimpeur "+dashName+" Position", getPosition());
   }
 
+  public void setVoltage(boolean monter){
+    if (!monter){
+      voltage = - voltage;
+    }
 
-  ////////CONSIGNES AUX MOTEURS
-  public void setVoltageGauche(double volt) {
-    moteurGauche.set(volt);
-  }
-
-  public void setVoltageDroit(double volt) {
-    moteurDroit.set(volt);
+    moteur.set(voltage);
   }
 
   public void stop() {
-    setVoltageDroit(0);
-    setVoltageGauche(0);
-
-  }
-  
-
-
-  /////////ENCODEURS
-  public double getPositionDroit() {
-    return moteurDroit.getPosition().getValueAsDouble() * conversion;
-  }
-
-  public double getPositionGauche(){
-    return moteurGauche.getPosition().getValueAsDouble() * conversion;
-  }
-
-  public void resetEncodeur() {
-    moteurGauche.setPosition(0);
-    moteurDroit.setPosition(0);
+    moteur.set(0);
   }
 
 
-
-  //Proposition 1 pour la TEAM Grimpeur
-
-  public boolean maxHauteurG(){
-    return getPositionGauche() >= maxPositionGrimpeur;
+  public double getPosition(){
+    return moteur.getPosition().getValueAsDouble()*conversion;
   }
 
-  public boolean minHauteurG(){
-    return getPositionGauche() < 0;
+  public void resetEncodeur(){
+    moteur.setPosition(0);
   }
 
-  public Command monterGauche(){
-    return this.startEnd(() -> this.setVoltageGauche(3), this::stop).until(this::maxHauteurG);//requiert implicitement "this"
+  public  boolean maxHauteur(){
+    return getPosition()>= maxPositionGrimpeur;
   }
 
-  public Command descendreGauche(){
-    return this.startEnd(()->this.setVoltageGauche(-3), this::stop).until(this::minHauteurG);
+  public boolean minHauteur(){
+    return getPosition() <=0;
   }
 
+  public Command monter(){
+    return this.startEnd(()-> this.setVoltage(true), this::stop).until(this::maxHauteur);//requiert this
+  }
 
-  //////puis faire l'équivalente pour la droite.....
-
+  public Command descendre(){
+    return  this.startEnd(()-> this.setVoltage(false), this::stop).until(this::minHauteur);
+  }
 
 }
