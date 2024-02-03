@@ -7,14 +7,19 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Grimpeur extends SubsystemBase {
   private TalonFX moteur;
+/* Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
+    gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 80 dents. La gear 80 dents fait tourner 
+    une poulie de 0.75 pouces auquelle s'enroule d'une corde */
 
-  private double conversion = 1; //à déterminer avec la team conception
+  private double conversion  = (14.0/40)*(14.0/80)*Units.inchesToMeters(0.75)*Math.PI;
+; 
   private double maxPositionGrimpeur = 0.5; //valeur à déterminer, en mètres
   private double voltage = 3; //valeur à déterminer
 
