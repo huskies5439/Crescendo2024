@@ -4,7 +4,8 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.PigeonIMU;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
@@ -37,7 +38,7 @@ public class BasePilotable extends SubsystemBase {
   private final MAXSwerveModule arriereDroite = new MAXSwerveModule(7,8,90);
 
   // Le gyroscope
-  private final PigeonIMU gyro = new PigeonIMU(3);
+  private final Pigeon2 gyro = new Pigeon2(3);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -256,7 +257,7 @@ public class BasePilotable extends SubsystemBase {
 
   ///////////////GYRO
   public double getAngle() {
-    return gyro.getYaw();
+    return -gyro.getAngle();
   } 
 
     public void resetGyro() {
