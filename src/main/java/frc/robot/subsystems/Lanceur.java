@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,10 +23,8 @@ public class Lanceur extends SubsystemBase {
 
   private final CANSparkMax moteurG = new CANSparkMax(10, MotorType.kBrushless);  
   private final CANSparkMax moteurD = new CANSparkMax(9, MotorType.kBrushless);
-
-  private final double conversionEncodeur = 1;//à déterminer
-
-  //DIO à créer sur le 2. L'émetteur sera branché sur le 3
+  private final DigitalInput capteurIr = new DigitalInput(2) ; 
+        //  L'émetteur sera branché sur le 3
  
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
@@ -43,12 +42,12 @@ public class Lanceur extends SubsystemBase {
     moteurG.setInverted(true);
     moteurD.setInverted(false);
 
-    moteurG.getEncoder().setPositionConversionFactor(conversionEncodeur);
-    moteurG.getEncoder().setVelocityConversionFactor(conversionEncodeur/60); //pour obtenir des rotation par seconde
+    moteurG.getEncoder().setPositionConversionFactor(1);
+    moteurG.getEncoder().setVelocityConversionFactor(1/60); //pour obtenir des rotation par seconde
 
 
-    moteurD.getEncoder().setPositionConversionFactor(conversionEncodeur);
-    moteurD.getEncoder().setVelocityConversionFactor(conversionEncodeur/60); //pour obtenir des rotation par seconde
+    moteurD.getEncoder().setPositionConversionFactor(1);
+    moteurD.getEncoder().setVelocityConversionFactor(1/60); //pour obtenir des rotation par seconde
 
   
 
@@ -116,7 +115,8 @@ public void setPIDShuffleboard(){
   setVitessePID(getValeurShuffleboard());
 }
 
+public boolean notePresente() { 
+return capteurIr.get() ;  // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
 
-
-
+}
 }
