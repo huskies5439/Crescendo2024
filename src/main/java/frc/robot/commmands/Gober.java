@@ -6,26 +6,28 @@ package frc.robot.commmands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Gobeur;
+import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.PositionNote;
 
 public class Gober extends Command {
 
   private Gobeur gobeur;
+  private Superstructure superstructure;
 
-  
-  public Gober(Gobeur gobeur) {
-    
+  public Gober(Gobeur gobeur, Superstructure superstructure) {
+
     this.gobeur = gobeur;
-   
+    this.superstructure = superstructure;
     addRequirements(gobeur);
   }
 
   @Override
-  public void initialize() {  
+  public void initialize() {
   }
 
   @Override
-  public void execute() { 
-    if (!gobeur.notePresente() /* && !lanceur.notePresente()*/) { //Il n'y a pas de notes dans le gobeur. Ni le lanceur. Valider la syntaxe pour le lanceur
+  public void execute() {
+    if (superstructure.getPositionNote() == PositionNote.AUCUNE) { // Il n'y a pas de notes dans le gobeur. Ni le lanceur.
       gobeur.gober();
     } else {
       gobeur.stop();
@@ -41,6 +43,6 @@ public class Gober extends Command {
 
   @Override
   public boolean isFinished() {
-    return gobeur.notePresente();
+    return superstructure.isNoteDansGobeur();
   }
 }

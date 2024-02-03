@@ -21,7 +21,7 @@ public class Homing extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands( 
       (Commands.run(()-> echelle.setVoltage(2), echelle). withTimeout(0.5)), 
-      (Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::positionDepart)),
+      (Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart)),
       (Commands.runOnce(echelle::stop )),
       (Commands.runOnce(echelle::resetEncodeur )),
        
@@ -29,7 +29,7 @@ public class Homing extends SequentialCommandGroup {
        //On réavance, puis on recule à nouveau vers l'interrupteur pour valider. 
 
        (Commands.run(()-> echelle.setVoltage(1), echelle). withTimeout(0.5)), 
-       (Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::positionDepart)), 
+       (Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart)), 
        (Commands.runOnce(echelle::stop )), 
        (Commands.runOnce(echelle::resetEncodeur ))
        

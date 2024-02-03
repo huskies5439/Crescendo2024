@@ -6,18 +6,18 @@ package frc.robot.commmands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Lanceur;
+import frc.robot.subsystems.Superstructure;
 
 public class DetecterNoteLancer extends Command {
-  Lanceur lanceur;
-
+  Superstructure superstructure; 
   boolean etatActuel;
 
   boolean etatPasse;
   int transitionEtat;
 
   /** Creates a new DetecterNoteLancer. */
-  public DetecterNoteLancer(Lanceur lanceur) {
-    this.lanceur = lanceur;
+  public DetecterNoteLancer(Superstructure superstructure) {
+    this.superstructure = superstructure;
 
   }
 
@@ -34,7 +34,7 @@ public class DetecterNoteLancer extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    etatActuel = lanceur.notePresente();
+    etatActuel = superstructure.isNoteDansLanceur();
 
     // true = on ne voit pas la note
     // false = on voit la note

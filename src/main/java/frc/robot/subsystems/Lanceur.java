@@ -4,11 +4,8 @@
 
 package frc.robot.subsystems;
 
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -21,21 +18,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Lanceur extends SubsystemBase {
 
-  private final CANSparkMax moteurG = new CANSparkMax(10, MotorType.kBrushless);  
+  private final CANSparkMax moteurG = new CANSparkMax(10, MotorType.kBrushless);
   private final CANSparkMax moteurD = new CANSparkMax(9, MotorType.kBrushless);
-  private final DigitalInput capteurIr = new DigitalInput(2) ; 
-        //  L'émetteur sera branché sur le 3
- 
+  // L'émetteur sera branché sur le 3
 
-  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0,0); // Trouver les valeurs du feedforward et du pid
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0); // Trouver les valeurs du
+                                                                                       // feedforward et du pid
   private PIDController pidG = new PIDController(0, 0, 0);
   private PIDController pidD = new PIDController(0, 0, 0);
 
-
   private ShuffleboardTab calibration = Shuffleboard.getTab("calibration");
-  private GenericEntry valeurLanceurCible = calibration.add("valeur lanceur cible",0).getEntry();
-  
-
+  private GenericEntry valeurLanceurCible = calibration.add("valeur lanceur cible", 0).getEntry();
 
   /** Creates a new Lanceur. */
   public Lanceur() {
@@ -43,80 +36,72 @@ public class Lanceur extends SubsystemBase {
     moteurD.setInverted(false);
 
     moteurG.getEncoder().setPositionConversionFactor(1);
-    moteurG.getEncoder().setVelocityConversionFactor(1/60); //pour obtenir des rotation par seconde
-
+    moteurG.getEncoder().setVelocityConversionFactor(1 / 60); // pour obtenir des rotation par seconde
 
     moteurD.getEncoder().setPositionConversionFactor(1);
-    moteurD.getEncoder().setVelocityConversionFactor(1/60); //pour obtenir des rotation par seconde
-
-  
+    moteurD.getEncoder().setVelocityConversionFactor(1 / 60); // pour obtenir des rotation par seconde
 
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("VitesseG", getVitesseG());
-    SmartDashboard.putNumber("VitesseD", getVitesseD());    
+    SmartDashboard.putNumber("VitesseD", getVitesseD());
 
   }
 
-  public void setVoltage(double volts){
+  public void setVoltage(double volts) {
     moteurG.setVoltage(volts);
     moteurD.setVoltage(volts);
 
-
   }
 
-  public void stop(){
+  public void stop() {
     setVoltage(0);
 
   }
 
-  public double getPositionG(){
-    return moteurG.getEncoder().getPosition();//en rotation
+  public double getPositionG() {
+    return moteurG.getEncoder().getPosition();// en rotation
   }
 
-  public double getVitesseG(){
-    return moteurG.getEncoder().getVelocity();//en rotation par seconde
+  public double getVitesseG() {
+    return moteurG.getEncoder().getVelocity();// en rotation par seconde
   }
 
   public void setVitessePIDGauche(double vcible) {
-    moteurG.setVoltage(pidG.calculate(getVitesseG(),vcible)+feedforward.calculate(vcible));
+    moteurG.setVoltage(pidG.calculate(getVitesseG(), vcible) + feedforward.calculate(vcible));
   }
 
-  public double getPositionD(){
+  public double getPositionD() {
     return moteurD.getEncoder().getPosition();
   }
 
-  public double getVitesseD(){
+  public double getVitesseD() {
     return moteurD.getEncoder().getVelocity();
 
   }
 
   public void setVitessePIDDroite(double vcible) {
-    moteurD.setVoltage(pidD.calculate(getVitesseD(),vcible)+feedforward.calculate(vcible));
+    moteurD.setVoltage(pidD.calculate(getVitesseD(), vcible) + feedforward.calculate(vcible));
   }
 
-  public void setVitessePID(double vcible){
-      setVitessePIDDroite(vcible);
-      setVitessePIDGauche(vcible);
+  public void setVitessePID(double vcible) {
+    setVitessePIDDroite(vcible);
+    setVitessePIDGauche(vcible);
 
   }
 
   public double getValeurShuffleboard() {
     return valeurLanceurCible.getDouble(0);
-}
+  }
 
-public void setVoltageShuffleboard(){
-  setVoltage(getValeurShuffleboard());
-}
+  public void setVoltageShuffleboard() {
+    setVoltage(getValeurShuffleboard());
+  }
 
-public void setPIDShuffleboard(){
-  setVitessePID(getValeurShuffleboard());
-}
+  public void setPIDShuffleboard() {
+    setVitessePID(getValeurShuffleboard());
+  }
 
-public boolean notePresente() { 
-return capteurIr.get() ;  // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
-
-}
 }

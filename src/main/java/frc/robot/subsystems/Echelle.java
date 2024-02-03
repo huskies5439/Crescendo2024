@@ -34,12 +34,12 @@ public class Echelle extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Position Échelle", getPosition());
-    SmartDashboard.putBoolean("Échelle à l'ampli", positionAmpli());
-    SmartDashboard.putBoolean("Échelle position de départ", positionDepart());
+    SmartDashboard.putBoolean("Échelle à l'ampli", isPositionAmpli());
+    SmartDashboard.putBoolean("Échelle position de départ", isPositionDepart());
 
 
     //Reset encodeur quand on redescend on active la limit switch
-    if (positionDepart()) {
+    if (isPositionDepart()) {
       resetEncodeur();
     }
   }
@@ -69,12 +69,12 @@ public class Echelle extends SubsystemBase {
 
 
   //Boolean donnant les positions de départ et de fin de l'échelle
-  public boolean positionDepart() {
+  public boolean isPositionDepart() {
     return limitSwitch.get();
   }
 
 
-  public boolean positionAmpli() {
+  public boolean isPositionAmpli() {
     return getPosition()>0.2; //valeur à déterminer
   }
 }
