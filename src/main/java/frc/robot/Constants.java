@@ -48,14 +48,4 @@ public final class Constants {
                                           new ReplanningConfig());
   }
 
- 
-
-
-
-  public static final double grimpeurVoltage = 3.0;
-
-
- 
-
-
 }

@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Superstructure extends SubsystemBase {
 
-  public enum Mode {//Deux etat pour savoir comment est actuellement géré la note dans le robot
+  public enum Mode {// Deux etats pour savoir comment est actuellement géré la note dans le robot
     SPEAKER,
     AMPLI
   }
 
-  public enum PositionNote {//Trois position de note possible
+  public enum PositionNote {// Trois positions de note possibles
     AUCUNE,
     GOBEUR,
     LANCEUR
@@ -27,24 +27,27 @@ public class Superstructure extends SubsystemBase {
 
   private PositionNote positionNote = PositionNote.AUCUNE;
 
-  private final DigitalInput capteurLanceur = new DigitalInput(2);
+
   private final DigitalInput capteurGobeur = new DigitalInput(0); // Émeteur branché sur le 1
-  private final AddressableLED del = new AddressableLED(9);
-  private final AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3
-                                                                        // DEL/Section
+  private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur sera branché sur le 3
+
+  private final AddressableLED del = new AddressableLED(9); //Port PWM, pas DIO
+  private final AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3 DEL/Section
+  
 
   /** Creates a new Superstructure. */
   public Superstructure() {
     del.setLength(delBuffer.getLength());
     del.setData(delBuffer);
     del.start();
-    setCouleur(Color.kOrange);
+    closeDel();
   }
 
   @Override
   public void periodic() {
     switch (positionNote) {
-      case AUCUNE://Si aucune note, on valide si un des capteurs detecte quelque chose pout indiquer que la note est présente
+      case AUCUNE:// Si aucune note, on valide si un des capteurs detecte quelque chose pout
+                  // indiquer que la note est présente
         if (isNoteDansGobeur()) {
           positionNote = PositionNote.GOBEUR;
         } else if (isNoteDansLanceur()) {
@@ -52,8 +55,8 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case GOBEUR:
-        if (!isNoteDansGobeur()) {//On valide si il n'y a plus de note dans le gobeur
-          if (isNoteDansLanceur()) {//On valide ou est rendu la note
+        if (!isNoteDansGobeur()) {// On valide si il n'y a plus de note dans le gobeur
+          if (isNoteDansLanceur()) {// On valide ou est rendu la note
             positionNote = PositionNote.LANCEUR;
           } else {
             positionNote = PositionNote.AUCUNE;
@@ -61,15 +64,15 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case LANCEUR:
-        if (!isNoteDansLanceur()) {//On valide si la note est sortie du lanceur
-          if (isNoteDansGobeur()) {//On valide ou est rendu la note
+        if (!isNoteDansLanceur()) {// On valide si la note est sortie du lanceur
+          if (isNoteDansGobeur()) {// On valide ou est rendu la note
             positionNote = PositionNote.GOBEUR;
           } else {
             positionNote = PositionNote.AUCUNE;
           }
         }
         break;
-      default://Si il y a un probleme, on remet la note nulle part et on recommence
+      default:// Si il y a un probleme, on remet la note nulle part et on recommence
         positionNote = PositionNote.AUCUNE;
         break;
     }

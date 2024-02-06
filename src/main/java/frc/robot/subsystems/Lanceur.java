@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +19,7 @@ public class Lanceur extends SubsystemBase {
 
   private final CANSparkMax moteurG = new CANSparkMax(10, MotorType.kBrushless);
   private final CANSparkMax moteurD = new CANSparkMax(9, MotorType.kBrushless);
-  // L'émetteur sera branché sur le 3
+
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0); // Trouver les valeurs du
                                                                                        // feedforward et du pid
