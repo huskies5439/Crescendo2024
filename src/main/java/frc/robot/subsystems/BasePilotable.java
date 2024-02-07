@@ -38,7 +38,7 @@ public class BasePilotable extends SubsystemBase {
   private final MAXSwerveModule arriereDroite = new MAXSwerveModule(7,8,90);
 
   // Le gyroscope
-  private final Pigeon2 gyro = new Pigeon2(3);
+  private final Pigeon2 gyro = new Pigeon2(1);
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;

@@ -7,12 +7,12 @@ package frc.robot.commmands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Lanceur;
 
-public class Lancer extends Command {
+public class LancerSimple extends Command {
   Lanceur lanceur;
   int vitesse;
 
   //Il faudra éventuellement ajouter une logique pour la fin de la commande.
-  public Lancer(int vitesse,Lanceur lanceur) {
+  public LancerSimple(int vitesse,Lanceur lanceur) {
     this.lanceur = lanceur;
     this.vitesse = vitesse;
     addRequirements(lanceur);
