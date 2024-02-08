@@ -11,6 +11,7 @@ import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.PositionNote;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -26,7 +27,7 @@ public class PreparerAmpli extends SequentialCommandGroup {
       
       Commands.startEnd(gobeur::convoyerLent, gobeur::stop, gobeur)
             .alongWith(Commands.startEnd(()->lanceur.setVoltage(2), lanceur:: stop,lanceur))
-            .until(superstructure::isNoteDansLanceur)
+            .until(()-> superstructure.ouEstLaNote(PositionNote.LANCEUR))
       
       
       

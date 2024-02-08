@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -101,6 +103,11 @@ public class Superstructure extends SubsystemBase {
   public PositionNote getPositionNote() {
     return positionNote;
   }
+
+  public boolean ouEstLaNote(PositionNote positionVoulue){
+    return getPositionNote() == positionVoulue;
+  }
+
 
   public boolean isNoteDansLanceur() {
     return capteurLanceur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
