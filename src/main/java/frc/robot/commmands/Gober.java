@@ -43,6 +43,6 @@ public class Gober extends Command {
 
   @Override
   public boolean isFinished() {
-    return superstructure.isNoteDansGobeur();
+    return superstructure.getPositionNote() == PositionNote.GOBEUR;
   }
 }

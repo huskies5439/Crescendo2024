@@ -12,7 +12,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -99,10 +99,12 @@ public class Lanceur extends SubsystemBase {
   public void setPIDShuffleboard() {
     setVitessePID(getValeurShuffleboard());
   }
-public void setPID(double vrotation){
-    setVitessePIDDroite(vrotation);
-    setVitessePIDGauche(vrotation);
-}
+
+
+  public Command setPID(double vcible){//Utiliser raceWith(DetecterLanceurNote) pour donner une condition de fin à cette commande
+    return this.runEnd(()-> this.setVitessePIDGauche(vcible), this::stop) //RunEnd car le PID doit être dans le EXECUTE de la commande
+            .alongWith(this.runEnd(()-> this.setVitessePIDDroite(vcible), this::stop));
+  }
 
 
 }

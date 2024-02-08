@@ -14,6 +14,7 @@ public class GestionDEL extends Command {
   /** Creates a new GestionDEL. */
   private Superstructure superstructure;
   private int compteur;
+  private boolean blink;
 
   public GestionDEL(Superstructure superstructure) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,34 +27,40 @@ public class GestionDEL extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() { 
-    compteur = 0; 
+    compteur = 0;
+    blink = false; 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    compteur ++ ;
 
-    if (superstructure.getPositionNote() == PositionNote.AUCUNE) {
+    if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
       superstructure.closeDel();
     }
 
-    else if (superstructure.getMode() == Mode.AMPLI) {
+    else if (superstructure.getMode() == Mode.SPEAKER) {//Mode Speaker = Couleur constante
+      superstructure.setCouleur(Color.kPurple);
+    }
 
-      if (compteur <= 50) {
-        superstructure.closeDel();
-        
-      } else if (compteur >= 51) {
-        superstructure.setCouleur(Color.kPurple);
-      }
+    else if (superstructure.getMode() == Mode.AMPLI) {//Mode Ampli = Blink
 
-      if (compteur == 100) {
+      compteur ++ ;
+
+      if (compteur >= 100){//Période de blink à déterminer
+        blink = !blink;
         compteur = 0;
       }
 
-    } else if (superstructure.getMode() == Mode.SPEAKER) {
-      superstructure.setCouleur(Color.kPurple);
-    }
+      if (blink) {
+        superstructure.setCouleur(Color.kPurple);
+      } 
+
+      else {
+        superstructure.closeDel();
+      }
+
+    } 
 
   }
 

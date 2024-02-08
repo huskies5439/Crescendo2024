@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -66,7 +64,7 @@ public class Superstructure extends SubsystemBase {
           }
         }
         break;
-      case LANCEUR:
+      case LANCEUR://Possible de mettre la logique de DetecterNoteLanceur ici ?????????
         if (!isNoteDansLanceur()) {// On valide si la note est sortie du lanceur
           if (isNoteDansGobeur()) {// On valide ou est rendu la note
             positionNote = PositionNote.GOBEUR;
@@ -104,17 +102,12 @@ public class Superstructure extends SubsystemBase {
     return positionNote;
   }
 
-  public boolean ouEstLaNote(PositionNote positionVoulue){
-    return getPositionNote() == positionVoulue;
-  }
-
-
-  public boolean isNoteDansLanceur() {
+  public boolean isNoteDansLanceur() {//Idéalement on mettrait private et forcerait les commandes à utiliser les PositionNote. Présentement, DétecterNoteLancer nécessite cette méthode......
     return capteurLanceur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
 
   }
 
-  public boolean isNoteDansGobeur() {
+  public boolean isNoteDansGobeur() {//Idem
     return capteurGobeur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
   }
 
