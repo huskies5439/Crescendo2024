@@ -4,8 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -13,12 +12,14 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 public class Lanceur extends SubsystemBase {
 
-  private final CANSparkMax moteurG = new CANSparkMax(10, MotorType.kBrushless);
-  private final CANSparkMax moteurD = new CANSparkMax(9, MotorType.kBrushless);
+  private final TalonFX moteurG = new TalonFX(1);
+  private final TalonFX moteurD = new TalonFX(2);
 
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0); // Trouver les valeurs du
@@ -28,17 +29,13 @@ public class Lanceur extends SubsystemBase {
 
   private ShuffleboardTab calibration = Shuffleboard.getTab("calibration");
   private GenericEntry valeurLanceurCible = calibration.add("valeur lanceur cible", 0).getEntry();
+  
 
   /** Creates a new Lanceur. */
   public Lanceur() {
+
     moteurG.setInverted(true);
     moteurD.setInverted(false);
-
-    moteurG.getEncoder().setPositionConversionFactor(1);
-    moteurG.getEncoder().setVelocityConversionFactor(1 / 60); // pour obtenir des rotation par seconde
-
-    moteurD.getEncoder().setPositionConversionFactor(1);
-    moteurD.getEncoder().setVelocityConversionFactor(1 / 60); // pour obtenir des rotation par seconde
 
   }
 
@@ -61,11 +58,11 @@ public class Lanceur extends SubsystemBase {
   }
 
   public double getPositionG() {
-    return moteurG.getEncoder().getPosition();// en rotation
+    return moteurG.getPosition().getValueAsDouble();// en rotation
   }
 
   public double getVitesseG() {
-    return moteurG.getEncoder().getVelocity();// en rotation par seconde
+    return moteurG.getVelocity().getValueAsDouble();// en rotation par seconde
   }
 
   public void setVitessePIDGauche(double vcible) {
@@ -73,11 +70,11 @@ public class Lanceur extends SubsystemBase {
   }
 
   public double getPositionD() {
-    return moteurD.getEncoder().getPosition();
+    return moteurD.getPosition().getValueAsDouble();
   }
 
   public double getVitesseD() {
-    return moteurD.getEncoder().getVelocity();
+    return moteurD.getVelocity().getValueAsDouble();
 
   }
 
@@ -102,5 +99,10 @@ public class Lanceur extends SubsystemBase {
   public void setPIDShuffleboard() {
     setVitessePID(getValeurShuffleboard());
   }
+public void setPID(double vrotation){
+    setVitessePIDDroite(vrotation);
+    setVitessePIDGauche(vrotation);
+}
+
 
 }

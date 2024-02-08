@@ -28,12 +28,12 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
   // The robot's subsystems
+  private final Superstructure superstructure = new Superstructure();
   private final BasePilotable basePilotable = new BasePilotable();
   private final Gobeur gobeur = new Gobeur();
   private final Lanceur lanceur = new Lanceur();
   private final Limelight limelight = new Limelight();
   private final Echelle echelle = new Echelle();
-  private final Superstructure superstructure = new Superstructure();
   private final Grimpeur grimpeurGauche = new Grimpeur(1, false, "gauche");
   private final Grimpeur grimpeurDroit = new Grimpeur(2, true, "droit");
 
@@ -84,6 +84,7 @@ public class RobotContainer {
     manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur,superstructure));
     manette.rightBumper().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
+//manette.rightBumper().toggleOnTrue(lanceur.lanceursetPID());    
     manette.start().onTrue(new Homing(echelle));
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
