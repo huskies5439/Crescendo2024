@@ -47,7 +47,7 @@ public class GestionDEL extends Command {
 
       compteur ++ ;
 
-      if (compteur <= 100){//Période de blink à déterminer
+      if (compteur >= 100){//Période de blink à déterminer
         blink = !blink;
         compteur = 0;
       }
