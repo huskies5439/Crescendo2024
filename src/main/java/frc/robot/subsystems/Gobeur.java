@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gobeur extends SubsystemBase {
@@ -26,12 +25,27 @@ public class Gobeur extends SubsystemBase {
 
   }
 
+  public void setVoltage(double voltage) {
+    moteur.setVoltage(voltage);
+  }
+
   public void gober() {
-    moteur.setVoltage(4);
+    setVoltage(4);
   }
 
   public void stop() {
-    moteur.setVoltage(0);
+    setVoltage(0);
+  }
+
+  public void convoyer() {
+
+    setVoltage(2);
+
+  }
+
+  public void convoyerLent() {
+
+    setVoltage(1);
   }
 
 }

@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -27,13 +28,12 @@ public class Superstructure extends SubsystemBase {
 
   private PositionNote positionNote = PositionNote.AUCUNE;
 
-
   private final DigitalInput capteurGobeur = new DigitalInput(0); // Émeteur branché sur le 1
   private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur sera branché sur le 3
 
-  private final AddressableLED del = new AddressableLED(9); //Port PWM, pas DIO
-  private final AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3 DEL/Section
-  
+  private final AddressableLED del = new AddressableLED(9); // Port PWM, pas DIO
+  private final AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3
+                                                                              // DEL/Section
 
   /** Creates a new Superstructure. */
   public Superstructure() {
@@ -45,6 +45,7 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
+
     switch (positionNote) {
       case AUCUNE:// Si aucune note, on valide si un des capteurs detecte quelque chose pout
                   // indiquer que la note est présente
@@ -76,10 +77,25 @@ public class Superstructure extends SubsystemBase {
         positionNote = PositionNote.AUCUNE;
         break;
     }
+
+    SmartDashboard.putString("Mode", mode.toString());
+    SmartDashboard.putString("Position Note", positionNote.toString());
+
+    SmartDashboard.putBoolean("Capteur Lanceur", capteurLanceur.get());
+    SmartDashboard.putBoolean("Capteur Gobeur", capteurGobeur.get());
+
   }
 
   public Mode getMode() {
     return mode;
+  }
+
+  public void setModeSpeaker() {
+    mode = Mode.SPEAKER;
+  }
+
+  public void setModeAmpli() {
+    mode = Mode.AMPLI;
   }
 
   public PositionNote getPositionNote() {
@@ -110,4 +126,5 @@ public class Superstructure extends SubsystemBase {
     del.setData(delBuffer);
 
   }
+
 }

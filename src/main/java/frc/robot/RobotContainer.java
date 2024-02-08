@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commmands.GestionDEL;
 import frc.robot.commmands.Gober;
 import frc.robot.commmands.Homing;
 import frc.robot.commmands.UpdatePosition;
@@ -67,7 +68,7 @@ public class RobotContainer {
                 true, true),
             basePilotable));
     limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
-
+    superstructure.setDefaultCommand(new GestionDEL(superstructure));
   }
 
   /**
