@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.GestionDEL;
 import frc.robot.commmands.Gober;
 import frc.robot.commmands.Homing;
+import frc.robot.commmands.LancerSpeaker;
 import frc.robot.commmands.PreparerAmpli;
 import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.Superstructure.Mode;
 import frc.robot.subsystems.Superstructure.PositionNote;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -87,8 +89,6 @@ public class RobotContainer {
 
     manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.leftBumper().toggleOnTrue(new Gober(gobeur,superstructure));
-    manette.rightBumper().toggleOnTrue(Commands.startEnd(lanceur::setVoltageShuffleboard, lanceur::stop, lanceur));
-//manette.rightBumper().toggleOnTrue(lanceur.lanceursetPID());    
     manette.start().onTrue(new Homing(echelle));
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
@@ -99,6 +99,15 @@ public class RobotContainer {
                                                                                    
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
               .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
+
+    manette.rightBumper().whileTrue(new ConditionalCommand(
+     new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
+      .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
+       null ,
+       () -> {return superstructure.getMode() == Mode.SPEAKER;}
+       ));
+
+
   }
 
   /**

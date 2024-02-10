@@ -103,7 +103,7 @@ public class Lanceur extends SubsystemBase {
   }
 
 
-  public Command setPID(double vcible){//Utiliser raceWith(DetecterLanceurNote) pour donner une condition de fin à cette commande
+  public Command setPIDCommand(double vcible){//Utiliser raceWith(DetecterLanceurNote) pour donner une condition de fin à cette commande
     return this.runEnd(()-> this.setVitessePIDGauche(vcible), this::stop) //RunEnd car le PID doit être dans le EXECUTE de la commande
             .alongWith(this.runEnd(()-> this.setVitessePIDDroite(vcible), this::stop));
   }

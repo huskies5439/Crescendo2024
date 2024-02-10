@@ -21,12 +21,16 @@ public class LancerSpeaker extends SequentialCommandGroup {
 
     addCommands(
 
-        new PIDechelle(0, echelle).until(echelle::isPositionDepart), // retracte l'échelle 
+        echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle
 
-        new ParallelRaceGroup(lanceur.setPID(20),//valeur vcible a vérifier
-            Commands.waitUntil(lanceur::atCible)
-              .andThen(Commands.startEnd((gobeur::convoyer), gobeur::stop,gobeur)),
-                  new DetecterNoteLancer(superstructure))
-);
+        new ParallelRaceGroup(
+                lanceur.setPIDCommand(20), // valeur vcible a vérifier
+
+                Commands.waitUntil(lanceur::atCible)
+                        .andThen(gobeur.convoyer()),
+
+                new DetecterNoteLancer(superstructure)
+                )
+              );
   }
 }

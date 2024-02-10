@@ -41,6 +41,7 @@ public class Superstructure extends SubsystemBase {
     del.setData(delBuffer);
     del.start();
     closeDel();
+    setModeSpeaker();
   }
 
   @Override

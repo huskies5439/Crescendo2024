@@ -7,14 +7,20 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Echelle extends SubsystemBase {
   private TalonFX moteur = new TalonFX(3);
   private DigitalInput limitSwitch = new DigitalInput(4);
+  private ProfiledPIDController pid = new ProfiledPIDController(0.56, 0, 0,
+        new TrapezoidProfile.Constraints(0.25, 0.5));
   private double conversionEncodeur;
   /** Creates a new Echelle. */
   public Echelle() {
@@ -22,7 +28,7 @@ public class Echelle extends SubsystemBase {
     moteur.setInverted(false);
     moteur.setNeutralMode(NeutralModeValue.Brake);
     resetEncodeur();
-    
+    pid.setTolerance(0.01);
     /* Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
     gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 60 dents. La gear 60 dents est solidaire d'une roue dentée
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
@@ -34,7 +40,7 @@ public class Echelle extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Position Échelle", getPosition());
-    SmartDashboard.putBoolean("Échelle à l'ampli", isPositionAmpli());
+    SmartDashboard.putBoolean("Échelle à la cible", atCible());
     SmartDashboard.putBoolean("Échelle position de départ", isPositionDepart());
 
 
@@ -46,7 +52,7 @@ public class Echelle extends SubsystemBase {
 
   //Envoyer consigne au moteur
   public void setVoltage(double volt) {
-    setVoltage(volt);
+    moteur.setVoltage(volt);
   }
 
   public void stop() {
@@ -73,9 +79,18 @@ public class Echelle extends SubsystemBase {
     return limitSwitch.get();
   }
 
+  public void setPositionPID(double cible){
+    cible = MathUtil.clamp(cible,0, 0.25);
+    setVoltage(pid.calculate(getPosition(),cible));
 
-  public boolean isPositionAmpli() {
-    return getPosition()>0.2; //valeur à déterminer
+  }
+  public Command setPIDCommand(double cible){
+    return this.runEnd(()-> this.setPositionPID(cible), this::stop);
+    
+  }
+  public boolean atCible(){
+    return pid.atGoal();
+
   }
 }
 

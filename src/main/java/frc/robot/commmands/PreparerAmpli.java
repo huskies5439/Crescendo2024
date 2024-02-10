@@ -4,7 +4,6 @@
 
 package frc.robot.commmands;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Echelle;
@@ -20,12 +19,12 @@ public class PreparerAmpli extends SequentialCommandGroup {
   public PreparerAmpli( Echelle echelle, Gobeur gobeur, Lanceur lanceur, Superstructure superstructure) {
     
     addCommands( 
-      //Comment valider la présence de la note dans gobeur?
-      new PIDechelle(0, echelle).until(echelle::isPositionDepart), // retracte l'échelle 
       
-      Commands.startEnd(gobeur::convoyerLent, gobeur::stop, gobeur) //Fait tourner lentement le gobeur et le lanceur pour transférer l'anneau dans le lanceur
-              .alongWith(Commands.startEnd(()->lanceur.setVoltage(2), lanceur:: stop,lanceur))//Transformer setVoltage en commande PID
-              .until(()-> { return superstructure.getPositionNote() == PositionNote.LANCEUR; }), //Voir la discussion sur les lambdas dans WPILIB
+      echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle 
+      
+      gobeur.convoyer() //Fait tourner lentement le gobeur et le lanceur pour transférer l'anneau dans le lanceur
+      .alongWith(lanceur.setPIDCommand(0.5))//vitesse à déterminer
+      .until(()-> { return superstructure.getPositionNote() == PositionNote.LANCEUR; }), //Voir la discussion sur les lambdas dans WPILIB
       
        Commands.runOnce(superstructure::setModeAmpli)//Le robot est en mode ampli
       

@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gobeur extends SubsystemBase {
@@ -37,15 +38,9 @@ public class Gobeur extends SubsystemBase {
     setVoltage(0);
   }
 
-  public void convoyer() {
+public Command convoyer(){
 
-    setVoltage(2);
-
-  }
-
-  public void convoyerLent() {
-
-    setVoltage(1);
-  }
+  return this.startEnd(()-> this.setVoltage(2),this::stop);
+}
 
 }
