@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Lanceur extends SubsystemBase {
 
-  private final TalonFX moteurG = new TalonFX(1);
-  private final TalonFX moteurD = new TalonFX(2);
+  private final TalonFX moteurG = new TalonFX(4);
+  private final TalonFX moteurD = new TalonFX(5);
 
 
   private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0); // Trouver les valeurs du
@@ -104,8 +104,8 @@ public class Lanceur extends SubsystemBase {
 
 
   public Command setPIDCommand(double vcible){//Utiliser raceWith(DetecterLanceurNote) pour donner une condition de fin à cette commande
-    return this.runEnd(()-> this.setVitessePIDGauche(vcible), this::stop) //RunEnd car le PID doit être dans le EXECUTE de la commande
-            .alongWith(this.runEnd(()-> this.setVitessePIDDroite(vcible), this::stop));
+    return this.runEnd(()-> this.setVitessePID(vcible), this::stop); //RunEnd car le PID doit être dans le EXECUTE de la commande
+       
   }
 
   public boolean atCible() {

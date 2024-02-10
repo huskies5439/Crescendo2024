@@ -16,7 +16,7 @@ import frc.robot.subsystems.Superstructure.PositionNote;
 public class PreparerAmpli extends SequentialCommandGroup {
 
 
-  public PreparerAmpli( Echelle echelle, Gobeur gobeur, Lanceur lanceur, Superstructure superstructure) {
+  public PreparerAmpli(Echelle echelle, Gobeur gobeur, Lanceur lanceur, Superstructure superstructure) {
     
     addCommands( 
       

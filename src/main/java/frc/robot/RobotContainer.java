@@ -77,17 +77,10 @@ public class RobotContainer {
     superstructure.setDefaultCommand(new GestionDEL(superstructure));
   
   echelle.setDefaultCommand(new ConditionalCommand(echelle.setPIDCommand(0.2), echelle.setPIDCommand(0), () -> {return superstructure.getMode() == Mode.GRIMPER;}));
-  }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
-   */
+}
+
+
   private void configureButtonBindings() {
 
     manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
@@ -100,10 +93,10 @@ public class RobotContainer {
                                                                                    // PIDEchelle(0.2)).....
                                                                                    // et éventuellement il faut passer en mode grimpeur
 
-                                                                                   
+                                                                                  
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
               .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
-
+    
     manette.rightBumper().whileTrue(new ConditionalCommand(
      new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
       .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
@@ -111,7 +104,7 @@ public class RobotContainer {
        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}) ,
        () -> {return superstructure.getMode() == Mode.SPEAKER;}
        ));
-
+    
       
 
 
@@ -124,7 +117,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return chooser.getSelected();
-
+    
   }
 
 }
