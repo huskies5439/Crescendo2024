@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.GestionDEL;
 import frc.robot.commmands.Gober;
 import frc.robot.commmands.Homing;
+import frc.robot.commmands.PreparerAmpli;
 import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Echelle;
@@ -18,6 +19,8 @@ import frc.robot.subsystems.Grimpeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.Mode;
+import frc.robot.subsystems.Superstructure.PositionNote;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -93,6 +96,9 @@ public class RobotContainer {
     manette.y().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new
                                                                                    // PIDEchelle(0.2)).....
 
+                                                                                   
+    manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
+              .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
   }
 
   /**
