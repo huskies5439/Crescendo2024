@@ -21,7 +21,7 @@ public class LancerSpeaker extends SequentialCommandGroup {
 
     addCommands(
 
-        echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle
+        //echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle
 
         new ParallelRaceGroup(
                 lanceur.setPIDCommand(20), // valeur vcible a vérifier

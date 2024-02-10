@@ -34,7 +34,6 @@ public class GestionDEL extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
       superstructure.closeDel();
     }

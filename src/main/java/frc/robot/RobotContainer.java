@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.GestionDEL;
 import frc.robot.commmands.Gober;
 import frc.robot.commmands.Homing;
+import frc.robot.commmands.LancerAmpli;
 import frc.robot.commmands.LancerSpeaker;
 import frc.robot.commmands.PreparerAmpli;
 import frc.robot.commmands.UpdatePosition;
@@ -74,6 +75,8 @@ public class RobotContainer {
             basePilotable));
     limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
     superstructure.setDefaultCommand(new GestionDEL(superstructure));
+  
+  echelle.setDefaultCommand(new ConditionalCommand(echelle.setPIDCommand(0.2), echelle.setPIDCommand(0), () -> {return superstructure.getMode() == Mode.GRIMPER;}));
   }
 
   /**
@@ -95,6 +98,7 @@ public class RobotContainer {
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
     manette.y().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new
                                                                                    // PIDEchelle(0.2)).....
+                                                                                   // et éventuellement il faut passer en mode grimpeur
 
                                                                                    
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
@@ -103,9 +107,12 @@ public class RobotContainer {
     manette.rightBumper().whileTrue(new ConditionalCommand(
      new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
       .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
-       null ,
+       new LancerAmpli(echelle, lanceur, superstructure)
+       .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}) ,
        () -> {return superstructure.getMode() == Mode.SPEAKER;}
        ));
+
+      
 
 
   }

@@ -20,16 +20,13 @@ public class PreparerAmpli extends SequentialCommandGroup {
     
     addCommands( 
       
-      echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle 
+      //echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle 
       
       gobeur.convoyer() //Fait tourner lentement le gobeur et le lanceur pour transférer l'anneau dans le lanceur
       .alongWith(lanceur.setPIDCommand(0.5))//vitesse à déterminer
       .until(()-> { return superstructure.getPositionNote() == PositionNote.LANCEUR; }), //Voir la discussion sur les lambdas dans WPILIB
       
        Commands.runOnce(superstructure::setModeAmpli)//Le robot est en mode ampli
-      
-  
-      
       
       );
   }
