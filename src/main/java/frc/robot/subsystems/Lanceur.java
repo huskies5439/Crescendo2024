@@ -36,6 +36,8 @@ public class Lanceur extends SubsystemBase {
 
     moteurG.setInverted(true);
     moteurD.setInverted(false);
+    pidG.setTolerance(1);//valeur a determiner en RPS
+    pidD.setTolerance(1);//valeur a determiner en RPS
 
   }
 
@@ -106,5 +108,10 @@ public class Lanceur extends SubsystemBase {
             .alongWith(this.runEnd(()-> this.setVitessePIDDroite(vcible), this::stop));
   }
 
+  public boolean atCible() {
+    return pidG.atSetpoint() 
+    && pidD.atSetpoint();
+
+  }
 
 }
