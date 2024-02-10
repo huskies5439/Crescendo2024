@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Gobeur extends SubsystemBase {
 
-  private final TalonFX moteur = new TalonFX(5);
+  private final TalonFX moteur = new TalonFX(6);
 
   /** Creates a new Gobeur. */
   public Gobeur() {
