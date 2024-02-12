@@ -12,35 +12,32 @@ import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Superstructure;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class LancerAmpli extends SequentialCommandGroup {
 
-
-
-  /** Creates a new LancerAmpli. */
   public LancerAmpli(Echelle echelle, Lanceur lanceur, Superstructure superstructure) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new ParallelRaceGroup(
-        echelle.setPIDCommand(0.2), 
+   
 
+    addCommands(
+
+      //Sortir l'échelle et lancer lentement
+      new ParallelRaceGroup(
+        echelle.setPIDCommand(0.2), //hauteur à valider
+
+        //Attendre que l'échelle soit sortie, puis on lance
         new SequentialCommandGroup(
           new WaitUntilCommand(echelle::atCible),
 
+          //On lance jusqu'à ce que la note sorte du lanceur
           new ParallelRaceGroup(
-            lanceur.setPIDCommand(5),
-
-            new DetecterNoteLancer(superstructure)
+            lanceur.setPIDCommand(5),//Valeur à déterminer
+            new DetecterNoteLancer(superstructure)//Termine le Race, qui termine le Sequential, qui termine le Race
           )
         )
       ),
+
        Commands.runOnce(superstructure::setModeSpeaker)
-       //echelle.setPIDCommand(0).until(echelle::isPositionDepart)
-
-
+       //echelle.setPIDCommand(0).until(echelle::isPositionDepart) 
     );
   }
 }

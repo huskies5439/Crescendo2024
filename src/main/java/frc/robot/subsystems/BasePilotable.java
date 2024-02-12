@@ -40,7 +40,7 @@ public class BasePilotable extends SubsystemBase {
   // Le gyroscope
   private final Pigeon2 gyro = new Pigeon2(1);
 
-  // Slew rate filter variables for controlling lateral acceleration
+  // Slew rate filter variables for controlling lateral acceleration (Code de REV)
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
@@ -67,7 +67,7 @@ public class BasePilotable extends SubsystemBase {
     resetEncoders();
     resetOdometry(new Pose2d());
 
-    //Copier-coller du getting started de PathPlanner
+    //Initialisation de PathPlanner (selon leur getting started)
     AutoBuilder.configureHolonomic(
       this::getPose,
       this::resetOdometry,
@@ -91,7 +91,7 @@ public class BasePilotable extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Update the odometry in the periodic block
+    // Update du Pose Estimator
     poseEstimator.update(
         Rotation2d.fromDegrees(getAngle()),
         new SwerveModulePosition[] {

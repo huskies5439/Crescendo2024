@@ -98,10 +98,6 @@ public class Lanceur extends SubsystemBase {
     setVoltage(getValeurShuffleboard());
   }
 
-  public void setPIDShuffleboard() {
-    setVitessePID(getValeurShuffleboard());
-  }
-
 
   public Command setPIDCommand(double vcible){//Utiliser raceWith(DetecterLanceurNote) pour donner une condition de fin à cette commande
     return this.runEnd(()-> this.setVitessePID(vcible), this::stop); //RunEnd car le PID doit être dans le EXECUTE de la commande

@@ -9,29 +9,26 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Echelle;
 
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class Homing extends SequentialCommandGroup {
 
-
-  /** Creates a new Homing. */
   public Homing( Echelle echelle) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+   
+
+    //Commande pour faire un Homing de l'échelle.
     addCommands( 
-      (Commands.run(()-> echelle.setVoltage(2), echelle). withTimeout(0.5)), 
-      (Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart)),
-      (Commands.runOnce(echelle::stop )),
-      (Commands.runOnce(echelle::resetEncodeur )),
+      //Avancer légèrement, puis on recule jusqu'à l'interrupteur
+      Commands.run(()-> echelle.setVoltage(2), echelle).withTimeout(0.5), 
+      Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart),
+      Commands.runOnce(echelle::stop ),
+      Commands.runOnce(echelle::resetEncodeur ),
        
 
        //On réavance, puis on recule à nouveau vers l'interrupteur pour valider. 
-
-       (Commands.run(()-> echelle.setVoltage(1), echelle). withTimeout(0.5)), 
-       (Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart)), 
-       (Commands.runOnce(echelle::stop )), 
-       (Commands.runOnce(echelle::resetEncodeur ))
+       Commands.run(()-> echelle.setVoltage(1), echelle). withTimeout(0.5), 
+       Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart), 
+       Commands.runOnce(echelle::stop ), 
+       Commands.runOnce(echelle::resetEncodeur )
        
     );
  

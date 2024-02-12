@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Superstructure extends SubsystemBase {
 
-  public enum Mode {// Deux etats pour savoir comment est actuellement géré la note dans le robot
+  public enum Mode {// Trois etats pour savoir comment est actuellement géré la note dans le robot
     SPEAKER,
     AMPLI,
     GRIMPER
@@ -108,7 +108,7 @@ public class Superstructure extends SubsystemBase {
     return positionNote;
   }
 
-  public boolean isNoteDansLanceur() {//Idéalement on mettrait private et forcerait les commandes à utiliser les PositionNote. Présentement, DétecterNoteLancer nécessite cette méthode......
+  public boolean isNoteDansLanceur() {//Idéalement, les Commandes ne parleraient pas aux capteurs, mais seulement à Position.Note
     return capteurLanceur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
 
   }

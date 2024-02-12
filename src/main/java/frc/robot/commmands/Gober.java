@@ -32,7 +32,6 @@ public class Gober extends Command {
     } else {
       gobeur.stop();
     }
-    // gobeur.gober();
   }
 
   @Override

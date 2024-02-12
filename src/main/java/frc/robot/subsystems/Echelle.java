@@ -17,18 +17,30 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Echelle extends SubsystemBase {
+
   private TalonFX moteur = new TalonFX(3);
+
   private DigitalInput limitSwitch = new DigitalInput(4);
-  private ProfiledPIDController pid = new ProfiledPIDController(0.56, 0, 0,
-        new TrapezoidProfile.Constraints(0.25, 0.5));
+
+  private ProfiledPIDController pid = new ProfiledPIDController(0.1, 0, 0,  //Valeur faible pour premiers essaies
+        new TrapezoidProfile.Constraints(0.1, 0.2)); //Valeur Charged Up : Kp : 0.56, Vmax 0.25, Amax 0.5
+
+
   private double conversionEncodeur;
-  /** Creates a new Echelle. */
+
+  private double maxEchelle = 0.25; //Valider la hauteur maximale
+
+
   public Echelle() {
 
     moteur.setInverted(false);
     moteur.setNeutralMode(NeutralModeValue.Brake);
+
     resetEncodeur();
+
     pid.setTolerance(0.01);
+
+
     /* Pignon 14 dents sur le falcon fait tourner gear 40 dents. La gear 40 dents est solidaire d'une
     gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 60 dents. La gear 60 dents est solidaire d'une roue dentée
     de 16 dents qui fait tourner la chaine 25. Chaque maille de la chaine fait 0.25 pouces*/
@@ -48,6 +60,7 @@ public class Echelle extends SubsystemBase {
     if (isPositionDepart()) {
       resetEncodeur();
     }
+
   }
 
   //Envoyer consigne au moteur
@@ -74,23 +87,28 @@ public class Echelle extends SubsystemBase {
   }
 
 
-  //Boolean donnant les positions de départ et de fin de l'échelle
+  //Boolean donne la valeur de la limit Switch
   public boolean isPositionDepart() {
-    return limitSwitch.get();
+    return limitSwitch.get(); //devrait être positif quand la switch est cliquée
   }
 
+
+  // PID
   public void setPositionPID(double cible){
-    cible = MathUtil.clamp(cible,0, 0.25);
+    cible = MathUtil.clamp(cible,0, maxEchelle);
     setVoltage(pid.calculate(getPosition(),cible));
-
   }
+
+  public boolean atCible(){
+    return pid.atGoal();//Tiens en compte la tolérance
+  }
+
+  //Commande PID de l'échelle pouvant être appelée directement
   public Command setPIDCommand(double cible){
     return this.runEnd(()-> this.setPositionPID(cible), this::stop);
-    
-  }
-  public boolean atCible(){
-    return pid.atGoal();
 
   }
+
+ 
 }
 

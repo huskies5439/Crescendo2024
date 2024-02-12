@@ -13,12 +13,9 @@ public class Gobeur extends SubsystemBase {
 
   private final TalonFX moteur = new TalonFX(6);
 
-  /** Creates a new Gobeur. */
   public Gobeur() {
     moteur.setInverted(false);
     stop();
-    // DEL
-
   }
 
   @Override
@@ -38,9 +35,12 @@ public class Gobeur extends SubsystemBase {
     setVoltage(0);
   }
 
-public Command convoyer(){
 
-  return this.startEnd(()-> this.setVoltage(2),this::stop);
-}
+  //Commande pour convoyer l'anneau vers le lanceur.
+  //Voltage à ajuster
+  //Il est possible qu'on doivent changer le voltage selon la situation, donc il faudra modifier la commande.
+  public Command convoyer() {
+    return this.startEnd(() -> this.setVoltage(2), this::stop);
+  }
 
 }

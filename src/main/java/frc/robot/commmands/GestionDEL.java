@@ -11,27 +11,23 @@ import frc.robot.subsystems.Superstructure.Mode;
 import frc.robot.subsystems.Superstructure.PositionNote;
 
 public class GestionDEL extends Command {
-  /** Creates a new GestionDEL. */
+
   private Superstructure superstructure;
   private int compteur;
   private boolean blink;
 
   public GestionDEL(Superstructure superstructure) {
-    // Use addRequirements() here to declare subsystem dependencies.
-
     this.superstructure = superstructure;
     addRequirements(superstructure);
 
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() { 
     compteur = 0;
     blink = false; 
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
@@ -63,12 +59,10 @@ public class GestionDEL extends Command {
 
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
