@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -36,6 +37,10 @@ public class Lanceur extends SubsystemBase {
 
     moteurG.setInverted(true);
     moteurD.setInverted(false);
+
+    moteurG.setNeutralMode(NeutralModeValue.Coast);
+    moteurD.setNeutralMode(NeutralModeValue.Coast);
+    
     pidG.setTolerance(1);//valeur a determiner en RPS
     pidD.setTolerance(1);//valeur a determiner en RPS
 
