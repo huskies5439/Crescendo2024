@@ -47,9 +47,7 @@ public class RobotContainer {
   CommandXboxController manette = new CommandXboxController(0);
   private final SendableChooser<Command> chooser;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+
   public RobotContainer() {
 
 
@@ -63,19 +61,19 @@ public class RobotContainer {
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajets", chooser);
 
-    // Configure default commands
+    // Commandes par défaut
     basePilotable.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
         Commands.run(
             () -> basePilotable.conduire(
                 manette.getLeftY(), manette.getLeftX(), manette.getRightX(),
                 true, true),
             basePilotable));
+        
     limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
     superstructure.setDefaultCommand(new GestionDEL(superstructure));
   
-  echelle.setDefaultCommand(new ConditionalCommand(echelle.setPIDCommand(0.2), echelle.setPIDCommand(0), () -> {return superstructure.getMode() == Mode.GRIMPER;}));
+  //À ajouter au code quand on est confiant du comportement de l'échelle
+  //echelle.setDefaultCommand(new ConditionalCommand(echelle.setPIDCommand(0.2), echelle.setPIDCommand(0), () -> {return superstructure.getMode() == Mode.GRIMPER;}));
 
 }
 
@@ -88,6 +86,7 @@ public class RobotContainer {
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
+    //À changer pour mode Grimper
     manette.y().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new
                                                                                    // PIDEchelle(0.2)).....
                                                                                    // et éventuellement il faut passer en mode grimpeur
@@ -96,24 +95,34 @@ public class RobotContainer {
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
               .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
     
-    manette.rightBumper().whileTrue(new ConditionalCommand(
-     new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
-      .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
-       new LancerAmpli(echelle, lanceur, superstructure)
-       .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}) ,
-       () -> {return superstructure.getMode() == Mode.SPEAKER;}
-       ));
+    manette.rightBumper().whileTrue(new ConditionalCommand(//Selon le mode du robot
+      new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
+        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}),
+
+      new LancerAmpli(echelle, lanceur, superstructure)
+        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}),
+
+      () -> {return superstructure.getMode() == Mode.SPEAKER;}));
     
       
+    //Commandes pour valider les systèmes
+    //Up, Down -> grimpeur
+    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(true), grimpeurGauche::stop, grimpeurGauche)
+                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(true), grimpeurDroit::stop, grimpeurDroit)));
 
+    manette.povDown().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(false), grimpeurGauche::stop, grimpeurGauche)
+                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(false), grimpeurDroit::stop, grimpeurDroit)));
+
+    //Gauche, Droite -> échelle
+    manette.povRight().whileTrue(Commands.startEnd(()->echelle.setVoltage(3), echelle::stop, echelle));
+    manette.povLeft().whileTrue(Commands.startEnd(()->echelle.setVoltage(-3), echelle::stop, echelle));
+
+    //B -> Lanceur de base
+    manette.b().toggleOnTrue(Commands.startEnd(()->lanceur.setVoltage(4), lanceur::stop, lanceur));
 
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+
   public Command getAutonomousCommand() {
     return chooser.getSelected();
     
