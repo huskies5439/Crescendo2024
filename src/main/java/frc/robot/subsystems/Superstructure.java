@@ -83,8 +83,8 @@ public class Superstructure extends SubsystemBase {
     SmartDashboard.putString("Mode", mode.toString());
     SmartDashboard.putString("Position Note", positionNote.toString());
 
-    SmartDashboard.putBoolean("Capteur Lanceur", capteurLanceur.get());
-    SmartDashboard.putBoolean("Capteur Gobeur", capteurGobeur.get());
+    SmartDashboard.putBoolean("Capteur Lanceur", isNoteDansLanceur());
+    SmartDashboard.putBoolean("Capteur Gobeur", isNoteDansGobeur());
 
   }
 
@@ -109,12 +109,12 @@ public class Superstructure extends SubsystemBase {
   }
 
   public boolean isNoteDansLanceur() {//Idéalement, les Commandes ne parleraient pas aux capteurs, mais seulement à Position.Note
-    return capteurLanceur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
+    return !capteurLanceur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
 
   }
 
   public boolean isNoteDansGobeur() {//Idem
-    return capteurGobeur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
+    return !capteurGobeur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
   }
 
   public void closeDel() {

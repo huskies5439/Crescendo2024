@@ -81,7 +81,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
-    manette.leftBumper().toggleOnTrue(new Gober(gobeur,superstructure));
+    manette.leftBumper().whileTrue(new Gober(gobeur,superstructure));
     manette.start().onTrue(new Homing(echelle));
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());

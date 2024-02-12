@@ -28,7 +28,7 @@ public class Echelle extends SubsystemBase {
 
   private double conversionEncodeur;
 
-  private double maxEchelle = 0.25; //Valider la hauteur maximale
+  private double maxEchelle = 0.28; 
 
 
   public Echelle() {
@@ -89,7 +89,7 @@ public class Echelle extends SubsystemBase {
 
   //Boolean donne la valeur de la limit Switch
   public boolean isPositionDepart() {
-    return limitSwitch.get(); //devrait être positif quand la switch est cliquée
+    return !limitSwitch.get(); //devrait être positif quand la switch est cliquée
   }
 
 
