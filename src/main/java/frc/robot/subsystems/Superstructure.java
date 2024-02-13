@@ -16,7 +16,7 @@ public class Superstructure extends SubsystemBase {
   public enum Mode {// Trois etats pour savoir comment est actuellement géré la note dans le robot
     SPEAKER,
     AMPLI,
-    GRIMPER
+    GRIMPEUR
   }
 
   public enum PositionNote {// Trois positions de note possibles
@@ -100,8 +100,8 @@ public class Superstructure extends SubsystemBase {
     mode = Mode.AMPLI;
   }
 
-  public void setModeGimper() {
-    mode = Mode.GRIMPER;
+  public void setModeGrimpeur() {
+    mode = Mode.GRIMPEUR;
   }
 
   public PositionNote getPositionNote() {

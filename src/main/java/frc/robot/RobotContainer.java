@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -47,6 +47,7 @@ public class RobotContainer {
   CommandXboxController manette = new CommandXboxController(0);
   private final SendableChooser<Command> chooser;
 
+  Trigger grimpeurTrigger = new Trigger(()-> {return superstructure.getMode() == Mode.GRIMPEUR;});
 
   public RobotContainer() {
 
@@ -87,9 +88,9 @@ public class RobotContainer {
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
     //À changer pour mode Grimper
-    manette.y().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new
-                                                                                   // PIDEchelle(0.2)).....
-                                                                                   // et éventuellement il faut passer en mode grimpeur
+    manette.y().toggleOnTrue(Commands.startEnd(superstructure::setModeGrimpeur,superstructure::setModeSpeaker,superstructure)); //ajouter only if 30 sec
+         
+    grimpeurTrigger.onTrue(Commands.run(grimpeurDroit::monter).alongWith(Commands.run(grimpeurGauche::monter))).onFalse(Commands.run(grimpeurDroit::descendre).alongWith(Commands.run(grimpeurGauche::descendre)));
 
                                                                                   
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
@@ -103,6 +104,7 @@ public class RobotContainer {
         .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}),
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
+
     
       
     //Commandes pour valider les systèmes
