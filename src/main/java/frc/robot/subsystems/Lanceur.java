@@ -23,10 +23,10 @@ public class Lanceur extends SubsystemBase {
   private final TalonFX moteurD = new TalonFX(5);
 
 
-  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0); // Trouver les valeurs du
-                                                                                       // feedforward et du pid
-  private PIDController pidG = new PIDController(0, 0, 0);
-  private PIDController pidD = new PIDController(0, 0, 0);
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.078206, 0.12432, 0.032397); // valeur du moteur gauche
+                                                                                      
+  private PIDController pidG = new PIDController(0.1, 0, 0);//a calibrer. Kp = 1 c'est trop
+  private PIDController pidD = new PIDController(0.1, 0, 0);
 
   private ShuffleboardTab calibration = Shuffleboard.getTab("calibration");
   private GenericEntry valeurLanceurCible = calibration.add("valeur lanceur cible", 0).getEntry();

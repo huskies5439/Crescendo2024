@@ -118,7 +118,7 @@ public class RobotContainer {
     manette.povLeft().whileTrue(Commands.startEnd(()->echelle.setVoltage(-3), echelle::stop, echelle));
 
     //B -> Lanceur de base
-    manette.b().toggleOnTrue(Commands.startEnd(()->lanceur.setVoltage(4), lanceur::stop, lanceur));
+    manette.b().toggleOnTrue(lanceur.setPIDCommand(10));
 
   }
 
