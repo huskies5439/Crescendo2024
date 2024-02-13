@@ -87,10 +87,11 @@ public class RobotContainer {
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
-    //À changer pour mode Grimper
+    //À changer pour une commande dans un fichier qui se souvient du mode avant de passer en grimpeur
     manette.y().toggleOnTrue(Commands.startEnd(superstructure::setModeGrimpeur,superstructure::setModeSpeaker,superstructure)); //ajouter only if 30 sec
          
-    grimpeurTrigger.onTrue(Commands.run(grimpeurDroit::monter).alongWith(Commands.run(grimpeurGauche::monter))).onFalse(Commands.run(grimpeurDroit::descendre).alongWith(Commands.run(grimpeurGauche::descendre)));
+    grimpeurTrigger.onTrue(grimpeurDroit.monter().alongWith(grimpeurGauche.monter()))
+                   .onFalse(grimpeurDroit.descendre().alongWith(grimpeurGauche.descendre()));
 
                                                                                   
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
