@@ -22,7 +22,7 @@ public class Grimpeur extends SubsystemBase {
   private double conversion  = (14.0/40)*(14.0/80)*Units.inchesToMeters(0.75)*Math.PI;
 ; 
   private double maxPositionGrimpeur = 0.5; //valeur à déterminer, en mètres
-  private double voltage = 3; //valeur à déterminer
+  private double voltageGrimpeur = 3; //valeur à déterminer
 
   String dashName;
   
@@ -41,10 +41,8 @@ public class Grimpeur extends SubsystemBase {
     SmartDashboard.putNumber("Grimpeur "+dashName+" Position", getPosition());
   }
 
-  public void setVoltage(boolean monter){
-    if (!monter){
-      voltage = - voltage;
-    }
+  public void setVoltage(double voltage){
+   
 
     moteur.set(voltage);
   }
@@ -71,11 +69,13 @@ public class Grimpeur extends SubsystemBase {
   }
 
   public Command monter(){
-    return this.startEnd(()-> this.setVoltage(true), this::stop).until(this::maxHauteur);//requiert this
+    return this.startEnd(()-> this.setVoltage(voltageGrimpeur), this::stop).until(this::maxHauteur);//requiert this
   }
 
   public Command descendre(){
-    return  this.startEnd(()-> this.setVoltage(false), this::stop).until(this::minHauteur);
+    return  this.startEnd(()-> this.setVoltage(-voltageGrimpeur), this::stop).until(this::minHauteur);
   }
+
+  
 
 }

@@ -40,7 +40,7 @@ public class Gobeur extends SubsystemBase {
   //Voltage à ajuster
   //Il est possible qu'on doivent changer le voltage selon la situation, donc il faudra modifier la commande.
   public Command convoyer() {
-    return this.startEnd(() -> this.setVoltage(2), this::stop);
+    return this.startEnd(() -> this.setVoltage(4), this::stop);
   }
 
 }

@@ -22,8 +22,8 @@ public class Echelle extends SubsystemBase {
 
   private DigitalInput limitSwitch = new DigitalInput(4);
 
-  private ProfiledPIDController pid = new ProfiledPIDController(0.1, 0, 0,  //Valeur faible pour premiers essaies
-        new TrapezoidProfile.Constraints(0.1, 0.2)); //Valeur Charged Up : Kp : 0.56, Vmax 0.25, Amax 0.5
+  private ProfiledPIDController pid = new ProfiledPIDController(200, 0, 0,  //Valeur faible pour premiers essaies
+        new TrapezoidProfile.Constraints(0.5, 1.0)); //Valeur Charged Up : Kp : 0.56, Vmax 0.25, Amax 0.5
 
 
   private double conversionEncodeur;
@@ -95,8 +95,20 @@ public class Echelle extends SubsystemBase {
 
   // PID
   public void setPositionPID(double cible){
+    
     cible = MathUtil.clamp(cible,0, maxEchelle);
-    setVoltage(pid.calculate(getPosition(),cible));
+    if (cible == 0 && getPosition() < 0.01){
+      if (isPositionDepart()){
+        stop();
+      }
+      else{
+        setVoltage(-1.0);
+      }
+    }
+    else{
+      double voltagePID = pid.calculate(getPosition(), cible);
+      setVoltage(voltagePID);
+    }
   }
 
   public boolean atCible(){

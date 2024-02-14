@@ -11,6 +11,7 @@ import frc.robot.commmands.Gober;
 import frc.robot.commmands.Homing;
 import frc.robot.commmands.LancerAmpli;
 import frc.robot.commmands.LancerSpeaker;
+import frc.robot.commmands.PositionDefautEchelle;
 import frc.robot.commmands.PreparerAmpli;
 import frc.robot.commmands.ToggleModeGrimpeur;
 import frc.robot.commmands.UpdatePosition;
@@ -72,11 +73,9 @@ public class RobotContainer {
             basePilotable));
         
     limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
-    superstructure.setDefaultCommand(new GestionDEL(superstructure));
+    superstructure.setDefaultCommand(new GestionDEL(superstructure)); 
+    echelle.setDefaultCommand(new PositionDefautEchelle(echelle, superstructure));
   
-  //À ajouter au code quand on est confiant du comportement de l'échelle
-  //echelle.setDefaultCommand(new ConditionalCommand(echelle.setPIDCommand(0.2), echelle.setPIDCommand(0), () -> {return superstructure.getMode() == Mode.GRIMPER;}));
-
 }
 
 
@@ -94,14 +93,14 @@ public class RobotContainer {
                    .onFalse(grimpeurDroit.descendre().alongWith(grimpeurGauche.descendre()));
 
                                                                                   
-    manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
+    manette.x().onTrue(new PreparerAmpli(gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
               .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}));
     
     manette.rightBumper().whileTrue(new ConditionalCommand(//Selon le mode du robot
-      new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
+      new LancerSpeaker(gobeur, lanceur, superstructure)
         .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}),
 
-      new LancerAmpli(echelle, lanceur, superstructure)
+      new LancerAmpli(echelle, lanceur, superstructure, gobeur)
         .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR && superstructure.getMode() != Mode.GRIMPEUR;}),
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
@@ -110,19 +109,19 @@ public class RobotContainer {
       
     //Commandes pour valider les systèmes
     //Up, Down -> grimpeur
-    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(true), grimpeurGauche::stop, grimpeurGauche)
-                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(true), grimpeurDroit::stop, grimpeurDroit)));
+    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(3), grimpeurGauche::stop, grimpeurGauche)
+                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(3), grimpeurDroit::stop, grimpeurDroit)));
 
-    manette.povDown().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(false), grimpeurGauche::stop, grimpeurGauche)
-                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(false), grimpeurDroit::stop, grimpeurDroit)));
+    manette.povDown().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-3), grimpeurGauche::stop, grimpeurGauche)
+                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(-3), grimpeurDroit::stop, grimpeurDroit)));
 
     //Gauche, Droite -> échelle
-    manette.povRight().whileTrue(Commands.startEnd(()->echelle.setVoltage(3), echelle::stop, echelle));
-    manette.povLeft().whileTrue(Commands.startEnd(()->echelle.setVoltage(-3), echelle::stop, echelle));
+    manette.povRight().onTrue(echelle.setPIDCommand(0.1756));
+    manette.povLeft().onTrue(echelle.setPIDCommand(0.0));
 
     //B -> Lanceur de base
-    manette.b().toggleOnTrue(lanceur.setPIDCommand(10));
-    //manette.b().toggleOnTrue(lanceur.commandeVoltageSimple(3));
+    manette.b().toggleOnTrue(lanceur.setPIDCommand(4));
+    // manette.b().toggleOnTrue(lanceur.commandeVoltageSimple(4));
 
   }
 

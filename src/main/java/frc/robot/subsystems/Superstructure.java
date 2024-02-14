@@ -58,13 +58,13 @@ public class Superstructure extends SubsystemBase {
         }
         break;
       case GOBEUR:
-        if (!isNoteDansGobeur()) {// On valide si il n'y a plus de note dans le gobeur
-          if (isNoteDansLanceur()) {// On valide ou est rendu la note
-            positionNote = PositionNote.LANCEUR;
-          } else {
-            positionNote = PositionNote.AUCUNE;
-          }
+
+        if (isNoteDansLanceur()) {// On valide ou est rendu la note
+          positionNote = PositionNote.LANCEUR;
+        } else if (!isNoteDansGobeur()){ // Si gobeur et lanceur sont bloqués on priorise lanceur
+          positionNote = PositionNote.AUCUNE;
         }
+  
         break;
       case LANCEUR://Possible de mettre la logique de DetecterNoteLanceur ici ?????????
         if (!isNoteDansLanceur()) {// On valide si la note est sortie du lanceur

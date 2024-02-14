@@ -23,7 +23,7 @@ public class Lanceur extends SubsystemBase {
   private final TalonFX moteurD = new TalonFX(5);
 
 
-  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.078206, 0.12432, 0.032397); // valeur du moteur gauche
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.0, 0.124, 0.0); // valeur du moteur gauche
                                                                                       
   private PIDController pidG = new PIDController(0.1, 0, 0);//a calibrer. Kp = 1 c'est trop
   private PIDController pidD = new PIDController(0.1, 0, 0);
@@ -41,8 +41,8 @@ public class Lanceur extends SubsystemBase {
     moteurG.setNeutralMode(NeutralModeValue.Coast);
     moteurD.setNeutralMode(NeutralModeValue.Coast);
     
-    pidG.setTolerance(1);//valeur a determiner en RPS
-    pidD.setTolerance(1);//valeur a determiner en RPS
+    pidG.setTolerance(3);//valeur a determiner en RPS
+    pidD.setTolerance(3);//valeur a determiner en RPS
 
   }
 
@@ -50,6 +50,7 @@ public class Lanceur extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
+    SmartDashboard.putBoolean("Lanceur At Cible", atCible());
 
   }
 

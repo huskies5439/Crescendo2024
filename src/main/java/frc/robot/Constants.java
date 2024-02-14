@@ -23,9 +23,9 @@ public final class Constants {
 
     public static final double maxVitesseModule = 3;//Vitesse maximale d'un module en m/s 
 
-    public static final double kDirectionSlewRate = 7; // radians per second //REV = 1.2
-    public static final double kMagnitudeSlewRate = 2.25; // percent per second (1 = 100%) // REV 1.8
-    public static final double kRotationalSlewRate = 2.25; // percent per second (1 = 100%) //REV 2.0
+    public static final double kDirectionSlewRate = 1.2; // radians per second
+    public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(26.5);

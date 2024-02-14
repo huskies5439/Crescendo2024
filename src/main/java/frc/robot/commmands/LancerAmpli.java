@@ -9,13 +9,14 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Echelle;
+import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Superstructure;
 
 
 public class LancerAmpli extends SequentialCommandGroup {
 
-  public LancerAmpli(Echelle echelle, Lanceur lanceur, Superstructure superstructure) {
+  public LancerAmpli(Echelle echelle, Lanceur lanceur, Superstructure superstructure, Gobeur gobeur) {
    
 
     addCommands(
@@ -23,6 +24,8 @@ public class LancerAmpli extends SequentialCommandGroup {
       //Sortir l'échelle et lancer lentement
       new ParallelRaceGroup(
         echelle.setPIDCommand(0.2), //hauteur à valider
+        
+        gobeur.convoyer(),
 
         //Attendre que l'échelle soit sortie, puis on lance
         new SequentialCommandGroup(
@@ -30,14 +33,13 @@ public class LancerAmpli extends SequentialCommandGroup {
 
           //On lance jusqu'à ce que la note sorte du lanceur
           new ParallelRaceGroup(
-            lanceur.setPIDCommand(5),//Valeur à déterminer
+            lanceur.setPIDCommand(20),//Valeur à déterminer
             new DetecterNoteLancer(superstructure)//Termine le Race, qui termine le Sequential, qui termine le Race
           )
         )
       ),
 
        Commands.runOnce(superstructure::setModeSpeaker)
-       //echelle.setPIDCommand(0).until(echelle::isPositionDepart) 
     );
   }
 }

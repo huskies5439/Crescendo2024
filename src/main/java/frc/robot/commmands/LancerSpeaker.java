@@ -15,15 +15,12 @@ import frc.robot.subsystems.Superstructure;
 
 public class LancerSpeaker extends SequentialCommandGroup {
 
-  public LancerSpeaker(Echelle echelle, Gobeur gobeur, Lanceur lanceur, Superstructure superstructure) {
+  public LancerSpeaker(Gobeur gobeur, Lanceur lanceur, Superstructure superstructure) {
 
     addCommands(
-        //Si la commande de rétracter l'échelle n'est plus nécessaire, transformer tout ça en ParallelRaceGroup
-        //echelle.setPIDCommand(0).until(echelle::isPositionDepart), // retracte l'échelle
-
         new ParallelRaceGroup(
 
-                lanceur.setPIDCommand(20), // valeur vcible a vérifier
+                lanceur.setPIDCommand(70), // valeur vcible a vérifier
 
                 Commands.waitUntil(lanceur::atCible)//Quand le lanceur a atteint sa cible, on envoit la note dans le lanceur
                         .andThen(gobeur.convoyer()),
