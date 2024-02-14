@@ -12,6 +12,7 @@ import frc.robot.commmands.Homing;
 import frc.robot.commmands.LancerAmpli;
 import frc.robot.commmands.LancerSpeaker;
 import frc.robot.commmands.PreparerAmpli;
+import frc.robot.commmands.ToggleModeGrimpeur;
 import frc.robot.commmands.UpdatePosition;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Echelle;
@@ -27,7 +28,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -47,6 +48,7 @@ public class RobotContainer {
   CommandXboxController manette = new CommandXboxController(0);
   private final SendableChooser<Command> chooser;
 
+  Trigger grimpeurTrigger = new Trigger(()-> {return superstructure.getMode() == Mode.GRIMPEUR;});
 
   public RobotContainer() {
 
@@ -86,23 +88,25 @@ public class RobotContainer {
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
-    //À changer pour mode Grimper
-    manette.y().onTrue(grimpeurGauche.monter().alongWith(grimpeurDroit.monter())); // et éventuellement.alongWith(new
-                                                                                   // PIDEchelle(0.2)).....
-                                                                                   // et éventuellement il faut passer en mode grimpeur
+    //À changer pour une commande dans un fichier qui se souvient du mode avant de passer en grimpeur 
+    manette.y().toggleOnTrue(new ToggleModeGrimpeur());//ajouter only if 30 sec
+
+    grimpeurTrigger.onTrue(grimpeurDroit.monter().alongWith(grimpeurGauche.monter()))
+                   .onFalse(grimpeurDroit.descendre().alongWith(grimpeurGauche.descendre()));
 
                                                                                   
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
-              .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
+              .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}));
     
     manette.rightBumper().whileTrue(new ConditionalCommand(//Selon le mode du robot
       new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
-        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}),
+        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}),
 
       new LancerAmpli(echelle, lanceur, superstructure)
-        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}),
+        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR && superstructure.getMode() != Mode.GRIMPEUR;}),
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
+
     
       
     //Commandes pour valider les systèmes
