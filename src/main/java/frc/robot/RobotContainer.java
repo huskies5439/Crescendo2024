@@ -119,6 +119,7 @@ public class RobotContainer {
 
     //B -> Lanceur de base
     manette.b().toggleOnTrue(lanceur.setPIDCommand(10));
+    manette.b().toggleOnTrue(lanceur.commandeVoltageSimple(3));
 
   }
 

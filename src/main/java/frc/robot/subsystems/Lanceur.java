@@ -53,6 +53,8 @@ public class Lanceur extends SubsystemBase {
 
   }
 
+
+  //Lancer simple
   public void setVoltage(double volts) {
     moteurG.setVoltage(volts);
     moteurD.setVoltage(volts);
@@ -61,9 +63,22 @@ public class Lanceur extends SubsystemBase {
 
   public void stop() {
     setVoltage(0);
-
   }
 
+  public Command commandeVoltageSimple(double voltage){
+    return this.startEnd(()->this.setVoltage(voltage), this::stop);
+  }
+
+  //Shuffleboard
+  public double getValeurShuffleboard() {
+    return valeurLanceurCible.getDouble(0);
+  }
+
+  public void setVoltageShuffleboard() {
+    setVoltage(getValeurShuffleboard());
+  }
+
+  //Encodeur et PID/FF Gauche
   public double getPositionG() {
     return moteurG.getPosition().getValueAsDouble();// en rotation
   }
@@ -76,6 +91,8 @@ public class Lanceur extends SubsystemBase {
     moteurG.setVoltage(pidG.calculate(getVitesseG(), vcible) + feedforward.calculate(vcible));
   }
 
+
+  //Encodeur et PID/FF DROIT
   public double getPositionD() {
     return moteurD.getPosition().getValueAsDouble();
   }
@@ -89,18 +106,11 @@ public class Lanceur extends SubsystemBase {
     moteurD.setVoltage(pidD.calculate(getVitesseD(), vcible) + feedforward.calculate(vcible));
   }
 
+  //PID
   public void setVitessePID(double vcible) {
     setVitessePIDDroite(vcible);
     setVitessePIDGauche(vcible);
 
-  }
-
-  public double getValeurShuffleboard() {
-    return valeurLanceurCible.getDouble(0);
-  }
-
-  public void setVoltageShuffleboard() {
-    setVoltage(getValeurShuffleboard());
   }
 
 
