@@ -96,7 +96,7 @@ public class RobotContainer {
 
                                                                                   
     manette.x().onTrue(new PreparerAmpli(echelle, gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
-              .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
+              .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}));
     
     manette.rightBumper().whileTrue(new ConditionalCommand(//Selon le mode du robot
       new LancerSpeaker(echelle, gobeur, lanceur, superstructure)
