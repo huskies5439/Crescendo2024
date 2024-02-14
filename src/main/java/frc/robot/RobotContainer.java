@@ -88,8 +88,7 @@ public class RobotContainer {
 
     manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
     manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
-    //À changer pour une commande dans un fichier qui se souvient du mode avant de passer en grimpeur 
-    manette.y().toggleOnTrue(new ToggleModeGrimpeur());//ajouter only if 30 sec
+    manette.y().toggleOnTrue(new ToggleModeGrimpeur(superstructure));//ajouter only if 30 sec
 
     grimpeurTrigger.onTrue(grimpeurDroit.monter().alongWith(grimpeurGauche.monter()))
                    .onFalse(grimpeurDroit.descendre().alongWith(grimpeurGauche.descendre()));

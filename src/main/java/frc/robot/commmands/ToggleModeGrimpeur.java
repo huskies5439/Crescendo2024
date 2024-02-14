@@ -13,26 +13,23 @@ public class ToggleModeGrimpeur extends Command {
   Superstructure superstructure;
   Mode modeActuel;
 
-  /** Creates a new ToggleModeGrimpeur. */
-  public ToggleModeGrimpeur() {
-
+  public ToggleModeGrimpeur(Superstructure superstructure) {
+    this.superstructure = superstructure;
+    //IL NE FAUT PAS REQUIERT SUPERSTRUCTURE
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.modeActuel = superstructure.getMode();
+    modeActuel = superstructure.getMode();
     superstructure.setModeGrimpeur();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (this.modeActuel == Mode.AMPLI){
+    if (modeActuel == Mode.AMPLI){
       superstructure.setModeAmpli();
     }
     else {
