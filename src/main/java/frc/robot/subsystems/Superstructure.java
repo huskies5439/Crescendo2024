@@ -83,8 +83,8 @@ public class Superstructure extends SubsystemBase {
     SmartDashboard.putString("Mode", mode.toString());
     SmartDashboard.putString("Position Note", positionNote.toString());
 
-    SmartDashboard.putBoolean("Capteur Lanceur", isNoteDansLanceur());
-    SmartDashboard.putBoolean("Capteur Gobeur", isNoteDansGobeur());
+    //SmartDashboard.putBoolean("Capteur Lanceur", isNoteDansLanceur());
+    //SmartDashboard.putBoolean("Capteur Gobeur", isNoteDansGobeur());
 
   }
 

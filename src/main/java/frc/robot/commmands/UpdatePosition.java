@@ -29,7 +29,7 @@ public class UpdatePosition extends Command {
 
   @Override
   public void execute() {//Critères à ajuster pour avoir une lecture fiable de AprilTags
-    if(limelight.getTv() && limelight.getTa() > 0.12){
+    if(limelight.getTv() && limelight.getTa() > 0.30){
       basePilotable.addVisionMeasurement(limelight.getVisionPosition(), limelight.getTotalLatency() / 1000.0);
     }
   }

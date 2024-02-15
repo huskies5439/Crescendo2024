@@ -7,6 +7,7 @@ package frc.robot.commmands;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Gobeur;
@@ -23,7 +24,7 @@ public class LancerAmpli extends SequentialCommandGroup {
 
       //Sortir l'échelle et lancer lentement
       new ParallelRaceGroup(
-        echelle.setPIDCommand(0.2), //hauteur à valider
+        echelle.setPIDCommand(0.28), //hauteur à valider
         
         gobeur.convoyer(),
 
@@ -33,8 +34,8 @@ public class LancerAmpli extends SequentialCommandGroup {
 
           //On lance jusqu'à ce que la note sorte du lanceur
           new ParallelRaceGroup(
-            lanceur.setPIDCommand(20),//Valeur à déterminer
-            new DetecterNoteLancer(superstructure)//Termine le Race, qui termine le Sequential, qui termine le Race
+            lanceur.setPIDCommand(10),//Valeur à déterminer
+            new WaitCommand(2)  //Termine le Race, qui termine le Sequential, qui termine le Race
           )
         )
       ),

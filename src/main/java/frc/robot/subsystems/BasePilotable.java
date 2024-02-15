@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
@@ -104,9 +105,9 @@ public class BasePilotable extends SubsystemBase {
         
         // SmartDashboard.putNumber("Gyro", getAngle());
 
-        // SmartDashboard.putNumber("Pose Estimator X",getPose().getX());
-        // SmartDashboard.putNumber("Pose Estimator Y",getPose().getY());
-        // SmartDashboard.putNumber("Pose Estimator Rotation",getPose().getRotation().getDegrees());
+         SmartDashboard.putNumber("Pose Estimator X",getPose().getX());
+         SmartDashboard.putNumber("Pose Estimator Y",getPose().getY());
+         SmartDashboard.putNumber("Pose Estimator Rotation",getPose().getRotation().getDegrees());
 
         // SmartDashboard.putNumber("Chassis Speed VX", getChassisSpeed().vxMetersPerSecond);
         // SmartDashboard.putNumber("Chassis Speed VY", getChassisSpeed().vyMetersPerSecond);

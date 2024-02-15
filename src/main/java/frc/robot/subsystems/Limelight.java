@@ -39,10 +39,10 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Vision X", getVisionPosition().getX());
-    SmartDashboard.putNumber("Vision Y", getVisionPosition().getY());
-    SmartDashboard.putNumber("Vision Rotation ", getVisionPosition().getRotation().getDegrees());
-    SmartDashboard.putNumber("Vision Total Latency", getTotalLatency());
+   // SmartDashboard.putNumber("Vision X", getVisionPosition().getX());
+   // SmartDashboard.putNumber("Vision Y", getVisionPosition().getY());
+   // SmartDashboard.putNumber("Vision Rotation ", getVisionPosition().getRotation().getDegrees());
+   // SmartDashboard.putNumber("Vision Total Latency", getTotalLatency());
 
   }
 

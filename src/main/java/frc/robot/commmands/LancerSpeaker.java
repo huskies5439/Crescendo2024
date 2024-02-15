@@ -20,12 +20,12 @@ public class LancerSpeaker extends SequentialCommandGroup {
     addCommands(
         new ParallelRaceGroup(
 
-                lanceur.setPIDCommand(70), // valeur vcible a vérifier
+                lanceur.setPIDCommand(40), // valeur vcible a vérifier
 
                 Commands.waitUntil(lanceur::atCible)//Quand le lanceur a atteint sa cible, on envoit la note dans le lanceur
-                        .andThen(gobeur.convoyer()),
+                        .andThen(gobeur.convoyer())
 
-                new DetecterNoteLancer(superstructure)//Met fin à la commande
+                // new DetecterNoteLancer(superstructure)//Met fin à la commande
                 )
               );
   }

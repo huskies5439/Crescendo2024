@@ -52,8 +52,8 @@ public class Echelle extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Position Échelle", getPosition());
-    SmartDashboard.putBoolean("Échelle à la cible", atCible());
-    SmartDashboard.putBoolean("Échelle position de départ", isPositionDepart());
+   // SmartDashboard.putBoolean("Échelle à la cible", atCible());
+    //SmartDashboard.putBoolean("Échelle position de départ", isPositionDepart());
 
 
     //Reset encodeur quand on redescend on active la limit switch
