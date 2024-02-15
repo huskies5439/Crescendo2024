@@ -30,7 +30,7 @@ public class GestionDEL extends Command {
 
   @Override
   public void execute() {
-    if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
+   /* if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
       superstructure.closeDel();
     }
 
@@ -55,7 +55,8 @@ public class GestionDEL extends Command {
         superstructure.closeDel();
       }
 
-    } 
+    } */
+    superstructure.setCouleur(Color.kPaleTurquoise);
 
   }
 

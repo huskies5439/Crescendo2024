@@ -32,16 +32,16 @@ public class Superstructure extends SubsystemBase {
   private final DigitalInput capteurGobeur = new DigitalInput(0); // Émeteur branché sur le 1
   private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur sera branché sur le 3
 
-  private final AddressableLED del = new AddressableLED(9); // Port PWM, pas DIO
-  private final AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(8); // LE nombre de sections de DEL ici 3
+  private  AddressableLED del = new AddressableLED(4); // Port PWM, pas DIO
+  private  AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(7); // LE nombre de sections de DEL ici 3
                                                                               // DEL/Section
 
   /** Creates a new Superstructure. */
   public Superstructure() {
+    
     del.setLength(delBuffer.getLength());
     del.setData(delBuffer);
     del.start();
-    closeDel();
     setModeSpeaker();
   }
 
