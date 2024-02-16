@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commmands.GestionDEL;
 import frc.robot.commmands.Gober;
-import frc.robot.commmands.Homing;
+import frc.robot.commmands.PreparationPit;
 import frc.robot.commmands.LancerAmpli;
 import frc.robot.commmands.LancerSpeaker;
 import frc.robot.commmands.PositionDefautEchelle;
@@ -27,7 +27,6 @@ import frc.robot.subsystems.Superstructure.PositionNote;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -50,6 +49,7 @@ public class RobotContainer {
   private final SendableChooser<Command> chooser;
 
   Trigger grimpeurTrigger = new Trigger(()-> {return superstructure.getMode() == Mode.GRIMPEUR;});
+  Trigger pasGrimpeurTrigger= grimpeurTrigger.negate(); 
 
   public RobotContainer() {
 
@@ -57,9 +57,17 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
+    //On ne peut pas changer les noms des commandes après avoir créer un Auto dans PathPlanner
+    //Les onlyIf sont-ils nécessaires en auto ??
     NamedCommands.registerCommand("gober", new Gober(gobeur,superstructure));
-    NamedCommands.registerCommand("lancer", new WaitCommand(2));
-    NamedCommands.registerCommand("scorerAmpli", new WaitCommand(2));
+    NamedCommands.registerCommand("lancerSpeaker", new LancerSpeaker(gobeur, lanceur)
+                                        /*.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;})*/.withTimeout(2));//Ajuster le timer selon le délai
+    NamedCommands.registerCommand("lancerAmpli", new LancerAmpli(echelle, lanceur, gobeur)
+                                        /*.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;})*/
+                                        .finallyDo(superstructure::setModeSpeaker).withTimeout(2)); //Ajuster le timer selon le délai
+    NamedCommands.registerCommand("preparerAmpli", new PreparerAmpli(gobeur, lanceur, superstructure)
+                                        /*.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;})*/);
+    
 
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajets", chooser);
@@ -82,30 +90,47 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
-    manette.leftBumper().whileTrue(new Gober(gobeur,superstructure));
-    manette.start().onTrue(new Homing(echelle));
+    manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));
 
-    manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
-    manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
+    //Gobeur
+    manette.leftBumper().and(pasGrimpeurTrigger).whileTrue(new Gober(gobeur,superstructure));
+
+
+
+    ////////GRIMPEUR
     manette.y().toggleOnTrue(new ToggleModeGrimpeur(superstructure));//ajouter only if 30 sec
 
+    //Position automatique du grimpeur quand on change de mode
     grimpeurTrigger.onTrue(grimpeurDroit.monter().alongWith(grimpeurGauche.monter()))
                    .onFalse(grimpeurDroit.descendre().alongWith(grimpeurGauche.descendre()));
 
-                                                                                  
-    manette.x().onTrue(new PreparerAmpli(gobeur, lanceur, superstructure)//Préparer ampli ne fonctionne pas tant qu´il n´y a pas de note dans le gobeur
-              .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}));
-    
-    manette.rightBumper().whileTrue(new ConditionalCommand(//Selon le mode du robot
-      new LancerSpeaker(gobeur, lanceur, superstructure)
-        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR && superstructure.getMode() != Mode.GRIMPEUR;}),
+    //Monter et descendre le grimpeur gauche
+    manette.leftBumper().and(grimpeurTrigger).whileTrue(grimpeurGauche.monter());
+    manette.leftTrigger().whileTrue(grimpeurGauche.descendre());
 
-      new LancerAmpli(echelle, lanceur, superstructure, gobeur)
-        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR && superstructure.getMode() != Mode.GRIMPEUR;}),
+    //Monter et descendre le grimpeur droit
+    manette.rightBumper().and(grimpeurTrigger).whileTrue(grimpeurDroit.monter());
+    manette.rightTrigger().whileTrue(grimpeurDroit.descendre());
+    
+    //Lanceur                                                                             
+    manette.x().onTrue( new PreparerAmpli(gobeur, lanceur, superstructure)
+                        .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
+    
+    //Lancer au speaker ou l'ampli selon le mode actuel
+     manette.rightBumper().and(pasGrimpeurTrigger).whileTrue(new ConditionalCommand(//Selon le mode du robot
+      
+      new LancerSpeaker(gobeur, lanceur)
+          .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
+
+      new LancerAmpli(echelle, lanceur, gobeur)
+          .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;})
+          .finallyDo(superstructure::setModeSpeaker) ,
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
 
     
+
+   
       
     //Commandes pour valider les systèmes
     //Up, Down -> grimpeur
@@ -116,7 +141,7 @@ public class RobotContainer {
                       .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(-3), grimpeurDroit::stop, grimpeurDroit)));
 
     //Gauche, Droite -> échelle
-    manette.povRight().onTrue(echelle.setPIDCommand(0.1756));
+    manette.povRight().onTrue(echelle.setPIDCommand(0.2));
     manette.povLeft().onTrue(echelle.setPIDCommand(0.0));
 
     //B -> Lanceur de base

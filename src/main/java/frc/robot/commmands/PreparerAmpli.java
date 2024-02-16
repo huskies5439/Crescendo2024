@@ -6,11 +6,10 @@ package frc.robot.commmands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Superstructure.PositionNote;
+
 
 
 public class PreparerAmpli extends SequentialCommandGroup {

@@ -5,6 +5,7 @@
 package frc.robot.commmands;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.BasePilotable;
 import frc.robot.subsystems.Limelight;
@@ -30,7 +31,11 @@ public class UpdatePosition extends Command {
   @Override
   public void execute() {//Critères à ajuster pour avoir une lecture fiable de AprilTags
     if(limelight.getTv() && limelight.getTa() > 0.30){
-      basePilotable.addVisionMeasurement(limelight.getVisionPosition(), limelight.getTotalLatency() / 1000.0);
+      basePilotable.addVisionMeasurement(limelight.getVisionPosition(), limelight.getTotalLatency() / 1000.0); 
+      SmartDashboard.putString("Cible Valide?", "Update") ;
+    } 
+    else{
+      SmartDashboard.putString("Cible Valide?", "Rejete") ;
     }
   }
 

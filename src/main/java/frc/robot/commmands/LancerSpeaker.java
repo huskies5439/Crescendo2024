@@ -5,28 +5,22 @@
 package frc.robot.commmands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Echelle;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
-import frc.robot.subsystems.Superstructure;
 
+public class LancerSpeaker extends ParallelCommandGroup {
 
-public class LancerSpeaker extends SequentialCommandGroup {
-
-  public LancerSpeaker(Gobeur gobeur, Lanceur lanceur, Superstructure superstructure) {
+  //Commande qui ne se termine pas
+  //Utiliser un decorateur timeout en auto
+  public LancerSpeaker(Gobeur gobeur, Lanceur lanceur) {
 
     addCommands(
-        new ParallelRaceGroup(
 
-                lanceur.setPIDCommand(40), // valeur vcible a vérifier
+        lanceur.setPIDCommand(40),
 
-                Commands.waitUntil(lanceur::atCible)//Quand le lanceur a atteint sa cible, on envoit la note dans le lanceur
-                        .andThen(gobeur.convoyer())
-
-                // new DetecterNoteLancer(superstructure)//Met fin à la commande
-                )
-              );
+        Commands.waitUntil(lanceur::atCible)// Quand le lanceur a atteint sa cible, on envoit la note dans le lanceur
+            .andThen(gobeur.convoyer())
+    );
   }
 }

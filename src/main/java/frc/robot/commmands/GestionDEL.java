@@ -30,7 +30,10 @@ public class GestionDEL extends Command {
 
   @Override
   public void execute() {
-   /* if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
+    if (superstructure.getMode() == Mode.GRIMPEUR) {
+      superstructure.setCouleur(Color.kGreen);
+    }
+   else if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
       superstructure.closeDel();
     }
 
@@ -42,7 +45,7 @@ public class GestionDEL extends Command {
 
       compteur ++ ;
 
-      if (compteur >= 100){//Période de blink à déterminer
+      if (compteur >= 10){//Période de blink à déterminer
         blink = !blink;
         compteur = 0;
       }
@@ -55,8 +58,8 @@ public class GestionDEL extends Command {
         superstructure.closeDel();
       }
 
-    } */
-    superstructure.setCouleur(Color.kPaleTurquoise);
+    }
+    
 
   }
 

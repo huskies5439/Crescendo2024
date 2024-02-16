@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "scorerAmpli"
+            "name": "lancerAmpli"
           }
         },
         {
@@ -45,6 +45,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Ampli",
   "choreoAuto": false
 }

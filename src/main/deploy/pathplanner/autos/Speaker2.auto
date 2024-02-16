@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "lancer"
+            "name": "lancerSpeaker"
           }
         },
         {
@@ -51,12 +51,12 @@
         {
           "type": "named",
           "data": {
-            "name": "lancer"
+            "name": "lancerSpeaker"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Speaker",
   "choreoAuto": false
 }

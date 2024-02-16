@@ -7,12 +7,13 @@ package frc.robot.commmands;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Echelle;
+import frc.robot.subsystems.Grimpeur;
 
 
 
-public class Homing extends SequentialCommandGroup {
+public class PreparationPit extends SequentialCommandGroup {
 
-  public Homing( Echelle echelle) {
+  public PreparationPit( Echelle echelle, Grimpeur grimpeurGauche, Grimpeur grimpeurDroit) {
    
 
     //Commande pour faire un Homing de l'échelle.
@@ -28,7 +29,14 @@ public class Homing extends SequentialCommandGroup {
        Commands.run(()-> echelle.setVoltage(1), echelle). withTimeout(0.5), 
        Commands.run(()-> echelle.setVoltage(-1), echelle).until(echelle::isPositionDepart), 
        Commands.runOnce(echelle::stop ), 
-       Commands.runOnce(echelle::resetEncodeur )
+       Commands.runOnce(echelle::resetEncodeur ),
+
+
+       //Reset les encodeurs des grimpeurs, qui doivent être rentrés
+       Commands.runOnce(grimpeurGauche::resetEncodeur),
+       Commands.runOnce(grimpeurDroit::resetEncodeur)
+
+
        
     );
  

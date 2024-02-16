@@ -4,43 +4,32 @@
 
 package frc.robot.commmands;
 
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
-import frc.robot.subsystems.Superstructure;
 
 
-public class LancerAmpli extends SequentialCommandGroup {
+public class LancerAmpli extends ParallelCommandGroup {
 
-  public LancerAmpli(Echelle echelle, Lanceur lanceur, Superstructure superstructure, Gobeur gobeur) {
-   
+  public LancerAmpli(Echelle echelle, Lanceur lanceur, Gobeur gobeur) {
 
+  //Commande qui ne se termine pas
+  //Utiliser un decorateur timeout en auto
     addCommands(
 
-      //Sortir l'échelle et lancer lentement
-      new ParallelRaceGroup(
-        echelle.setPIDCommand(0.28), //hauteur à valider
-        
+        //Sortir l'échelle
+        echelle.setPIDCommand(0.2), 
+        //Faire tourner le convoyeur pour décoincer la note
         gobeur.convoyer(),
 
         //Attendre que l'échelle soit sortie, puis on lance
         new SequentialCommandGroup(
-          new WaitUntilCommand(echelle::atCible),
-
-          //On lance jusqu'à ce que la note sorte du lanceur
-          new ParallelRaceGroup(
-            lanceur.setPIDCommand(10),//Valeur à déterminer
-            new WaitCommand(2)  //Termine le Race, qui termine le Sequential, qui termine le Race
-          )
+          new WaitCommand(0.4),//Ajuster si l'échelle n'est pas assez déployée 
+          lanceur.setPIDCommand(7.5)    
         )
-      ),
-
-       Commands.runOnce(superstructure::setModeSpeaker)
     );
   }
 }

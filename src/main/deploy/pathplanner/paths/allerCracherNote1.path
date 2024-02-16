@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Long",
   "previewStartingState": null,
   "useDefaultConstraints": true
 }
