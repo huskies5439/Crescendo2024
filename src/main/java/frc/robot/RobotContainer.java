@@ -88,8 +88,13 @@ public class RobotContainer {
 
 
   private void configureButtonBindings() {
+    
+    /////////////Auto Centrer
+    manette.a().and(pasGrimpeurTrigger).whileTrue(new ConditionalCommand(
+                                                  basePilotable.followPath(true), // Centrer speaker
+                                                  basePilotable.followPath(false), // Centrer ampli
+                                                  ()->{return superstructure.getMode() == Mode.SPEAKER;})); // Selon mode robot
 
-    manette.a().whileTrue(Commands.run(basePilotable::setX, basePilotable));
     manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));
 
     //Gobeur
