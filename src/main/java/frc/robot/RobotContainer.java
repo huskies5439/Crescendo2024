@@ -97,7 +97,7 @@ public class RobotContainer {
     manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));
 
     //Gobeur
-    manette.leftBumper().and(pasGrimpeurTrigger).whileTrue(new Gober(gobeur,superstructure));
+    manette.leftBumper().and(pasGrimpeurTrigger).toggleOnTrue(new Gober(gobeur,superstructure));
 
 
 

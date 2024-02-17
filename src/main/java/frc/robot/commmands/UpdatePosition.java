@@ -30,12 +30,12 @@ public class UpdatePosition extends Command {
 
   @Override
   public void execute() {//Critères à ajuster pour avoir une lecture fiable de AprilTags
-    if(limelight.getTv() && limelight.getTa() > 0.30){
+    if(limelight.getTv() && limelight.getTa() > 0.15){
       basePilotable.addVisionMeasurement(limelight.getVisionPosition(), limelight.getTotalLatency() / 1000.0); 
-      SmartDashboard.putString("Cible Valide?", "Update") ;
+      SmartDashboard.putBoolean("Cible Valide?", true) ;
     } 
     else{
-      SmartDashboard.putString("Cible Valide?", "Rejete") ;
+      SmartDashboard.putBoolean("Cible Valide?", false) ;
     }
   }
 

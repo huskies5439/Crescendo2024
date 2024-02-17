@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
   private NetworkTableInstance networkTableInstance = NetworkTableInstance.getDefault();
-  private NetworkTable limelight = networkTableInstance.getTable("limelight-huskies");
+  private NetworkTable limelight = networkTableInstance.getTable("limelight");
   private NetworkTableEntry tv = limelight.getEntry("tv");
   private NetworkTableEntry ta = limelight.getEntry("ta");
   private NetworkTableEntry tl = limelight.getEntry("tl"); //Target Latency

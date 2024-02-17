@@ -301,7 +301,7 @@ public class BasePilotable extends SubsystemBase {
     }
     else {
       rotationCible =  new Rotation2d(Math.toRadians(-90));
-      endPose = new Pose2d(1.85, 7.63, rotationCible);
+      endPose = new Pose2d(1.85, 7.75, rotationCible);
     }
 
     Pose2d startPose = getPose();
@@ -309,7 +309,7 @@ public class BasePilotable extends SubsystemBase {
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
 
     PathPlannerPath path = new PathPlannerPath(bezierPoints,
-                           new PathConstraints(0.5, 1.5, Math.toRadians(180), Math.toRadians(180)),
+                           new PathConstraints(3, 3, Math.toRadians(180), Math.toRadians(180)),
                            new GoalEndState(0.0, rotationCible));
     path.preventFlipping = false;
                     
