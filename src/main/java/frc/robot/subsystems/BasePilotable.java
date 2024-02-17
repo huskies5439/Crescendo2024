@@ -4,14 +4,20 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -25,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
@@ -281,6 +288,37 @@ public class BasePilotable extends SubsystemBase {
 
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(swerveModuleStates);
+  }
+
+  /////////////////////// On the fly
+  public PathPlannerPath getPath(boolean speaker){
+    Rotation2d rotationCible;
+    Pose2d endPose;
+
+    if (speaker){
+      rotationCible =  new Rotation2d(Math.toRadians(0));
+      endPose = new Pose2d(1.35, 5.5, rotationCible);
+    }
+    else {
+      rotationCible =  new Rotation2d(Math.toRadians(-90));
+      endPose = new Pose2d(1.85, 7.63, rotationCible);
+    }
+
+    Pose2d startPose = getPose();
+
+    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
+
+    PathPlannerPath path = new PathPlannerPath(bezierPoints,
+                           new PathConstraints(0.5, 1.5, Math.toRadians(180), Math.toRadians(180)),
+                           new GoalEndState(0.0, rotationCible));
+    path.preventFlipping = false;
+                    
+    return path;
+  }
+
+
+  public Command followPath(boolean speaker){
+    return AutoBuilder.followPath(getPath(speaker));
   }
 
 }
