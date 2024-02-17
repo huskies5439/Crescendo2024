@@ -21,8 +21,8 @@ public class Grimpeur extends SubsystemBase {
     une poulie de 0.75 pouces auquelle s'enroule d'une corde */
   private double conversion  = (14.0/40)*(14.0/80)*Units.inchesToMeters(0.75)*Math.PI;
 ; 
-  private double maxPositionGrimpeur = 0.5; //valeur à déterminer, en mètres
-  private double voltageGrimpeur = 3; //valeur à déterminer
+  private double maxPositionGrimpeur = 0.5;
+  private double voltageGrimpeur = 3;
 
   String dashName;
   
@@ -33,6 +33,7 @@ public class Grimpeur extends SubsystemBase {
     moteur.setNeutralMode(NeutralModeValue.Brake);
 
     resetEncodeur();
+
     this.dashName = dashName;
   }
 
@@ -41,17 +42,17 @@ public class Grimpeur extends SubsystemBase {
    // SmartDashboard.putNumber("Grimpeur "+dashName+" Position", getPosition());
   }
 
+  //Consignes au moteur
   public void setVoltage(double voltage){
-   
-
     moteur.set(voltage);
   }
 
   public void stop() {
-    moteur.set(0);
+    setVoltage(0);
   }
 
 
+  //Encodeur
   public double getPosition(){
     return moteur.getPosition().getValueAsDouble()*conversion;
   }
@@ -68,11 +69,13 @@ public class Grimpeur extends SubsystemBase {
     return getPosition() <=0;
   }
 
-  public Command monter(){
+
+  //Commandes pour monter et descendre automatiquement
+  public Command monterCommand(){
     return this.startEnd(()-> this.setVoltage(voltageGrimpeur), this::stop).until(this::maxHauteur);//requiert this
   }
 
-  public Command descendre(){
+  public Command descendreCommand(){
     return  this.startEnd(()-> this.setVoltage(-voltageGrimpeur), this::stop).until(this::minHauteur);
   }
 

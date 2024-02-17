@@ -22,9 +22,8 @@ public class Echelle extends SubsystemBase {
 
   private DigitalInput limitSwitch = new DigitalInput(4);
 
-  private ProfiledPIDController pid = new ProfiledPIDController(200, 0, 0,  //Valeur faible pour premiers essaies
-        new TrapezoidProfile.Constraints(0.5, 1.0)); //Valeur Charged Up : Kp : 0.56, Vmax 0.25, Amax 0.5
-
+  private ProfiledPIDController pid = new ProfiledPIDController(200, 0, 0,  
+        new TrapezoidProfile.Constraints(0.5, 1.0)); 
 
   private double conversionEncodeur;
 
@@ -89,14 +88,16 @@ public class Echelle extends SubsystemBase {
 
   //Boolean donne la valeur de la limit Switch
   public boolean isPositionDepart() {
-    return !limitSwitch.get(); //devrait être positif quand la switch est cliquée
+    return !limitSwitch.get();
   }
 
 
   // PID
-  public void setPositionPID(double cible){
-    
+  public void setPID(double cible){
+    //On vérifie que la cible est entre le min et le max
     cible = MathUtil.clamp(cible,0, maxEchelle);
+
+    //Quand on veut descendre l'échelle au minimu, on triche sur le dernier cm pour s'assurer de vraiment rentrer l'échelle
     if (cible == 0 && getPosition() < 0.01){
       if (isPositionDepart()){
         stop();
@@ -105,6 +106,8 @@ public class Echelle extends SubsystemBase {
         setVoltage(-1.0);
       }
     }
+
+    //Sinon, PID standard
     else{
       double voltagePID = pid.calculate(getPosition(), cible);
       setVoltage(voltagePID);
@@ -117,7 +120,7 @@ public class Echelle extends SubsystemBase {
 
   //Commande PID de l'échelle pouvant être appelée directement
   public Command setPIDCommand(double cible){
-    return this.runEnd(()-> this.setPositionPID(cible), this::stop);
+    return this.runEnd(()-> this.setPID(cible), this::stop);
 
   }
 

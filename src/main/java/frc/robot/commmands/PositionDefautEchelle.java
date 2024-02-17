@@ -4,7 +4,6 @@
 
 package frc.robot.commmands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Superstructure;
@@ -29,11 +28,11 @@ public class PositionDefautEchelle extends Command {
   @Override
   public void execute() {
     if (superstructure.getMode() == Mode.GRIMPEUR){
-      echelle.setPositionPID(0.28);
+      echelle.setPID(0.28);
     }
     else
     {
-      echelle.setPositionPID(0.0); 
+      echelle.setPID(0.0); 
     }
   }
 

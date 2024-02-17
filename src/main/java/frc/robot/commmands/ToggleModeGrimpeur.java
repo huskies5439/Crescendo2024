@@ -20,7 +20,7 @@ public class ToggleModeGrimpeur extends Command {
 
   @Override
   public void initialize() {
-    modeActuel = superstructure.getMode();
+    modeActuel = superstructure.getMode();//On enregistre le mode actuel pour y retourner si on quitte le mode Grimpeur
     superstructure.setModeGrimpeur();
   }
 

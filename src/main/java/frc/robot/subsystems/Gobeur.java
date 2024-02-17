@@ -37,9 +37,7 @@ public class Gobeur extends SubsystemBase {
 
 
   //Commande pour convoyer l'anneau vers le lanceur.
-  //Voltage à ajuster
-  //Il est possible qu'on doivent changer le voltage selon la situation, donc il faudra modifier la commande.
-  public Command convoyer() {
+  public Command convoyerCommand() {
     return this.startEnd(() -> this.setVoltage(3), this::stop);
   }
 

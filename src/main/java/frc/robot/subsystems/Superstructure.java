@@ -29,16 +29,15 @@ public class Superstructure extends SubsystemBase {
 
   private PositionNote positionNote = PositionNote.AUCUNE;
 
-  private final DigitalInput capteurGobeur = new DigitalInput(0); // Émeteur branché sur le 1
-  private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur sera branché sur le 3
+  private final DigitalInput capteurGobeur = new DigitalInput(0); // Émetteur branché sur PWM 0
+  private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur branché sur PWM 1
 
-  private  AddressableLED del = new AddressableLED(9); // Port PWM, pas DIO
-  private  AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(23); // LE nombre de sections de DEL ici 3
-                                                                              // DEL/Section
+  private AddressableLED del = new AddressableLED(9); // Port PWM
+  private AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(23);
 
   /** Creates a new Superstructure. */
   public Superstructure() {
-    
+
     del.setLength(delBuffer.getLength());
     del.setData(delBuffer);
     del.start();
@@ -49,6 +48,7 @@ public class Superstructure extends SubsystemBase {
   public void periodic() {
 
     switch (positionNote) {
+
       case AUCUNE:// Si aucune note, on valide si un des capteurs detecte quelque chose pout
                   // indiquer que la note est présente
         if (isNoteDansGobeur()) {
@@ -57,16 +57,17 @@ public class Superstructure extends SubsystemBase {
           positionNote = PositionNote.LANCEUR;
         }
         break;
+
       case GOBEUR:
 
         if (isNoteDansLanceur()) {// On valide ou est rendu la note
           positionNote = PositionNote.LANCEUR;
-        } else if (!isNoteDansGobeur()){ // Si gobeur et lanceur sont bloqués on priorise lanceur
+        } else if (!isNoteDansGobeur()) { // Si gobeur et lanceur sont bloqués on priorise lanceur
           positionNote = PositionNote.AUCUNE;
         }
-  
         break;
-      case LANCEUR://Possible de mettre la logique de DetecterNoteLanceur ici ?????????
+
+      case LANCEUR:// Possible de mettre la logique de DetecterNoteLanceur ici ?????????
         if (!isNoteDansLanceur()) {// On valide si la note est sortie du lanceur
           if (isNoteDansGobeur()) {// On valide ou est rendu la note
             positionNote = PositionNote.GOBEUR;
@@ -75,6 +76,7 @@ public class Superstructure extends SubsystemBase {
           }
         }
         break;
+
       default:// Si il y a un probleme, on remet la note nulle part et on recommence
         positionNote = PositionNote.AUCUNE;
         break;
@@ -83,11 +85,12 @@ public class Superstructure extends SubsystemBase {
     SmartDashboard.putString("Mode", mode.toString());
     SmartDashboard.putString("Position Note", positionNote.toString());
 
-    //SmartDashboard.putBoolean("Capteur Lanceur", isNoteDansLanceur());
-    //SmartDashboard.putBoolean("Capteur Gobeur", isNoteDansGobeur());
+    // SmartDashboard.putBoolean("Capteur Lanceur", isNoteDansLanceur());
+    // SmartDashboard.putBoolean("Capteur Gobeur", isNoteDansGobeur());
 
   }
 
+  ////////Mode
   public Mode getMode() {
     return mode;
   }
@@ -108,15 +111,17 @@ public class Superstructure extends SubsystemBase {
     return positionNote;
   }
 
-  public boolean isNoteDansLanceur() {//Idéalement, les Commandes ne parleraient pas aux capteurs, mais seulement à Position.Note
-    return !capteurLanceur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
+  ///////Position Note et capteurs
+  public boolean isNoteDansLanceur() {// Idéalement, les Commandes ne parleraient pas aux capteurs, mais seulement à PositionNote.
+    return !capteurLanceur.get(); 
 
   }
 
-  public boolean isNoteDansGobeur() {//Idem
-    return !capteurGobeur.get(); // verifier s'il faut inverser ( veut qu'il dise true quand on a la note )
+  public boolean isNoteDansGobeur() {// Idem
+    return !capteurGobeur.get();
   }
 
+  /////////DEL
   public void closeDel() {
     for (var i = 0; i < delBuffer.getLength(); i++) {
       delBuffer.setRGB(i, 0, 0, 0);

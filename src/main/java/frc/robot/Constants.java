@@ -15,7 +15,7 @@ import edu.wpi.first.math.util.Units;
 
 
 public final class Constants {
-  public static final class DriveConstants {
+  public static final class BPConstantes {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double maxVitesseLineaire = 3;//Vitesse linéaire max du chassis //Valeur original 4.8 a note:à ajuster
@@ -47,5 +47,7 @@ public final class Constants {
                                           new Translation2d(kWheelBase / 2, kTrackWidth / 2).getNorm(),
                                           new ReplanningConfig());
   }
+
+
 
 }

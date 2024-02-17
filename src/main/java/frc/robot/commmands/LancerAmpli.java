@@ -23,7 +23,7 @@ public class LancerAmpli extends ParallelCommandGroup {
         //Sortir l'échelle
         echelle.setPIDCommand(0.2), 
         //Faire tourner le convoyeur pour décoincer la note
-        gobeur.convoyer(),
+        gobeur.convoyerCommand(),
 
         //Attendre que l'échelle soit sortie, puis on lance
         new SequentialCommandGroup(

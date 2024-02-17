@@ -9,9 +9,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,16 +20,13 @@ public class Lanceur extends SubsystemBase {
   private final TalonFX moteurD = new TalonFX(5);
 
 
-  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.0, 0.124, 0.0); // valeur du moteur gauche
+  private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.0, 0.124, 0.0); //Voir le SysID Crescendo
                                                                                       
-  private PIDController pidG = new PIDController(0.1, 0, 0);//a calibrer. Kp = 1 c'est trop
+  private PIDController pidG = new PIDController(0.1, 0, 0);
   private PIDController pidD = new PIDController(0.1, 0, 0);
-
-  private ShuffleboardTab calibration = Shuffleboard.getTab("calibration");
-  private GenericEntry valeurLanceurCible = calibration.add("valeur lanceur cible", 0).getEntry();
   
 
-  /** Creates a new Lanceur. */
+
   public Lanceur() {
 
     moteurG.setInverted(true);
@@ -41,8 +35,8 @@ public class Lanceur extends SubsystemBase {
     moteurG.setNeutralMode(NeutralModeValue.Coast);
     moteurD.setNeutralMode(NeutralModeValue.Coast);
     
-    pidG.setTolerance(3);//valeur a determiner en RPS
-    pidD.setTolerance(3);//valeur a determiner en RPS
+    pidG.setTolerance(3);
+    pidD.setTolerance(3);
 
   }
 
@@ -64,22 +58,10 @@ public class Lanceur extends SubsystemBase {
 
   public void stop() {
     setVoltage(0);
-    pidG.setSetpoint(0);
+    pidG.setSetpoint(0);//Pour que la condition atCible arrête d'être vraie à la fin de la commande
     pidD.setSetpoint(0);
   }
 
-  public Command commandeVoltageSimple(double voltage){
-    return this.startEnd(()->this.setVoltage(voltage), this::stop);
-  }
-
-  //Shuffleboard
-  public double getValeurShuffleboard() {
-    return valeurLanceurCible.getDouble(0);
-  }
-
-  public void setVoltageShuffleboard() {
-    setVoltage(getValeurShuffleboard());
-  }
 
   //Encodeur et PID/FF Gauche
   public double getPositionG() {
@@ -110,20 +92,20 @@ public class Lanceur extends SubsystemBase {
   }
 
   //PID
-  public void setVitessePID(double vcible) {
+  public void setPID(double vcible) {
     setVitessePIDDroite(vcible);
     setVitessePIDGauche(vcible);
 
   }
 
 
-  public Command setPIDCommand(double vcible){//Utiliser raceWith(DetecterLanceurNote) pour donner une condition de fin à cette commande
-    return this.runEnd(()-> this.setVitessePID(vcible), this::stop); //RunEnd car le PID doit être dans le EXECUTE de la commande
+  public Command setPIDCommand(double vcible){
+    return this.runEnd(()-> this.setPID(vcible), this::stop); //RunEnd car le PID doit être dans le EXECUTE de la commande
        
   }
 
-  public boolean atCible() {
 
+  public boolean atCible() {
     return pidG.atSetpoint() && pidD.atSetpoint();
 
   }

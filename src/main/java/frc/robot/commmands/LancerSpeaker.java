@@ -20,7 +20,7 @@ public class LancerSpeaker extends ParallelCommandGroup {
         lanceur.setPIDCommand(40),
 
         Commands.waitUntil(lanceur::atCible)// Quand le lanceur a atteint sa cible, on envoit la note dans le lanceur
-            .andThen(gobeur.convoyer())
+            .andThen(gobeur.convoyerCommand())
     );
   }
 }

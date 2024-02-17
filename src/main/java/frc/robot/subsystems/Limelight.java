@@ -26,14 +26,11 @@ public class Limelight extends SubsystemBase {
 
   private NetworkTableEntry botpose;
 
-  double[] result;
+  double[] arrayLimelight;
  
-
   String alliance;
   
   public Limelight() {
-    alliance = "blue";
-    botpose = limelight.getEntry("botpose" + alliance);
     setAlliance();
   }
 
@@ -48,10 +45,10 @@ public class Limelight extends SubsystemBase {
 
   //Donne la position du robot selon la limelight
   public Pose2d getVisionPosition() {
-    result = botpose.getDoubleArray(new double[6]);
+    arrayLimelight = botpose.getDoubleArray(new double[6]);
 
-    Translation3d tran3d = new Translation3d(result[0], result[1], result[2]);
-    Rotation3d r3d = new Rotation3d(Math.toRadians(result[3]), Math.toRadians(result[4]), Math.toRadians(result[5]));
+    Translation3d tran3d = new Translation3d(arrayLimelight[0], arrayLimelight[1], arrayLimelight[2]);
+    Rotation3d r3d = new Rotation3d(Math.toRadians(arrayLimelight[3]), Math.toRadians(arrayLimelight[4]), Math.toRadians(arrayLimelight[5]));
     Pose3d p3d = new Pose3d(tran3d, r3d);
 
     return p3d.toPose2d();

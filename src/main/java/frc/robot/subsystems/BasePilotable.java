@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.BPConstantes;
 
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,15 +52,15 @@ public class BasePilotable extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
-  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
+  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(BPConstantes.kMagnitudeSlewRate);
+  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(BPConstantes.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private Field2d field = new Field2d();
 
   // Initialisation PoseEstimator
   SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-      DriveConstants.kDriveKinematics,
+      BPConstantes.kDriveKinematics,
       Rotation2d.fromDegrees(getAngle()),
       new SwerveModulePosition[] {
           avantGauche.getPosition(),
@@ -82,7 +82,7 @@ public class BasePilotable extends SubsystemBase {
         this::resetOdometry,
         this::getChassisSpeed,
         this::conduireChassis,
-        DriveConstants.kPathFollowerConfig,
+        BPConstantes.kPathFollowerConfig,
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red
           // alliance
@@ -131,7 +131,7 @@ public class BasePilotable extends SubsystemBase {
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.maxVitesseModule);
+        desiredStates, BPConstantes.maxVitesseModule);
     avantGauche.setDesiredState(desiredStates[0]);
     avantDroite.setDesiredState(desiredStates[1]);
     arriereGauche.setDesiredState(desiredStates[2]);
@@ -159,7 +159,7 @@ public class BasePilotable extends SubsystemBase {
       // acceleration
       double directionSlewRate;
       if (m_currentTranslationMag != 0.0) {
-        directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag);
+        directionSlewRate = Math.abs(BPConstantes.kDirectionSlewRate / m_currentTranslationMag);
       } else {
         directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
       }
@@ -197,11 +197,11 @@ public class BasePilotable extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.maxVitesseLineaire;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.maxVitesseLineaire;
-    double rotDelivered = m_currentRotation * DriveConstants.maxVitesseRotation;
+    double xSpeedDelivered = xSpeedCommanded * BPConstantes.maxVitesseLineaire;
+    double ySpeedDelivered = ySpeedCommanded * BPConstantes.maxVitesseLineaire;
+    double rotDelivered = m_currentRotation * BPConstantes.maxVitesseRotation;
 
-    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+    var swerveModuleStates = BPConstantes.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 getPose().getRotation())
@@ -264,7 +264,7 @@ public class BasePilotable extends SubsystemBase {
   }
 
   ///////// Méthodes pour PathPlanner. Ce sont deux méthodes réfléchies en terme
-  ///////// du Chassis et Field Relative
+  ///////// du Chassis et Field Relative et prises dans l'exemple de la PathPlannerLib
   /**
    * Returns the chassis speed relative to the field XY and angle from each module
    * angle and speed
@@ -272,7 +272,7 @@ public class BasePilotable extends SubsystemBase {
    * @return the ChassisSpeed
    */
   public ChassisSpeeds getChassisSpeed() {
-    return DriveConstants.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),
+    return BPConstantes.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),
         arriereDroite.getState(), arriereGauche.getState());
   }
 
@@ -286,7 +286,7 @@ public class BasePilotable extends SubsystemBase {
     // itérations du roborio = 50 Hz)
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
 
-    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+    SwerveModuleState[] swerveModuleStates = BPConstantes.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     setModuleStates(swerveModuleStates);
   }
 
