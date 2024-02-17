@@ -11,9 +11,9 @@
     "divers",
     "Speaker"
   ],
-  "defaultMaxVel": 0.5,
-  "defaultMaxAccel": 1.5,
+  "defaultMaxVel": 1.5,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 180.0,
-  "maxModuleSpeed": 3.0
+  "maxModuleSpeed": 4.0
 }

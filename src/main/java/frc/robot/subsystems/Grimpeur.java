@@ -38,7 +38,7 @@ public class Grimpeur extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Grimpeur "+dashName+" Position", getPosition());
+   // SmartDashboard.putNumber("Grimpeur "+dashName+" Position", getPosition());
   }
 
   public void setVoltage(double voltage){

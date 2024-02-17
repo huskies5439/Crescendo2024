@@ -24,7 +24,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -38,14 +38,33 @@
                 "data": {
                   "name": "gober"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "descendreEchelle"
+                }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "retourAmpli"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "retourAmpli"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "preparerAmpli"
+                }
+              }
+            ]
           }
         },
         {
@@ -55,7 +74,13 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
+          "data": {
+            "name": "descendreEchelle"
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {

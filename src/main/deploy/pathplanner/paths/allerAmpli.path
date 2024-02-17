@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6894709561776844,
-        "y": 7.294927630505668
+        "x": 1.6894712994718069,
+        "y": 7.294947259672864
       },
       "isLocked": false,
       "linkedName": "DépartAmpli"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.849652349711203,
-        "y": 7.628638867033832
+        "y": 7.75
       },
       "prevControl": {
         "x": 1.7024717553477797,
-        "y": 7.233521149157386
+        "y": 7.354882282123554
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },

@@ -64,6 +64,8 @@ public class Lanceur extends SubsystemBase {
 
   public void stop() {
     setVoltage(0);
+    pidG.setSetpoint(0);
+    pidD.setSetpoint(0);
   }
 
   public Command commandeVoltageSimple(double voltage){
@@ -121,8 +123,8 @@ public class Lanceur extends SubsystemBase {
   }
 
   public boolean atCible() {
-    return pidG.atSetpoint() 
-    && pidD.atSetpoint();
+
+    return pidG.atSetpoint() && pidD.atSetpoint();
 
   }
 

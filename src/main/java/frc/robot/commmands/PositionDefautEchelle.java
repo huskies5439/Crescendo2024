@@ -30,12 +30,10 @@ public class PositionDefautEchelle extends Command {
   public void execute() {
     if (superstructure.getMode() == Mode.GRIMPEUR){
       echelle.setPositionPID(0.28);
-      SmartDashboard.putString("etat echelle","grimpeur");
     }
     else
     {
       echelle.setPositionPID(0.0); 
-       SmartDashboard.putString("etat echelle","rentre");
     }
   }
 

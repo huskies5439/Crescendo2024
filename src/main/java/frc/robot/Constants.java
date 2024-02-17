@@ -21,7 +21,7 @@ public final class Constants {
     public static final double maxVitesseLineaire = 3;//Vitesse linéaire max du chassis //Valeur original 4.8 a note:à ajuster
     public static final double maxVitesseRotation = Math.PI*1.5; // radians per second //Originale REV = 2pi
 
-    public static final double maxVitesseModule = 6;//Vitesse maximale d'un module en m/s  note: à ajuster
+    public static final double maxVitesseModule = 4;//Vitesse maximale d'un module en m/s  note: à ajuster
 
     public static final double kDirectionSlewRate = 3; // radians per second
     public static final double kMagnitudeSlewRate = 2.5; // percent per second (1 = 100%) original : 1.8

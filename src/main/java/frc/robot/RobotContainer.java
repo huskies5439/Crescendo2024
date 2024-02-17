@@ -61,16 +61,15 @@ public class RobotContainer {
     //Les onlyIf sont-ils nécessaires en auto ??
     NamedCommands.registerCommand("gober", new Gober(gobeur,superstructure));
     NamedCommands.registerCommand("lancerSpeaker", new LancerSpeaker(gobeur, lanceur)
-                                        /*.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;})*/.withTimeout(2));//Ajuster le timer selon le délai
+                                       .withTimeout(1.5));
     NamedCommands.registerCommand("lancerAmpli", new LancerAmpli(echelle, lanceur, gobeur)
-                                        /*.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;})*/
-                                        .finallyDo(superstructure::setModeSpeaker).withTimeout(2)); //Ajuster le timer selon le délai
-    NamedCommands.registerCommand("preparerAmpli", new PreparerAmpli(gobeur, lanceur, superstructure)
-                                        /*.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;})*/);
+                                        .finallyDo(superstructure::setModeSpeaker).withTimeout(1.5)); //Ajuster le timer selon le délai
+    NamedCommands.registerCommand("preparerAmpli", new PreparerAmpli(gobeur, lanceur, superstructure));
+    NamedCommands.registerCommand("descendreEchelle",echelle.setPIDCommand(0.0).until(echelle::isPositionDepart));
     
 
     chooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("trajets", chooser);
+    SmartDashboard.putData("trajet", chooser);
 
     // Commandes par défaut
     basePilotable.setDefaultCommand(
@@ -134,26 +133,22 @@ public class RobotContainer {
       
     //Commandes pour valider les systèmes
     //Up, Down -> grimpeur
-    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(3), grimpeurGauche::stop, grimpeurGauche)
-                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(3), grimpeurDroit::stop, grimpeurDroit)));
+    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-3), grimpeurGauche::stop, grimpeurGauche));
+                    
 
-    manette.povDown().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-3), grimpeurGauche::stop, grimpeurGauche)
-                      .alongWith(Commands.startEnd(()->grimpeurDroit.setVoltage(-3), grimpeurDroit::stop, grimpeurDroit)));
+    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-3), grimpeurDroit::stop, grimpeurDroit));
+                      
 
-    //Gauche, Droite -> échelle
-    manette.povRight().onTrue(echelle.setPIDCommand(0.2));
-    manette.povLeft().onTrue(echelle.setPIDCommand(0.0));
-
-    //B -> Lanceur de base
-    manette.b().toggleOnTrue(lanceur.setPIDCommand(4));
-    // manette.b().toggleOnTrue(lanceur.commandeVoltageSimple(4));
+    
+    
+    
 
   }
 
 
   public Command getAutonomousCommand() {
     return chooser.getSelected();
-    
+ 
   }
 
 }
