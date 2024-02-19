@@ -8,8 +8,8 @@
   ],
   "autoFolders": [
     "Ampli",
-    "divers",
-    "Speaker"
+    "Speaker",
+    "3ePosition"
   ],
   "defaultMaxVel": 1.5,
   "defaultMaxAccel": 3.0,
