@@ -38,7 +38,7 @@ public class RobotContainer {
   private final BasePilotable basePilotable = new BasePilotable();
   private final Gobeur gobeur = new Gobeur();
   private final Lanceur lanceur = new Lanceur();
-  private final Limelight limelight = new Limelight();
+  // private final Limelight limelight = new Limelight();
   private final Echelle echelle = new Echelle();
   private final Grimpeur grimpeurGauche = new Grimpeur(1, false, "gauche");
   private final Grimpeur grimpeurDroit = new Grimpeur(2, true, "droit");
@@ -77,10 +77,10 @@ public class RobotContainer {
                 true, true),
             basePilotable));
         
-    limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
+    //limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
     superstructure.setDefaultCommand(new GestionDEL(superstructure)); 
     echelle.setDefaultCommand(new PositionDefautEchelle(echelle, superstructure));
-  
+
 }
 
 
@@ -144,7 +144,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return chooser.getSelected();
- 
+
   }
 
 }
