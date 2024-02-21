@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Superstructure extends SubsystemBase {
+  int rainbowFirstPixelHue = 0;
 
   public enum Mode {// Trois etats pour savoir comment est actuellement géré la note dans le robot
     SPEAKER,
@@ -136,6 +137,23 @@ public class Superstructure extends SubsystemBase {
     }
     del.setData(delBuffer);
 
+  }
+
+  public void rainbow() {
+    // For every pixel
+    for (var i = 0; i < delBuffer.getLength(); i++) {
+      // Calculate the hue - hue is easier for rainbows because the color
+      // shape is a circle so only one value needs to precess
+      final var hue = (rainbowFirstPixelHue + (i * 180 / delBuffer.getLength())) % 180;
+      // Set the value
+      delBuffer.setHSV(i, hue, 255, 128);
+    }
+    // Increase by to make the rainbow "move"
+    rainbowFirstPixelHue += 3;
+    // Check bounds
+    rainbowFirstPixelHue %= 180;
+
+    del.setData(delBuffer);
   }
 
 }

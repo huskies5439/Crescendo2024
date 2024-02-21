@@ -31,14 +31,14 @@ public class GestionDEL extends Command {
   @Override
   public void execute() {
     if (superstructure.getMode() == Mode.GRIMPEUR) {//Mode Grimpeur = vert
-      superstructure.setCouleur(Color.kGreen);
+      superstructure.rainbow();
     }
    else if (superstructure.getPositionNote() == PositionNote.AUCUNE) {//Pas de notes = fermée
       superstructure.closeDel();
     }
 
     else if (superstructure.getMode() == Mode.SPEAKER) {//Mode Speaker = Mauve Constant
-      superstructure.setCouleur(Color.kPurple);
+      superstructure.setCouleur(Color.kGreen);
     }
 
     else if (superstructure.getMode() == Mode.AMPLI) {//Mode Ampli = Mauve Blink
@@ -51,12 +51,12 @@ public class GestionDEL extends Command {
       }
 
       if (blink) {
-        superstructure.setCouleur(Color.kPurple);
+        superstructure.setCouleur(Color.kGreen);
       } 
 
       else {
-        //superstructure.closeDel();
-        superstructure.setCouleur(Color.kWhite);//Pour debug
+        superstructure.closeDel();
+        
       }
 
     }

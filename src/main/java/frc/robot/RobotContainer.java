@@ -139,6 +139,10 @@ public class RobotContainer {
     //Après avoir descendu les grimpeurs dans le pit, on home l'échelle et reset les encodeurs des grimpeurs                                  
     manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));
 
+
+    //////////////PANIC!!
+    manette.b().whileTrue(lanceur.setPIDCommand(4).alongWith(gobeur.convoyerCommand()).finallyDo(superstructure::setModeSpeaker));
+
   }
 
 
