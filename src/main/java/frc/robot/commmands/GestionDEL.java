@@ -55,7 +55,8 @@ public class GestionDEL extends Command {
       } 
 
       else {
-        superstructure.closeDel();
+        //superstructure.closeDel();
+        superstructure.setCouleur(Color.kWhite);
       }
 
     }
