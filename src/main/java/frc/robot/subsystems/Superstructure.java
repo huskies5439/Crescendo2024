@@ -67,7 +67,7 @@ public class Superstructure extends SubsystemBase {
         }
         break;
 
-      case LANCEUR:// Possible de mettre la logique de DetecterNoteLanceur ici ?????????
+      case LANCEUR:
         if (!isNoteDansLanceur()) {// On valide si la note est sortie du lanceur
           if (isNoteDansGobeur()) {// On valide ou est rendu la note
             positionNote = PositionNote.GOBEUR;

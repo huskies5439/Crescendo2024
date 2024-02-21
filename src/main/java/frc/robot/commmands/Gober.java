@@ -28,7 +28,7 @@ public class Gober extends Command {
   @Override
   public void execute() {
     if (superstructure.getPositionNote() == PositionNote.AUCUNE) { // Il n'y a pas de notes dans le gobeur. Ni le lanceur.
-      gobeur.gober();
+      gobeur.setVoltage(3.5);
     } else {
       gobeur.stop();
     }

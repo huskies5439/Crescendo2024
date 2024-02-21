@@ -74,12 +74,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "descendreEchelle"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -93,6 +87,12 @@
                 "type": "named",
                 "data": {
                   "name": "gober"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "descendreEchelle"
                 }
               }
             ]

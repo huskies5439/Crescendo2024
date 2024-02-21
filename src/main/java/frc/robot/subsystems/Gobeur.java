@@ -27,10 +27,6 @@ public class Gobeur extends SubsystemBase {
     moteur.setVoltage(voltage);
   }
 
-  public void gober() {
-    setVoltage(3.5);
-  }
-
   public void stop() {
     setVoltage(0);
   }
