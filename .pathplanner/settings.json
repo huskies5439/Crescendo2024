@@ -11,7 +11,7 @@
     "Speaker",
     "3ePosition"
   ],
-  "defaultMaxVel": 1.5,
+  "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 180.0,
   "defaultMaxAngAccel": 180.0,

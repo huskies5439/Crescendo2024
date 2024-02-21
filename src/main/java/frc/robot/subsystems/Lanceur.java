@@ -104,6 +104,11 @@ public class Lanceur extends SubsystemBase {
        
   }
 
+  public Command setPIDCommandSansFin(double vcible){
+    return this.run(()-> this.setPID(vcible)); //RunEnd car le PID doit être dans le EXECUTE de la commande
+       
+  }
+
 
   public boolean atCible() {
     return pidG.atSetpoint() && pidD.atSetpoint();

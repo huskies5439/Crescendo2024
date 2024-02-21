@@ -297,11 +297,11 @@ public class BasePilotable extends SubsystemBase {
 
     if (speaker){
       rotationCible =  new Rotation2d(Math.toRadians(0));
-      endPose = new Pose2d(1.35, 5.5, rotationCible);
+      endPose = new Pose2d(1.3, 5.5, rotationCible);
     }
     else {
       rotationCible =  new Rotation2d(Math.toRadians(-90));
-      endPose = new Pose2d(1.85, 7.75, rotationCible);
+      endPose = new Pose2d(1.85, 7.70, rotationCible);
     }
 
     Pose2d startPose = getPose();
@@ -309,10 +309,11 @@ public class BasePilotable extends SubsystemBase {
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
 
     PathPlannerPath path = new PathPlannerPath(bezierPoints,
-                           new PathConstraints(3, 3, Math.toRadians(180), Math.toRadians(180)),
-                           new GoalEndState(0.0, rotationCible));
+                           new PathConstraints(3, 2
+                           , Math.toRadians(180), Math.toRadians(180)),
+                           new GoalEndState(0.0, rotationCible, true));
     path.preventFlipping = false;
-                    
+
     return path;
   }
 

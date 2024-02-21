@@ -2,19 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4024792927634633,
-      "y": 1.65
+      "x": 0.7,
+      "y": 4.35
     },
-    "rotation": 0.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "deposeNoteArea1"
+            "waitTime": 2.0
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "allerNoteMilieuStage"
+                  "pathName": "allerNoteMilieuCoteSpeaker"
                 }
               },
               {
@@ -43,40 +43,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "allerCracherNote1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "retourNoteMilieuCoteSpeaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "preparerSpeaker"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "lancerSpeaker"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "allerNoteMilieuSource"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "gober"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "allerCracherNote2"
           }
         }
       ]

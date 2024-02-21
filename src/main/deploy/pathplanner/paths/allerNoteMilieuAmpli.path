@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.849652349711203,
-        "y": 7.75
+        "y": 7.7
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.5838170700731644,
-        "y": 7.281443135894402
+        "y": 7.231443135894402
       },
       "isLocked": true,
       "linkedName": "Ampli"
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0

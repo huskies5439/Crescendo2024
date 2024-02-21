@@ -64,7 +64,7 @@ public class RobotContainer {
                                         .withTimeout(1.5)); 
     NamedCommands.registerCommand("preparerAmpli", new PreparerAmpli(gobeur, lanceur, superstructure));
     NamedCommands.registerCommand("descendreEchelle",echelle.setPIDCommand(0.0).until(echelle::isPositionDepart));
-    
+    NamedCommands.registerCommand("preparerSpeaker", lanceur.setPIDCommandSansFin(40));
 
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajet", chooser);
@@ -88,7 +88,7 @@ public class RobotContainer {
     
     /////////////Auto Centrer
     manette.a().and(pasGrimpeurTrigger).whileTrue(new ConditionalCommand(
-                                                  basePilotable.followPath(true), // Centrer speaker
+                                                  basePilotable.followPath(true).alongWith(lanceur.setPIDCommand(40)), // Centrer speaker
                                                   basePilotable.followPath(false), // Centrer ampli
                                                   ()->{return superstructure.getMode() == Mode.SPEAKER;})); // Selon mode robot
 

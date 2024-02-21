@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3,
-      "y": 5.5
+      "x": 0.7,
+      "y": 6.6
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "allerNoteSpeaker"
+                  "pathName": "coteAllerNoteAmpli"
                 }
               },
               {
@@ -37,19 +37,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "retourSpeaker"
+                  "pathName": "retourAmpli"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "preparerSpeaker"
+                  "name": "preparerAmpli"
                 }
               }
             ]
@@ -58,7 +58,13 @@
         {
           "type": "named",
           "data": {
-            "name": "lancerSpeaker"
+            "name": "lancerAmpli"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "descendreEchelle"
           }
         },
         {
@@ -68,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "allerNoteMilieuSpeaker"
+                  "pathName": "allerNoteMilieuAmpli"
                 }
               },
               {
@@ -83,6 +89,6 @@
       ]
     }
   },
-  "folder": "Speaker",
+  "folder": "Ampli",
   "choreoAuto": false
 }

@@ -3,47 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.303627664165898,
-        "y": 0.7742100687453413
+        "x": 0.7,
+        "y": 6.64
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.042199190089438,
-        "y": 0.767535844014777
+        "x": 1.7580178221872895,
+        "y": 7.12881677551624
       },
       "isLocked": false,
-      "linkedName": "NoteMilieuSource"
+      "linkedName": "coteHautSub"
     },
     {
       "anchor": {
-        "x": 2.510400598036968,
-        "y": 2.703061015878129
+        "x": 2.9,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 3.424769386124138,
-        "y": 2.008941643899548
+        "x": 1.9,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "cracherNote"
+      "linkedName": "NoteAmpli"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Long",
-  "previewStartingState": null,
+  "folder": "Court",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }

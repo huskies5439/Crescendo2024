@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8455861704876034,
-        "y": 4.414985377759629
+        "x": 0.7,
+        "y": 4.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8455861704876035,
-        "y": 3.9149853777596286
+        "x": 1.7000000000000002,
+        "y": 3.8499999999999996
       },
       "isLocked": false,
       "linkedName": "coteBasSub"
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Court",

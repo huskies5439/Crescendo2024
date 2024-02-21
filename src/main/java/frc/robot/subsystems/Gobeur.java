@@ -28,7 +28,7 @@ public class Gobeur extends SubsystemBase {
   }
 
   public void gober() {
-    setVoltage(4);
+    setVoltage(3.5);
   }
 
   public void stop() {
