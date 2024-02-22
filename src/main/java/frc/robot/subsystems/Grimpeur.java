@@ -21,7 +21,7 @@ public class Grimpeur extends SubsystemBase {
     une poulie de 0.75 pouces auquelle s'enroule d'une corde */
   private double conversion  = (14.0/40)*(14.0/80)*Units.inchesToMeters(0.75)*Math.PI;
 ; 
-  private double maxPositionGrimpeur = 0.5;
+  private double maxPositionGrimpeur = 0.4;
   private double voltageGrimpeur = 3;
 
   String dashName;

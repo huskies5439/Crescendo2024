@@ -129,14 +129,18 @@ public class RobotContainer {
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
 
-      manette.rightTrigger().whileTrue(echelle.setPIDCommand(0.2)); 
+     
+     //monter l'échelle si la note reste pris sur l'ampli
+      manette.rightTrigger().and(pasGrimpeurTrigger).whileTrue(echelle.setPIDCommand(0.2)); 
 
    
       
     //////////Commandes PIT
     //Descendre les grimpeurs dans le pit
-    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-3), grimpeurGauche::stop, grimpeurGauche));
-    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-3), grimpeurDroit::stop, grimpeurDroit));
+    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-1), grimpeurGauche::stop, grimpeurGauche));
+    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-1), grimpeurDroit::stop, grimpeurDroit));
+    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(1), grimpeurDroit::stop, grimpeurDroit)
+    .alongWith(Commands.startEnd(()->grimpeurGauche.setVoltage(1), grimpeurGauche::stop, grimpeurGauche)));
                       
     //Après avoir descendu les grimpeurs dans le pit, on home l'échelle et reset les encodeurs des grimpeurs                                  
     manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));
