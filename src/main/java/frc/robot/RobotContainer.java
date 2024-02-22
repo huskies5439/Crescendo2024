@@ -129,6 +129,8 @@ public class RobotContainer {
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
 
+      manette.rightTrigger().whileTrue(echelle.setPIDCommand(0.2)); 
+
    
       
     //////////Commandes PIT
@@ -141,7 +143,8 @@ public class RobotContainer {
 
 
     //////////////PANIC!!
-    manette.b().whileTrue(lanceur.setPIDCommand(4).alongWith(gobeur.convoyerCommand()).finallyDo(superstructure::setModeSpeaker));
+    manette.b().whileTrue(lanceur.setPIDCommand(4).alongWith(gobeur.convoyerCommand()));
+    // .finallyDo(superstructure::setModeSpeaker));
 
   }
 
