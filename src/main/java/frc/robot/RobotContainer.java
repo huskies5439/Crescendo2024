@@ -137,8 +137,8 @@ public class RobotContainer {
       
     //////////Commandes PIT
     //Descendre les grimpeurs dans le pit
-    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-1), grimpeurGauche::stop, grimpeurGauche));
-    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-1), grimpeurDroit::stop, grimpeurDroit));
+    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-0.25), grimpeurGauche::stop, grimpeurGauche));
+    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-0.25), grimpeurDroit::stop, grimpeurDroit));
     manette.povUp().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(1), grimpeurDroit::stop, grimpeurDroit)
     .alongWith(Commands.startEnd(()->grimpeurGauche.setVoltage(1), grimpeurGauche::stop, grimpeurGauche)));
                       
