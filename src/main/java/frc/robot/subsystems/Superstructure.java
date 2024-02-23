@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -32,7 +34,8 @@ public class Superstructure extends SubsystemBase {
 
   private final DigitalInput capteurGobeur = new DigitalInput(0); // Émetteur branché sur PWM 0
   private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur branché sur PWM 1
-
+  private final Debouncer debouncerGobeur = new Debouncer(0.04,DebounceType.kRising);
+  private final Debouncer debouncerLanceur = new Debouncer(0.04,DebounceType.kRising);
   private AddressableLED del = new AddressableLED(9); // Port PWM
   private AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(23);
 
@@ -114,12 +117,13 @@ public class Superstructure extends SubsystemBase {
 
   ///////Position Note et capteurs
   public boolean isNoteDansLanceur() {// Idéalement, les Commandes ne parleraient pas aux capteurs, mais seulement à PositionNote.
-    return !capteurLanceur.get(); 
+    return debouncerLanceur.calculate(!capteurLanceur.get()); 
 
   }
 
   public boolean isNoteDansGobeur() {// Idem
-    return !capteurGobeur.get();
+    return debouncerGobeur.calculate(!capteurGobeur.get());
+   
   }
 
   /////////DEL

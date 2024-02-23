@@ -88,7 +88,7 @@ public class RobotContainer {
     
     /////////////Auto Centrer
     manette.a().and(pasGrimpeurTrigger).whileTrue(new ConditionalCommand(
-                                                  basePilotable.followPath(true).alongWith(lanceur.setPIDCommand(40)), // Centrer speaker
+                                                  basePilotable.followPath(true).alongWith(lanceur.setPIDCommand(Constants.vitesseLancerSpeaker)), // Centrer speaker
                                                   basePilotable.followPath(false), // Centrer ampli
                                                   ()->{return superstructure.getMode() == Mode.SPEAKER;})); // Selon mode robot
 
@@ -101,16 +101,16 @@ public class RobotContainer {
     manette.y().toggleOnTrue(new ToggleModeGrimpeur(superstructure));//ajouter only if 30 sec
 
     //Position automatique du grimpeur quand on change de mode
-    grimpeurTrigger.onTrue(grimpeurDroit.monterCommand().alongWith(grimpeurGauche.monterCommand()))
-                   .onFalse(grimpeurDroit.descendreCommand().alongWith(grimpeurGauche.descendreCommand()));
+    grimpeurTrigger.onTrue(grimpeurDroit.monterCommand(Constants.vMonter).alongWith(grimpeurGauche.monterCommand(Constants.vMonter)))
+                   .onFalse(grimpeurDroit.descendreCommand(Constants.vAuto).alongWith(grimpeurGauche.descendreCommand(Constants.vAuto)));
 
     //Monter et descendre le grimpeur gauche
-    manette.leftBumper().and(grimpeurTrigger).whileTrue(grimpeurGauche.monterCommand());
-    manette.leftTrigger().whileTrue(grimpeurGauche.descendreCommand());
+    manette.leftBumper().and(grimpeurTrigger).whileTrue(grimpeurGauche.monterCommand(Constants.vMonter));
+    manette.leftTrigger().and(grimpeurTrigger).whileTrue(grimpeurGauche.descendreCommand(Constants.vDescendre));
 
     //Monter et descendre le grimpeur droit
-    manette.rightBumper().and(grimpeurTrigger).whileTrue(grimpeurDroit.monterCommand());
-    manette.rightTrigger().whileTrue(grimpeurDroit.descendreCommand());
+    manette.rightBumper().and(grimpeurTrigger).whileTrue(grimpeurDroit.monterCommand(Constants.vMonter));
+    manette.rightTrigger().and(grimpeurTrigger).whileTrue(grimpeurDroit.descendreCommand(Constants.vDescendre));
     
     ///////////////Lanceur 
     //Préparer Ampli                                                                            
@@ -137,18 +137,18 @@ public class RobotContainer {
       
     //////////Commandes PIT
     //Descendre les grimpeurs dans le pit
-    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-0.25), grimpeurGauche::stop, grimpeurGauche));
-    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-0.25), grimpeurDroit::stop, grimpeurDroit));
-    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(1), grimpeurDroit::stop, grimpeurDroit)
-    .alongWith(Commands.startEnd(()->grimpeurGauche.setVoltage(1), grimpeurGauche::stop, grimpeurGauche)));
+    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-Constants.vAuto), grimpeurGauche::stop, grimpeurGauche));
+    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-Constants.vAuto), grimpeurDroit::stop, grimpeurDroit));
+    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(Constants.vAuto), grimpeurDroit::stop, grimpeurDroit)
+    .alongWith(Commands.startEnd(()->grimpeurGauche.setVoltage(Constants.vAuto), grimpeurGauche::stop, grimpeurGauche)));
                       
     //Après avoir descendu les grimpeurs dans le pit, on home l'échelle et reset les encodeurs des grimpeurs                                  
     manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));
 
 
     //////////////PANIC!!
-    manette.b().whileTrue(lanceur.setPIDCommand(4).alongWith(gobeur.convoyerCommand()));
-    // .finallyDo(superstructure::setModeSpeaker));
+    manette.b().whileTrue(lanceur.setPIDCommand(6).alongWith(gobeur.convoyerCommand()))
+        .onFalse(Commands.runOnce(superstructure::setModeSpeaker));
 
   }
 

@@ -20,7 +20,7 @@ public class PreparerAmpli extends SequentialCommandGroup {
     
     addCommands(       
       gobeur.convoyerCommand() //Fait tourner lentement le gobeur et le lanceur pour transférer l'anneau dans le lanceur
-      .alongWith(lanceur.setPIDCommand(8))
+      .alongWith(lanceur.setPIDCommand(4))
       .until(()-> {return superstructure.getPositionNote() == PositionNote.LANCEUR;}), //Voir la discussion sur les lambdas dans WPILIB
       
        Commands.runOnce(superstructure::setModeAmpli)//Le robot est en mode ampli

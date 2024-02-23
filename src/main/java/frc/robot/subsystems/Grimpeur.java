@@ -22,8 +22,7 @@ public class Grimpeur extends SubsystemBase {
   private double conversion  = (14.0/40)*(14.0/80)*Units.inchesToMeters(0.75)*Math.PI;
 ; 
   private double maxPositionGrimpeur = 0.4;
-  private double voltageGrimpeurMonter = 3;
-    private double voltageGrimpeurDescendre = 0.25;
+
 
 
   String dashName;
@@ -73,12 +72,12 @@ public class Grimpeur extends SubsystemBase {
 
 
   //Commandes pour monter et descendre automatiquement
-  public Command monterCommand(){
-    return this.startEnd(()-> this.setVoltage(voltageGrimpeurMonter), this::stop).until(this::maxHauteur);//requiert this
+  public Command monterCommand(double voltage){
+    return this.startEnd(()-> this.setVoltage(Math.abs(voltage)), this::stop).until(this::maxHauteur);//requiert this
   }
 
-  public Command descendreCommand(){
-    return  this.startEnd(()-> this.setVoltage(-voltageGrimpeurDescendre), this::stop).until(this::minHauteur);
+  public Command descendreCommand(double voltage){
+    return  this.startEnd(()-> this.setVoltage(-Math.abs(voltage)), this::stop).until(this::minHauteur);
   }
 
   

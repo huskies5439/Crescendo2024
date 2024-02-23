@@ -28,7 +28,7 @@ public class LancerAmpli extends ParallelCommandGroup {
         //Attendre que l'échelle soit sortie, puis on lance
         new SequentialCommandGroup(
           new WaitCommand(0.4),//Ajuster si l'échelle n'est pas assez déployée 
-          lanceur.setPIDCommand(7.5)    
+          lanceur.setPIDCommand(8)    
         )
     );
   }

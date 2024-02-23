@@ -15,11 +15,20 @@ import edu.wpi.first.math.util.Units;
 
 
 public final class Constants {
+
+  public static final double vitesseLancerSpeaker = 45;
+
+
+public static final double vMonter = 3;
+public static final double vDescendre = 3;
+public static final double vAuto = 0.25;
+
+
   public static final class BPConstantes {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double maxVitesseLineaire = 3;//Vitesse linéaire max du chassis //Valeur original 4.8 a note:à ajuster
-    public static final double maxVitesseRotation = Math.PI*1.5; // radians per second //Originale REV = 2pi
+    public static final double maxVitesseRotation = Math.PI*1.4; // radians per second //Originale REV = 2pi soirée 22 fevrier = 1.5
 
     public static final double maxVitesseModule = 4;//Vitesse maximale d'un module en m/s
 
