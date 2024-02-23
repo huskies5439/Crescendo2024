@@ -39,8 +39,8 @@ public class Lanceur extends SubsystemBase {
     moteurG.setNeutralMode(NeutralModeValue.Coast);
     moteurD.setNeutralMode(NeutralModeValue.Coast);
     
-    pidG.setTolerance(3);
-    pidD.setTolerance(3);
+    pidG.setTolerance(2);//Fonctionne à 3, on test à 2
+    pidD.setTolerance(2);
 
   }
 
@@ -115,7 +115,7 @@ public class Lanceur extends SubsystemBase {
 
 
   public boolean atCible() {
-    return debouncerLanceur.calculate(pidG.atSetpoint()) && debouncerLanceur.calculate(pidD.atSetpoint());
+    return debouncerLanceur.calculate(pidG.atSetpoint() && pidD.atSetpoint());
 
   }
 
