@@ -139,7 +139,7 @@ public class BasePilotable extends SubsystemBase {
   }
 
   //////// TÉLÉOP
-  public void conduire(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void conduire(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit, boolean squared) {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
@@ -149,6 +149,12 @@ public class BasePilotable extends SubsystemBase {
     xSpeed = -MathUtil.applyDeadband(xSpeed, deadband);
     ySpeed = -MathUtil.applyDeadband(ySpeed, deadband);
     rot = -MathUtil.applyDeadband(rot, deadband);
+
+    if (squared){//Mettre les joysticks au carré pour adoucir les déplacements
+      xSpeed = xSpeed*Math.abs(xSpeed);
+      ySpeed = ySpeed*Math.abs(ySpeed);
+      rot = rot * Math.abs(rot);
+    }
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -211,7 +217,7 @@ public class BasePilotable extends SubsystemBase {
   }
 
   public void stop() {
-    conduire(0, 0, 0, false, false);
+    conduire(0, 0, 0, false, false, false);
 
   }
 

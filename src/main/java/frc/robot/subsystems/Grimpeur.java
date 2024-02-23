@@ -8,9 +8,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 public class Grimpeur extends SubsystemBase {
   
@@ -20,10 +20,12 @@ public class Grimpeur extends SubsystemBase {
     gear 14 dents (même vitesse). La gear 14 dents fait tourner une gear 80 dents. La gear 80 dents fait tourner 
     une poulie de 0.75 pouces auquelle s'enroule d'une corde */
   private double conversion  = (14.0/40)*(14.0/80)*Units.inchesToMeters(0.75)*Math.PI;
-; 
+
+
   private double maxPositionGrimpeur = 0.4;
 
-
+  private double voltageRapide = 3;
+  private double voltageLent = 0.25;
 
   String dashName;
   
@@ -71,15 +73,25 @@ public class Grimpeur extends SubsystemBase {
   }
 
 
-  //Commandes pour monter et descendre automatiquement
-  public Command monterCommand(double voltage){
-    return this.startEnd(()-> this.setVoltage(Math.abs(voltage)), this::stop).until(this::maxHauteur);//requiert this
+  //Commandes pour monter et descendre
+  //Parfois il faut aller rapidement, parfois rapidement.
+  public Command monterCommandSansLimite(boolean rapide){
+    return this.startEnd(()-> this.setVoltage(rapide ? voltageRapide : voltageLent), this::stop);
   }
 
-  public Command descendreCommand(double voltage){
-    return  this.startEnd(()-> this.setVoltage(-Math.abs(voltage)), this::stop).until(this::minHauteur);
+  public Command descendreCommandSansLimite(boolean rapide){
+    return this.startEnd(()-> this.setVoltage(rapide ? -voltageRapide : -voltageLent), this::stop);
   }
 
+
+  //Commandes pour monter et descendre en s'arrêtant automatiquement aux limites du grimpeur
+  public Command monterCommand(boolean rapide){
+    return monterCommandSansLimite(rapide).until(this::maxHauteur);
+  }
+
+  public Command descendreCommand(boolean rapide){
+    return descendreCommandSansLimite(rapide).until(this::minHauteur);
+  }
   
 
 }

@@ -25,7 +25,7 @@ public class UpdatePosition extends Command {
 
   @Override
   public void initialize() {
-    limelight.setAlliance();
+    limelight.getAlliance();
   }
 
   @Override

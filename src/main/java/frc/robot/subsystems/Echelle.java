@@ -12,9 +12,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ChiffreMagique;
 
 public class Echelle extends SubsystemBase {
 
@@ -26,9 +26,6 @@ public class Echelle extends SubsystemBase {
         new TrapezoidProfile.Constraints(0.5, 1.0)); 
 
   private double conversionEncodeur;
-
-  private double maxEchelle = 0.28; 
-
 
   public Echelle() {
 
@@ -95,9 +92,9 @@ public class Echelle extends SubsystemBase {
   // PID
   public void setPID(double cible){
     //On vérifie que la cible est entre le min et le max
-    cible = MathUtil.clamp(cible,0, maxEchelle);
+    cible = MathUtil.clamp(cible,0, ChiffreMagique.maxEchelle);
 
-    //Quand on veut descendre l'échelle au minimu, on triche sur le dernier cm pour s'assurer de vraiment rentrer l'échelle
+    //Quand on veut descendre l'échelle au minimun, on triche sur le dernier cm pour s'assurer de vraiment rentrer l'échelle
     if (cible == 0 && getPosition() < 0.01){
       if (isPositionDepart()){
         stop();

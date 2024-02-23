@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import static frc.robot.Constants.ChiffreMagique.*;//Pour alléger les commandes
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -59,12 +61,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("gober", new Gober(gobeur,superstructure));
     NamedCommands.registerCommand("lancerSpeaker", new LancerSpeaker(gobeur, lanceur)
                                        .withTimeout(1.5));
+
     NamedCommands.registerCommand("lancerAmpli", new LancerAmpli(echelle, lanceur, gobeur)
                                         .finallyDo(superstructure::setModeSpeaker)
                                         .withTimeout(1.5)); 
+
     NamedCommands.registerCommand("preparerAmpli", new PreparerAmpli(gobeur, lanceur, superstructure));
     NamedCommands.registerCommand("descendreEchelle",echelle.setPIDCommand(0.0).until(echelle::isPositionDepart));
-    NamedCommands.registerCommand("preparerSpeaker", lanceur.setPIDCommandSansFin(40));
+    NamedCommands.registerCommand("preparerSpeaker", lanceur.setPIDCommandSansFin(vitesseLancerSpeaker));
 
     chooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("trajet", chooser);
@@ -74,7 +78,7 @@ public class RobotContainer {
         Commands.run(
             () -> basePilotable.conduire(
                 manette.getLeftY(), manette.getLeftX(), manette.getRightX(),
-                true, true),
+                true, true, false),
             basePilotable));
         
     limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
@@ -87,32 +91,18 @@ public class RobotContainer {
   private void configureButtonBindings() {
     
     /////////////Auto Centrer
-    manette.a().and(pasGrimpeurTrigger).whileTrue(new ConditionalCommand(
-                                                  basePilotable.followPath(true).alongWith(lanceur.setPIDCommand(Constants.vitesseLancerSpeaker)), // Centrer speaker
-                                                  basePilotable.followPath(false), // Centrer ampli
-                                                  ()->{return superstructure.getMode() == Mode.SPEAKER;})); // Selon mode robot
+    manette.a().and(pasGrimpeurTrigger).whileTrue(
+      new ConditionalCommand(
+          basePilotable.followPath(true).alongWith(lanceur.setPIDCommand(vitesseLancerSpeaker)), // Centrer speaker
+          basePilotable.followPath(false), // Centrer ampli
+          ()->{return superstructure.getMode() == Mode.SPEAKER;})); // Selon mode robot
 
     //Gobeur
     manette.leftBumper().and(pasGrimpeurTrigger).toggleOnTrue(new Gober(gobeur,superstructure));
 
 
-
-    ////////GRIMPEUR
-    manette.y().toggleOnTrue(new ToggleModeGrimpeur(superstructure));//ajouter only if 30 sec
-
-    //Position automatique du grimpeur quand on change de mode
-    grimpeurTrigger.onTrue(grimpeurDroit.monterCommand(Constants.vMonter).alongWith(grimpeurGauche.monterCommand(Constants.vMonter)))
-                   .onFalse(grimpeurDroit.descendreCommand(Constants.vAuto).alongWith(grimpeurGauche.descendreCommand(Constants.vAuto)));
-
-    //Monter et descendre le grimpeur gauche
-    manette.leftBumper().and(grimpeurTrigger).whileTrue(grimpeurGauche.monterCommand(Constants.vMonter));
-    manette.leftTrigger().and(grimpeurTrigger).whileTrue(grimpeurGauche.descendreCommand(Constants.vDescendre));
-
-    //Monter et descendre le grimpeur droit
-    manette.rightBumper().and(grimpeurTrigger).whileTrue(grimpeurDroit.monterCommand(Constants.vMonter));
-    manette.rightTrigger().and(grimpeurTrigger).whileTrue(grimpeurDroit.descendreCommand(Constants.vDescendre));
     
-    ///////////////Lanceur 
+    //////////////////////////Lanceur 
     //Préparer Ampli                                                                            
     manette.x().onTrue( new PreparerAmpli(gobeur, lanceur, superstructure)
                         .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}));
@@ -130,17 +120,35 @@ public class RobotContainer {
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
 
      
-     //monter l'échelle si la note reste pris sur l'ampli
-      manette.rightTrigger().and(pasGrimpeurTrigger).whileTrue(echelle.setPIDCommand(0.2)); 
+    //monter l'échelle si la note reste pris sur l'ampli
+    manette.rightTrigger().and(pasGrimpeurTrigger).whileTrue(echelle.setPIDCommand(HauteurAmpli)); 
 
-   
+
+    ////////////////////////////GRIMPEUR
+    manette.y().toggleOnTrue(new ToggleModeGrimpeur(superstructure));//ajouter only if 30 sec ?
+
+    //Position automatique du grimpeur quand on change de mode
+    grimpeurTrigger.onTrue(grimpeurDroit.monterCommand(true).alongWith(grimpeurGauche.monterCommand(true)))
+                   .onFalse(grimpeurDroit.descendreCommand(false).alongWith(grimpeurGauche.descendreCommand(false)));
+
+    //Monter et descendre le grimpeur gauche
+    manette.leftBumper().and(grimpeurTrigger).whileTrue(grimpeurGauche.monterCommand(true));
+    manette.leftTrigger().and(grimpeurTrigger).whileTrue(grimpeurGauche.descendreCommand(true));
+
+    //Monter et descendre le grimpeur droit
+    manette.rightBumper().and(grimpeurTrigger).whileTrue(grimpeurDroit.monterCommand(true));
+    manette.rightTrigger().and(grimpeurTrigger).whileTrue(grimpeurDroit.descendreCommand(true));
       
+
+
     //////////Commandes PIT
-    //Descendre les grimpeurs dans le pit
-    manette.povLeft().whileTrue(Commands.startEnd(()->grimpeurGauche.setVoltage(-Constants.vAuto), grimpeurGauche::stop, grimpeurGauche));
-    manette.povRight().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(-Constants.vAuto), grimpeurDroit::stop, grimpeurDroit));
-    manette.povUp().whileTrue(Commands.startEnd(()->grimpeurDroit.setVoltage(Constants.vAuto), grimpeurDroit::stop, grimpeurDroit)
-    .alongWith(Commands.startEnd(()->grimpeurGauche.setVoltage(Constants.vAuto), grimpeurGauche::stop, grimpeurGauche)));
+    //Descendre et monter les grimpeurs dans le pit
+    manette.povLeft().whileTrue(grimpeurGauche.descendreCommandSansLimite(false));
+
+    manette.povRight().whileTrue(grimpeurDroit.descendreCommandSansLimite(false));
+
+    manette.povUp().whileTrue(grimpeurGauche.monterCommandSansLimite(false)
+                    .alongWith(grimpeurDroit.monterCommandSansLimite(false)));
                       
     //Après avoir descendu les grimpeurs dans le pit, on home l'échelle et reset les encodeurs des grimpeurs                                  
     manette.start().onTrue(new PreparationPit(echelle, grimpeurGauche, grimpeurDroit));

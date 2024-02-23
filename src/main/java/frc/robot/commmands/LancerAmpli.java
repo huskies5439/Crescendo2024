@@ -7,6 +7,7 @@ package frc.robot.commmands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.ChiffreMagique;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Gobeur;
 import frc.robot.subsystems.Lanceur;
@@ -21,7 +22,7 @@ public class LancerAmpli extends ParallelCommandGroup {
     addCommands(
 
         //Sortir l'échelle
-        echelle.setPIDCommand(0.2), 
+        echelle.setPIDCommand(ChiffreMagique.HauteurAmpli), 
         //Faire tourner le convoyeur pour décoincer la note
         gobeur.convoyerCommand(),
 

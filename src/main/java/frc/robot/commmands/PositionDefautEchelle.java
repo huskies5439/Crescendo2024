@@ -5,6 +5,7 @@
 package frc.robot.commmands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ChiffreMagique;
 import frc.robot.subsystems.Echelle;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.Mode;
@@ -28,7 +29,7 @@ public class PositionDefautEchelle extends Command {
   @Override
   public void execute() {
     if (superstructure.getMode() == Mode.GRIMPEUR){
-      echelle.setPID(0.28);
+      echelle.setPID(ChiffreMagique.maxEchelle);
     }
     else
     {

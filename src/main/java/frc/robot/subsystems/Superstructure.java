@@ -34,8 +34,12 @@ public class Superstructure extends SubsystemBase {
 
   private final DigitalInput capteurGobeur = new DigitalInput(0); // Émetteur branché sur PWM 0
   private final DigitalInput capteurLanceur = new DigitalInput(2); // Émetteur branché sur PWM 1
+
+  //Pour débouncer les capteurs et éviter de fausses lectures quand le robot brasse
   private final Debouncer debouncerGobeur = new Debouncer(0.04,DebounceType.kRising);
   private final Debouncer debouncerLanceur = new Debouncer(0.04,DebounceType.kRising);
+
+
   private AddressableLED del = new AddressableLED(9); // Port PWM
   private AddressableLEDBuffer delBuffer = new AddressableLEDBuffer(23);
 
