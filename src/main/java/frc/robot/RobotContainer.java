@@ -78,7 +78,7 @@ public class RobotContainer {
         Commands.run(
             () -> basePilotable.conduire(
                 manette.getLeftY(), manette.getLeftX(), manette.getRightX(),
-                true, true, false),
+                true, true, true),
             basePilotable));
         
     limelight.setDefaultCommand(new UpdatePosition(basePilotable, limelight));
@@ -111,7 +111,7 @@ public class RobotContainer {
      manette.rightBumper().and(pasGrimpeurTrigger).whileTrue(new ConditionalCommand(//Selon le mode du robot
       
       new LancerSpeaker(gobeur, lanceur)
-          .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
+         .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
 
       new LancerAmpli(echelle, lanceur, gobeur)
           .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;})

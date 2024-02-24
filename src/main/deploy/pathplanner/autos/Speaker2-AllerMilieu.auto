@@ -79,6 +79,31 @@
               }
             ]
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "preparerSpeaker"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "retourNoteMilieuSpeaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancerSpeaker"
+          }
         }
       ]
     }

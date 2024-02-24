@@ -97,6 +97,31 @@
               }
             ]
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "retourNoteMilieuAmpli"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "preparerAmpli"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancerAmpli"
+          }
         }
       ]
     }
