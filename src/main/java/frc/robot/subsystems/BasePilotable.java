@@ -300,19 +300,29 @@ public class BasePilotable extends SubsystemBase {
   public PathPlannerPath getPath(boolean speaker){
     Rotation2d rotationCible;
     Pose2d endPose;
+    Pose2d interPose;
 
     if (speaker){
       rotationCible =  new Rotation2d(Math.toRadians(0));
+      interPose = new Pose2d(1.45, 5.5, rotationCible);
       endPose = new Pose2d(1.3, 5.5, rotationCible);
     }
     else {
       rotationCible =  new Rotation2d(Math.toRadians(-90));
+      interPose = new Pose2d(1.85, 7.55, rotationCible);
       endPose = new Pose2d(1.85, 7.70, rotationCible);
     }
-
+    List<Translation2d> bezierPoints;
     Pose2d startPose = getPose();
+    if(startPose.getTranslation().getDistance(endPose.getTranslation()) < 0.5){
+      bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
 
-    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
+    }
+    else{
+      bezierPoints = PathPlannerPath.bezierFromPoses(startPose, interPose, endPose);
+
+    }
+    
 
     PathPlannerPath path = new PathPlannerPath(bezierPoints,
                            new PathConstraints(3, 2

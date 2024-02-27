@@ -39,7 +39,7 @@ public class Lanceur extends SubsystemBase {
     moteurG.setNeutralMode(NeutralModeValue.Coast);
     moteurD.setNeutralMode(NeutralModeValue.Coast);
     
-    pidG.setTolerance(3.0);//Fonctionne à 3, on test à 2
+    pidG.setTolerance(3.0);
     pidD.setTolerance(3.0);
 
   }
