@@ -314,7 +314,9 @@ public class BasePilotable extends SubsystemBase {
     }
     List<Translation2d> bezierPoints;
     Pose2d startPose = getPose();
-    if(startPose.getTranslation().getDistance(endPose.getTranslation()) < 0.5){
+    // si on est plus loin de 0.5 m de la cible du lanceur, 
+    //on rajoute un point intermediaire pour s'assurer que le robot ne percutte pas les murs
+    if(startPose.getTranslation().getDistance(endPose.getTranslation()) <= 0.5){
       bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
 
     }
