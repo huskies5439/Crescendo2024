@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -24,6 +25,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,6 +59,7 @@ public class BasePilotable extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private Field2d field = new Field2d();
+  private Rotation2d gyroOffset; 
 
   // Initialisation PoseEstimator
   SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
@@ -71,10 +74,22 @@ public class BasePilotable extends SubsystemBase {
       new Pose2d());
 
   public BasePilotable() {
+
     // Reset initial
     resetGyro();
     resetEncoders();
     resetOdometry(new Pose2d());
+
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        gyroOffset = Rotation2d.fromDegrees(180);
+      }
+      if (ally.get() == Alliance.Blue) {
+        gyroOffset = Rotation2d.fromDegrees(0);
+      }
+    }
+          
 
     // Initialisation de PathPlanner (selon leur getting started)
     AutoBuilder.configureHolonomic(
@@ -114,9 +129,9 @@ public class BasePilotable extends SubsystemBase {
 
     // SmartDashboard.putNumber("Gyro", getAngle());
 
-    SmartDashboard.putNumber("Pose Estimator X", getPose().getX());
+   /*  SmartDashboard.putNumber("Pose Estimator X", getPose().getX());
     SmartDashboard.putNumber("Pose Estimator Y", getPose().getY());
-    SmartDashboard.putNumber("Pose Estimator Rotation", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Pose Estimator Rotation", getPose().getRotation().getDegrees());*/
     SmartDashboard.putData(field);
     // SmartDashboard.putNumber("Chassis Speed VX",
     // getChassisSpeed().vxMetersPerSecond);
@@ -210,7 +225,7 @@ public class BasePilotable extends SubsystemBase {
     var swerveModuleStates = BPConstantes.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                getPose().getRotation())
+                getPose().getRotation().minus(gyroOffset))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 
     setModuleStates(swerveModuleStates);
@@ -300,30 +315,23 @@ public class BasePilotable extends SubsystemBase {
   public PathPlannerPath getPath(boolean speaker){
     Rotation2d rotationCible;
     Pose2d endPose;
-    Pose2d interPose;
 
     if (speaker){
       rotationCible =  new Rotation2d(Math.toRadians(0));
-      interPose = new Pose2d(1.45, 5.5, rotationCible);
       endPose = new Pose2d(1.3, 5.5, rotationCible);
     }
     else {
       rotationCible =  new Rotation2d(Math.toRadians(-90));
-      interPose = new Pose2d(1.85, 7.55, rotationCible);
       endPose = new Pose2d(1.85, 7.70, rotationCible);
     }
     List<Translation2d> bezierPoints;
     Pose2d startPose = getPose();
-    // si on est plus loin de 0.5 m de la cible du lanceur, 
-    //on rajoute un point intermediaire pour s'assurer que le robot ne percutte pas les murs
-    if(startPose.getTranslation().getDistance(endPose.getTranslation()) <= 0.5){
-      bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
+    
 
-    }
-    else{
-      bezierPoints = PathPlannerPath.bezierFromPoses(startPose, interPose, endPose);
+  bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
 
-    }
+    
+
     
 
     PathPlannerPath path = new PathPlannerPath(bezierPoints,

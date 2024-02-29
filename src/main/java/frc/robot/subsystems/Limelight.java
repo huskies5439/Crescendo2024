@@ -87,7 +87,7 @@ public class Limelight extends SubsystemBase {
       alliance = "blue";
     }
 
-     botpose = limelight.getEntry("botpose_wpi" + alliance);
+     botpose = limelight.getEntry("botpose_wpiblue");
 
   }
 }

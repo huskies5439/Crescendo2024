@@ -68,53 +68,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "allerNoteMilieuAmpli"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "gober"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "descendreEchelle"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "preparerAmpli"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "retourNoteMilieuAmpli"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "lancerAmpli"
+            "name": "descendreEchelle"
           }
         }
       ]

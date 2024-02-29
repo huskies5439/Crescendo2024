@@ -46,9 +46,9 @@ public class Lanceur extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("VitesseG", getVitesseG());
+   /*  SmartDashboard.putNumber("VitesseG", getVitesseG());
     SmartDashboard.putNumber("VitesseD", getVitesseD());
-    SmartDashboard.putBoolean("Lanceur At Cible", atCible());
+    SmartDashboard.putBoolean("Lanceur At Cible", atCible());*/
 
   }
 
