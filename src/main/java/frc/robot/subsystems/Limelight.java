@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -13,8 +12,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
@@ -25,14 +22,13 @@ public class Limelight extends SubsystemBase {
   private NetworkTableEntry tl = limelight.getEntry("tl"); // Target Latency
   private NetworkTableEntry cl = limelight.getEntry("cl"); // Captured Latency
 
-  private NetworkTableEntry botpose;
+  private NetworkTableEntry botpose = limelight.getEntry("botpose_wpiblue");//On fournit tout le temps une pose "bleu" à PathPlanner et le flip est automatique
 
   double[] arrayLimelight;
 
   String alliance;
 
   public Limelight() {
-    getAlliance();
   }
 
   @Override
@@ -73,21 +69,4 @@ public class Limelight extends SubsystemBase {
     return ta.getDouble(0);
   }
 
-  // Change l'alliance
-  public void getAlliance() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    if (ally.isPresent()) {
-      if (ally.get() == Alliance.Red) {
-        alliance = "red";
-      }
-      if (ally.get() == Alliance.Blue) {
-        alliance = "blue";
-      }
-    } else {
-      alliance = "blue";
-    }
-
-     botpose = limelight.getEntry("botpose_wpiblue");
-
-  }
 }

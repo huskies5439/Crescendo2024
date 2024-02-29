@@ -28,8 +28,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants.BPConstantes;
 
 import frc.utils.SwerveUtils;
@@ -80,16 +79,8 @@ public class BasePilotable extends SubsystemBase {
     resetEncoders();
     resetOdometry(new Pose2d());
 
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    if (ally.isPresent()) {
-      if (ally.get() == Alliance.Red) {
-        gyroOffset = Rotation2d.fromDegrees(180);
-      }
-      if (ally.get() == Alliance.Blue) {
-        gyroOffset = Rotation2d.fromDegrees(0);
-      }
-    }
-          
+
+    getAlliance();
 
     // Initialisation de PathPlanner (selon leur getting started)
     AutoBuilder.configureHolonomic(
@@ -127,12 +118,17 @@ public class BasePilotable extends SubsystemBase {
         });
     field.setRobotPose(poseEstimator.getEstimatedPosition());
 
+  //Au cas où l'alliance est null au start up du robot
+  if (gyroOffset.getDegrees()==-1){
+    getAlliance();
+  }
+
     // SmartDashboard.putNumber("Gyro", getAngle());
 
-   /*  SmartDashboard.putNumber("Pose Estimator X", getPose().getX());
-    SmartDashboard.putNumber("Pose Estimator Y", getPose().getY());
-    SmartDashboard.putNumber("Pose Estimator Rotation", getPose().getRotation().getDegrees());*/
-    SmartDashboard.putData(field);
+    //SmartDashboard.putNumber("Pose Estimator X", getPose().getX());
+    //SmartDashboard.putNumber("Pose Estimator Y", getPose().getY());
+    //SmartDashboard.putNumber("Pose Estimator Rotation", getPose().getRotation().getDegrees());*/
+    //SmartDashboard.putData(field);
     // SmartDashboard.putNumber("Chassis Speed VX",
     // getChassisSpeed().vxMetersPerSecond);
     // SmartDashboard.putNumber("Chassis Speed VY",
@@ -346,6 +342,24 @@ public class BasePilotable extends SubsystemBase {
 
   public Command followPath(boolean speaker){
     return AutoBuilder.followPath(getPath(speaker));
+  }
+
+
+  public void getAlliance(){
+    //Seulement important pour la fonction conduire (manette)
+    //Pathplanner gère lui-même le flip des trajets selon l'alliance
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        gyroOffset = Rotation2d.fromDegrees(180);
+      }
+      if (ally.get() == Alliance.Blue) {
+        gyroOffset = Rotation2d.fromDegrees(0);
+      }
+    }
+    else {
+      gyroOffset = Rotation2d.fromDegrees(-1);//code d'erreur
+    }
   }
 
 }
