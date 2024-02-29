@@ -79,7 +79,9 @@ public class BasePilotable extends SubsystemBase {
     resetEncoders();
     resetOdometry(new Pose2d());
 
-
+    //Pour inverser l'angle du robot pour la fonction conduire.
+    //Nécessaire car PathPlanner prend toujours une odométrie "bleu" et gère le flip automatiquement
+    //Donc si on est rouge, il faut inverser ce qui n'est pas géré par PathPlanner, c-à-d le fieldOriented
     getAlliance();
 
     // Initialisation de PathPlanner (selon leur getting started)
@@ -123,7 +125,7 @@ public class BasePilotable extends SubsystemBase {
     getAlliance();
   }
 
-    // SmartDashboard.putNumber("Gyro", getAngle());
+    //SmartDashboard.putNumber("Gyro", getAngle());
 
     //SmartDashboard.putNumber("Pose Estimator X", getPose().getX());
     //SmartDashboard.putNumber("Pose Estimator Y", getPose().getY());
@@ -161,7 +163,7 @@ public class BasePilotable extends SubsystemBase {
     ySpeed = -MathUtil.applyDeadband(ySpeed, deadband);
     rot = -MathUtil.applyDeadband(rot, deadband);
 
-    if (squared){//Mettre les joysticks au carré pour adoucir les déplacements
+    if (squared){//Mettre les joysticks "au carré" pour adoucir les déplacements
       xSpeed = xSpeed*Math.abs(xSpeed);
       ySpeed = ySpeed*Math.abs(ySpeed);
       rot = rot * Math.abs(rot);
@@ -324,12 +326,9 @@ public class BasePilotable extends SubsystemBase {
     Pose2d startPose = getPose();
     
 
-  bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
+    bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
 
     
-
-    
-
     PathPlannerPath path = new PathPlannerPath(bezierPoints,
                            new PathConstraints(3, 2
                            , Math.toRadians(180), Math.toRadians(180)),
