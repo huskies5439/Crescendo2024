@@ -114,7 +114,7 @@ public class RobotContainer {
          .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.GOBEUR;}) ,
 
       new LancerAmpli(echelle, lanceur, gobeur)
-          .onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;})
+          //.onlyIf(() -> {return superstructure.getPositionNote() == PositionNote.LANCEUR;})
           .finallyDo(superstructure::setModeSpeaker) ,
 
       () -> {return superstructure.getMode() == Mode.SPEAKER;}));
