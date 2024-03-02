@@ -16,7 +16,7 @@ public final class Constants {
 
   //////Les chiffres magiques sont les valeurs arbitraires qui se trouvent à plus d'un endroit dans le code
   public static final class ChiffreMagique{
-    public static final double vitesseLancerSpeaker = 55;
+    public static final double vitesseLancerSpeaker = 52;
 
     public static final double maxEchelle = 0.28;
     public static final double HauteurAmpli = 0.2;
