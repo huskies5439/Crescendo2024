@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7,
-        "y": 4.35
+        "x": 0.5059719106599396,
+        "y": 2.131372251332233
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7000000000000003,
-        "y": 1.3499999999999996
+        "x": 1.2548602020254207,
+        "y": 1.0360289951356165
       },
       "isLocked": false,
-      "linkedName": "coteBasSub"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.7742100687453413
       },
       "prevControl": {
-        "x": 6.591498613630826,
-        "y": 1.0761046148094415
+        "x": 7.303627664165898,
+        "y": 0.774210068745341
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "Long",
   "previewStartingState": {
-    "rotation": -60.69684089572019,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

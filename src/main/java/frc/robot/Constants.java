@@ -16,7 +16,7 @@ public final class Constants {
 
   //////Les chiffres magiques sont les valeurs arbitraires qui se trouvent à plus d'un endroit dans le code
   public static final class ChiffreMagique{
-    public static final double vitesseLancerSpeaker = 52;
+    public static final double vitesseLancerSpeaker = 60;
 
     public static final double maxEchelle = 0.28;
     public static final double HauteurAmpli = 0.2;
@@ -27,7 +27,7 @@ public final class Constants {
   public static final class BPConstantes {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double maxVitesseLineaire = 3;// Vitesse linéaire max du chassis //Valeur original 4.8 a note:à
+    public static final double maxVitesseLineaire = 4;// Vitesse linéaire max du chassis //Valeur original 4.8 a note:à
                                                       // ajuster
     public static final double maxVitesseRotation = Math.PI * 1.4; // radians per second //Originale REV = 2pi soirée 22
                                                                    // fevrier = 1.5

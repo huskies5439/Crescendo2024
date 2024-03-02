@@ -121,9 +121,9 @@ public class BasePilotable extends SubsystemBase {
     field.setRobotPose(poseEstimator.getEstimatedPosition());
 
   //Au cas où l'alliance est null au start up du robot
-  if (gyroOffset.getDegrees()==-1){
+  //if (gyroOffset.getDegrees()==-1){
     getAlliance();
-  }
+ // }
 
     //SmartDashboard.putNumber("Gyro", getAngle());
 
@@ -356,9 +356,9 @@ public class BasePilotable extends SubsystemBase {
         gyroOffset = Rotation2d.fromDegrees(0);
       }
     }
-    else {
+   /*  else {
       gyroOffset = Rotation2d.fromDegrees(-1);//code d'erreur
-    }
+    }*/
   }
 
 }

@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7000000000000003,
-        "y": 1.3499999999999996
+        "x": 1.4896821805055864,
+        "y": 2.939419972991158
       },
       "isLocked": false,
       "linkedName": "coteBasSub"
     },
     {
       "anchor": {
-        "x": 8.303627664165898,
-        "y": 0.7742100687453413
+        "x": 8.281967377058862,
+        "y": 2.435854001522554
       },
       "prevControl": {
-        "x": 6.591498613630826,
-        "y": 1.0761046148094415
+        "x": 2.9301150756367123,
+        "y": -0.386457606010789
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NoteMilieuSource"
+      "linkedName": "NoteMilieuStage2"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 25.346175941946658,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Long",
   "previewStartingState": {
-    "rotation": -60.69684089572019,
+    "rotation": -60.042619354907146,
     "velocity": 0
   },
   "useDefaultConstraints": true

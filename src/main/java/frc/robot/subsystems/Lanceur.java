@@ -116,7 +116,7 @@ public class Lanceur extends SubsystemBase {
 
 
   public boolean atCible() {
-    return getVitesseG() > ChiffreMagique.vitesseLancerSpeaker - 2 || getVitesseD() > ChiffreMagique.vitesseLancerSpeaker - 2;
+    return getVitesseG() > ChiffreMagique.vitesseLancerSpeaker - 2  && getVitesseD() > ChiffreMagique.vitesseLancerSpeaker - 2;
 
   }
 
