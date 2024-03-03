@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5841647203619615,
-        "y": 7.231443135894402
+        "x": 1.85,
+        "y": 6.829056045704071
       },
       "isLocked": true,
       "linkedName": "Ampli"
@@ -30,8 +30,13 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0.15,
       "rotationDegrees": -90.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.9,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],

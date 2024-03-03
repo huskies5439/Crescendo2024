@@ -18,26 +18,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "taxiMilieu"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "gober"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "allerNoteMilieuCoteSpeaker"
+                  "pathName": "sourceAllerCoteSpeaker"
                 }
               },
               {
@@ -68,10 +49,35 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "allerNoteStage2"
+                  "pathName": "allerNoteMilieuCoteSpeaker"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "preparerSpeaker"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "retourNoteMilieuCoteSpeaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancerSpeaker"
           }
         }
       ]

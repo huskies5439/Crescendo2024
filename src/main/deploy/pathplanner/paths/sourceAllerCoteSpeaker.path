@@ -8,27 +8,33 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2548602020254207,
-        "y": 1.0360289951356165
+        "x": 2.2977299021645106,
+        "y": 2.1547939244237972
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "source"
     },
     {
       "anchor": {
-        "x": 8.303627664165898,
-        "y": 0.7742100687453413
+        "x": 0.7,
+        "y": 4.35
       },
       "prevControl": {
-        "x": 7.303627664165898,
-        "y": 0.774210068745341
+        "x": 1.1999999999999997,
+        "y": 3.483974596215561
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "NoteMilieuSource"
+      "linkedName": "coteBasSub"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": -60.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -39,11 +45,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -60.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Long",
+  "folder": "Court",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

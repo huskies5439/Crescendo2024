@@ -32,7 +32,7 @@ public final class Constants {
     public static final double maxVitesseRotation = Math.PI * 1.4; // radians per second //Originale REV = 2pi soirée 22
                                                                    // fevrier = 1.5
 
-    public static final double maxVitesseModule = 4;// Vitesse maximale d'un module en m/s
+    public static final double maxVitesseModule = 4.46;// Vitesse maximale d'un module en m/s
 
     public static final double kDirectionSlewRate = 3; // radians per second
     public static final double kMagnitudeSlewRate = 2.5; // percent per second (1 = 100%) original : 1.8
