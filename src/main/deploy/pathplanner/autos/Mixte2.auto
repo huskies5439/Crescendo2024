@@ -1,0 +1,81 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7,
+      "y": 6.6
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancerSpeaker"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "coteAllerNoteAmpli"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "gober"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "retourAmpli"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "preparerAmpli"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lancerAmpli"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "descendreEchelle"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Ampli",
+  "choreoAuto": false
+}

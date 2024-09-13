@@ -4,22 +4,35 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
-import frc.robot.Constants;
+import frc.robot.Constants.BPConstantes;
 
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BasePilotable extends SubsystemBase {
@@ -40,13 +53,16 @@ public class BasePilotable extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
-  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(Constants.kMagnitudeSlewRate);
-  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(Constants.kRotationalSlewRate);
+  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(BPConstantes.kMagnitudeSlewRate);
+  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(BPConstantes.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+  private Field2d field = new Field2d();
+  private Rotation2d gyroOffset; 
 
   // Initialisation PoseEstimator
   SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
-      Constants.kDriveKinematics,
+      BPConstantes.kDriveKinematics,
       Rotation2d.fromDegrees(getAngle()),
       new SwerveModulePosition[] {
           avantGauche.getPosition(),
@@ -62,6 +78,32 @@ public class BasePilotable extends SubsystemBase {
     resetGyro();
     resetEncoders();
     resetOdometry(new Pose2d());
+
+    //Pour inverser l'angle du robot pour la fonction conduire.
+    //Nécessaire car PathPlanner prend toujours une odométrie "bleu" et gère le flip automatiquement
+    //Donc si on est rouge, il faut inverser ce qui n'est pas géré par PathPlanner, c-à-d le fieldOriented
+    getAlliance();
+
+    // Initialisation de PathPlanner (selon leur getting started)
+    AutoBuilder.configureHolonomic(
+        this::getPose,
+        this::resetOdometry,
+        this::getChassisSpeed,
+        this::conduireChassis,
+        BPConstantes.kPathFollowerConfig,
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this);
   }
 
   @Override
@@ -76,13 +118,33 @@ public class BasePilotable extends SubsystemBase {
             arriereGauche.getPosition(),
             arriereDroite.getPosition()
         });
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
+
+  //Au cas où l'alliance est null au start up du robot
+  //if (gyroOffset.getDegrees()==-1){
+    getAlliance();
+ // }
+
+    //SmartDashboard.putNumber("Gyro", getAngle());
+
+    //SmartDashboard.putNumber("Pose Estimator X", getPose().getX());
+    //SmartDashboard.putNumber("Pose Estimator Y", getPose().getY());
+    //SmartDashboard.putNumber("Pose Estimator Rotation", getPose().getRotation().getDegrees());*/
+    //SmartDashboard.putData(field);
+    // SmartDashboard.putNumber("Chassis Speed VX",
+    // getChassisSpeed().vxMetersPerSecond);
+    // SmartDashboard.putNumber("Chassis Speed VY",
+    // getChassisSpeed().vyMetersPerSecond);
+    // SmartDashboard.putNumber("Chassis Speed Omega",
+    // Math.toDegrees(getChassisSpeed().omegaRadiansPerSecond));
+
   }
 
   ///////// MÉTHODE DONNANT DES CONSIGNES À CHAQUE MODULE
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, Constants.maxVitesseModule);
+        desiredStates, BPConstantes.maxVitesseModule);
     avantGauche.setDesiredState(desiredStates[0]);
     avantDroite.setDesiredState(desiredStates[1]);
     arriereGauche.setDesiredState(desiredStates[2]);
@@ -116,7 +178,7 @@ public class BasePilotable extends SubsystemBase {
       // acceleration
       double directionSlewRate;
       if (m_currentTranslationMag != 0.0) {
-        directionSlewRate = Math.abs(Constants.kDirectionSlewRate / m_currentTranslationMag);
+        directionSlewRate = Math.abs(BPConstantes.kDirectionSlewRate / m_currentTranslationMag);
       } else {
         directionSlewRate = 500.0; // some high number that means the slew rate is effectively instantaneous
       }
@@ -154,14 +216,14 @@ public class BasePilotable extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * Constants.maxVitesseLineaire;
-    double ySpeedDelivered = ySpeedCommanded * Constants.maxVitesseLineaire;
-    double rotDelivered = m_currentRotation * Constants.maxVitesseRotation;
+    double xSpeedDelivered = xSpeedCommanded * BPConstantes.maxVitesseLineaire;
+    double ySpeedDelivered = ySpeedCommanded * BPConstantes.maxVitesseLineaire;
+    double rotDelivered = m_currentRotation * BPConstantes.maxVitesseRotation;
 
-    var swerveModuleStates = Constants.kDriveKinematics.toSwerveModuleStates(
+    var swerveModuleStates = BPConstantes.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                getPose().getRotation())
+                getPose().getRotation().minus(gyroOffset))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
 
     setModuleStates(swerveModuleStates);
@@ -183,6 +245,10 @@ public class BasePilotable extends SubsystemBase {
   ///////// Pose estimator
   public Pose2d getPose() {
     return poseEstimator.getEstimatedPosition();
+  }
+
+  public void addVisionMeasurement(Pose2d position, double delaiLimelight) {
+    poseEstimator.addVisionMeasurement(position, Timer.getFPGATimestamp() - delaiLimelight);
   }
 
   public void resetOdometry(Pose2d pose) {// pose est à la pose où reset l'odométrie du robot
@@ -215,4 +281,84 @@ public class BasePilotable extends SubsystemBase {
   public void resetGyro() {
     gyro.setYaw(0);
   }
+
+  ///////// Méthodes pour PathPlanner. Ce sont deux méthodes réfléchies en terme
+  ///////// du Chassis et Field Relative et prises dans l'exemple de la PathPlannerLib
+  /**
+   * Returns the chassis speed relative to the field XY and angle from each module
+   * angle and speed
+   * 
+   * @return the ChassisSpeed
+   */
+  public ChassisSpeeds getChassisSpeed() {
+    return BPConstantes.kDriveKinematics.toChassisSpeeds(avantDroite.getState(), avantGauche.getState(),
+        arriereDroite.getState(), arriereGauche.getState());
+  }
+
+  /**
+   * Method to drive the robot from field relative speeds
+   * 
+   * @param chassisSpeeds XY and omege speeds the robot should be going
+   */
+  public void conduireChassis(ChassisSpeeds chassisSpeeds) {
+    // Ramene la vitesse continue en valeur à chaque de 20 ms (fréquence des
+    // itérations du roborio = 50 Hz)
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+
+    SwerveModuleState[] swerveModuleStates = BPConstantes.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+    setModuleStates(swerveModuleStates);
+  }
+
+  /////////////////////// On the fly
+  public PathPlannerPath getPath(boolean speaker){
+    Rotation2d rotationCible;
+    Pose2d endPose;
+
+    if (speaker){
+      rotationCible =  new Rotation2d(Math.toRadians(0));
+      endPose = new Pose2d(1.3, 5.5, rotationCible);
+    }
+    else {
+      rotationCible =  new Rotation2d(Math.toRadians(-90));
+      endPose = new Pose2d(1.85, 7.70, rotationCible);
+    }
+    List<Translation2d> bezierPoints;
+    Pose2d startPose = getPose();
+    
+
+    bezierPoints = PathPlannerPath.bezierFromPoses(startPose, endPose);
+
+    
+    PathPlannerPath path = new PathPlannerPath(bezierPoints,
+                           new PathConstraints(3, 2
+                           , Math.toRadians(180), Math.toRadians(180)),
+                           new GoalEndState(0.0, rotationCible, true));
+    path.preventFlipping = false;
+
+    return path;
+  }
+
+
+  public Command followPath(boolean speaker){
+    return AutoBuilder.followPath(getPath(speaker));
+  }
+
+
+  public void getAlliance(){
+    //Seulement important pour la fonction conduire (manette)
+    //Pathplanner gère lui-même le flip des trajets selon l'alliance
+    Optional<Alliance> ally = DriverStation.getAlliance();
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        gyroOffset = Rotation2d.fromDegrees(180);
+      }
+      if (ally.get() == Alliance.Blue) {
+        gyroOffset = Rotation2d.fromDegrees(0);
+      }
+    }
+   /*  else {
+      gyroOffset = Rotation2d.fromDegrees(-1);//code d'erreur
+    }*/
+  }
+
 }

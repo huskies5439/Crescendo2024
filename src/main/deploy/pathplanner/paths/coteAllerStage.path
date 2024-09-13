@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.7,
+        "y": 4.35
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7000000000000002,
+        "y": 3.8499999999999996
+      },
+      "isLocked": false,
+      "linkedName": "coteBasSub"
+    },
+    {
+      "anchor": {
+        "x": 2.894982565999367,
+        "y": 4.098792791023527
+      },
+      "prevControl": {
+        "x": 1.3742919334248123,
+        "y": 4.098792791023527
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "NoteStage"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 180.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Court",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}
